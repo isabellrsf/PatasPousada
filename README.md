@@ -51,7 +51,7 @@ O levantamento de requisitos foi realizado por meio da análise de mercado pet, 
 **Duplo Diamante – Design Thinking**  
 Metodologia utilizada para entender as necessidades dos donos de pets e propor soluções centradas no usuário.
 
-*Imagem ilustrativa não disponível neste README*
+![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinkingCausas.jpg)
 
 ## Diagrama de Casos de Uso
 
@@ -59,17 +59,11 @@ O diagrama ilustra as funcionalidades principais da plataforma como: cadastro, b
 
 *Imagem ilustrativa não disponível neste README*
 
-## Modelagem de Banco de Dados Lógica
-
-Representa entidades como Usuário, Pet, Reserva, Avaliação e seus relacionamentos.
-
-*Imagem ilustrativa não disponível neste README*
-
 ## Modelagem de Banco de Dados Física
 
 Detalha a estrutura de tabelas, chaves primárias e estrangeiras, índices e restrições visando eficiência e segurança.
 
-*Imagem ilustrativa não disponível neste README*
+![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/Bancodedados.png)
 
 ## Apresentação do projeto com vídeo do protótipo do projeto:
 Protótipo desenvolvido de interface e funcionalidades, utilizando VSCODE e CANVA.
