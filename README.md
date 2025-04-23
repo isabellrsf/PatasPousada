@@ -51,7 +51,7 @@ O levantamento de requisitos foi realizado por meio da análise de mercado pet, 
 **Duplo Diamante – Design Thinking**  
 Metodologia utilizada para entender as necessidades dos donos de pets e propor soluções centradas no usuário.
 
-![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinkingCausas.jpg)
+![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinking.png)
 
 ## Diagrama de Casos de Uso
 
