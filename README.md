@@ -12,17 +12,16 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ## ✅ Objetivo
 
-- Aumentar a confiabilidade na hospedagem de pets, por meio de sistemas de verificação e avaliações.
--Reduzir os custos com hospedagem com hospedagem em compração a creches e hotéis tradicionais.
-- Diminuir a solidão e ansiedade dos animais, oferencedo ambientes familiares e cuidadosos.
-- Melhorar a comunicação entre donos e anfitriões, promovendo segurança e confiança.
-- Oferecer uma solução prática e deigital, com usabilidade amigável e recursos como clandário, chat, pagamentos e perfis completos.
+- **Aumentar a confiabilidade** na hospedagem de pets, por meio de sistemas de verificação e avaliações.
+- **Reduzir os custos** com hospedagem com hospedagem em compração a creches e hotéis tradicionais.
+- **Diminuir a solidão e ansiedade dos animais**, oferencedo ambientes familiares e cuidadosos.
+- **Melhorar a comunicação** entre donos e anfitriões, promovendo segurança e confiança.
+- **Oferecer uma solução prática e digital**, com usabilidade amigável e recursos como clandário, chat, pagamentos e perfis completos.
 
 ## Escopo e Requisitos do Projeto
 
 ### 🛠 Tecnologias utilizadas:
 - HTML, CSS e JavaScript
-- Firebase (autenticação e banco de dados)
 - Node.js
 - Ferramentas de versionamento: Git e GitHub
 
@@ -72,9 +71,8 @@ Detalha a estrutura de tabelas, chaves primárias e estrangeiras, índices e res
 
 *Imagem ilustrativa não disponível neste README*
 
-## Prototipação
+## Apresentação do projeto com vídeo do protótipo do projeto:
+Protótipo desenvolvido de interface e funcionalidades, utilizando VSCODE e CANVA.
 
-Protótipo desenvolvido para validação de interface e funcionalidades, utilizando Figma.  
-[Protótipo no Figma - (exemplo)](https://www.figma.com/file/EXEMPLO)
+https://www.canva.com/design/DAGSK2yjaeo/mgvhpMt38Mw3bmdVStndIQ/edit?utm_content=DAGSK2yjaeo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
-*Imagem ilustrativa não disponível neste README*
