@@ -1,78 +1,80 @@
 
-# 🐾 PatasPousada
-
-**Airbnb de Pets** - Uma plataforma que conecta donos de animais de estimação a anfitriões confiáveis que oferecem hospedagem em ambiente familiar durante ausências dos donos. 🐶🐱
+# 🐾 PatasPousadas
 
 ## 📌 Descrição do Projeto
 
-Com o crescimento do mercado pet e a preocupação dos tutores com o bem-estar dos seus animais, a PatasPousada surge como uma solução inovadora para cuidados temporários. Inspirada no modelo de negócios do Airbnb, a plataforma permite que anfitriões ofereçam suas casas para cuidar de pets enquanto seus donos viajam.
+O projeto **PatasPousadas** é uma plataforma online que conecta donos de animais de estimação a anfitriões que oferecem hospedagem em suas casas, funcionando de forma semelhante ao Airbnb. A solução visa oferecer uma alternativa mais humana, acessível e confiável aos serviços tradicionais de hospedagem para pets, promovendo o bem-estar dos animais e proporcionando renda extra aos cuidadores. A plataforma se baseia em confiança, avaliações transparentes e uma comunidade de amantes de animais.
 
-A proposta é fornecer um ambiente seguro, acolhedor e personalizado para os animais, garantindo tranquilidade aos donos e oferecendo renda extra aos cuidadores.
+## 👥 Equipe de Desenvolvimento
 
-## ✅ Funcionalidades
+**Isabella Rodrigues:** Design da interface, documentação e programação.  
+**Jessye Aguiar:** Documentação, pesquisas, entrevistas e testes.
 
-- Cadastro de usuários (donos e anfitriões)
-- Perfis personalizados com fotos, localização e preferências
-- Sistema de busca e filtragem de anfitriões por localização, tipo de animal e avaliações
+## ✅ Objetivo
+
+- Aumentar a confiabilidade na hospedagem de pets, por meio de sistemas de verificação e avaliações.
+-Reduzir os custos com hospedagem com hospedagem em compração a creches e hotéis tradicionais.
+- Diminuir a solidão e ansiedade dos animais, oferencedo ambientes familiares e cuidadosos.
+- Melhorar a comunicação entre donos e anfitriões, promovendo segurança e confiança.
+- Oferecer uma solução prática e deigital, com usabilidade amigável e recursos como clandário, chat, pagamentos e perfis completos.
+
+## Escopo e Requisitos do Projeto
+
+### 🛠 Tecnologias utilizadas:
+- HTML, CSS e JavaScript
+- Firebase (autenticação e banco de dados)
+- Node.js
+- Ferramentas de versionamento: Git e GitHub
+
+### Requisitos funcionais:
+- Cadastro de donos de pets e anfitriões
+- Sistema de busca e filtragem por localização, tipo de animal, avaliações
 - Reservas com calendário integrado
-- Chat seguro para comunicação entre dono e anfitrião
-- Avaliações e feedback após a hospedagem
-- Sistema de pagamento integrado e seguro
-- Histórico de hospedagens e relatório de atividades
-- Painel administrativo para gerenciamento do sistema
+- Comunicação via chat interno
+- Pagamentos seguros
+- Sistema de avaliações e feedback
 
-## 🔒 Segurança
+## 💡 Levantamento de Requisitos
 
-- Validação de identidade dos anfitriões
-- Sistema de autenticação em duas etapas
-- Criptografia de dados sensíveis
-- Suporte 24/7 para resolução de dúvidas e emergências
-- Certificação de anfitriões e verificação de ambiente
+O levantamento de requisitos foi realizado por meio da análise de mercado pet, entrevistas com donos de animais e pesquisas online sobre os principais problemas enfrentados com hospedagem tradicional. Foram levantados requisitos funcionais e não funcionais, além de definidos cenários de negócio para otimizar a plataforma.
 
-## 💡 Diferenciais
+## Cronograma de Atividades
 
-- Hospedagem em ambiente familiar
-- Preços acessíveis com pacotes personalizados
-- Match entre pets e anfitriões com base em perfil
-- Atualizações em tempo real com fotos e vídeos
-- Sistema de fidelidade e recompensas
+| Etapa                     | Data Inicial | Data Final   | Responsável |
+|--------------------------|--------------|--------------|-------------|
+| Planejamento e Definição | 01/03/2024   | 15/03/2024   | Equipe      |
+| Desenvolvimento          | 16/03/2024   | 30/04/2024   | Equipe      |
+| Testes e Validação       | 01/05/2024   | 15/05/2024   | Equipe      |
+| Finalização e Apresentação| 16/05/2024  | 31/05/2024   | Equipe      |
 
-## 🛠 Tecnologias Utilizadas (Exemplo)
+## Diagramas e Fluxogramas
 
-- HTML5, CSS3, JavaScript
-- Bootstrap 5
-- Node.js + Express
-- MongoDB
-- Firebase (autenticação)
-- Git e GitHub
+**Duplo Diamante – Design Thinking**  
+Metodologia utilizada para entender as necessidades dos donos de pets e propor soluções centradas no usuário.
 
-## 🚀 Como Executar o Projeto
+*Imagem ilustrativa não disponível neste README*
 
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/PatasPousada.git
+## Diagrama de Casos de Uso
 
-# Acesse o diretório do projeto
-cd PatasPousada
+O diagrama ilustra as funcionalidades principais da plataforma como: cadastro, busca, reserva, comunicação, avaliações e pagamentos.
 
-# Instale as dependências (se houver backend)
-npm install
+*Imagem ilustrativa não disponível neste README*
 
-# Inicie a aplicação
-npm start
-```
+## Modelagem de Banco de Dados Lógica
 
-## 🗓 Metodologia
+Representa entidades como Usuário, Pet, Reserva, Avaliação e seus relacionamentos.
 
-- Metodologia Ágil (Scrum)
-- Sprints quinzenais
-- Reuniões de planejamento, daily meetings e retrospectivas
+*Imagem ilustrativa não disponível neste README*
 
-## 👥 Equipe
+## Modelagem de Banco de Dados Física
 
-- Isabella Rodrigues - RA: 22353446
-- Jessye Aguiar - RA: 22350089
+Detalha a estrutura de tabelas, chaves primárias e estrangeiras, índices e restrições visando eficiência e segurança.
 
-## 📄 Licença
+*Imagem ilustrativa não disponível neste README*
 
-Este projeto está licenciado sob a licença MIT.
+## Prototipação
+
+Protótipo desenvolvido para validação de interface e funcionalidades, utilizando Figma.  
+[Protótipo no Figma - (exemplo)](https://www.figma.com/file/EXEMPLO)
+
+*Imagem ilustrativa não disponível neste README*
