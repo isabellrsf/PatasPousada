@@ -8,9 +8,6 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ➡️ [Acesse aqui o site](https://isabellrsf.github.io/PatasPousada/)  
 
-_(Substituir pelo link gerado no GitHub Pages se estiver diferente)_
-
----
 
 ## 👥 Equipe de Desenvolvimento
 
