@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner-pataspousadas.jpg" alt="Banner do PatasPousadas">
+</p>
+
 # 🐾 PatasPousadas
 
 ## 📌 Descrição do Projeto
@@ -14,10 +18,10 @@ O **PatasPousadas** é uma plataforma online que conecta donos de animais de est
 
 ## 👥 Equipe de Desenvolvimento
 
-- [**Isabella Rodrigues**](https://www.linkedin.com/in/isabella-rodrigues-7486642a7/) — Design da interface, documentação e programação.  
+- [**Isabella Rodrigues**](https://www.linkedin.com/in/isabella-rodrigues-7486642a7/) — Design da interface, documentação, programação e testes.  
 - [**Jessye Aguiar Torres**](https://www.linkedin.com/in/jessye-aguiar-torres-75628330b/) — Documentação, pesquisas, entrevistas e testes.  
-- [**Maria Luiza Andrade**](https://www.linkedin.com/in/maria-luiza-concei%C3%A7%C3%A3o-da-silva-andrade-b95b21324) — Documentação e testes.  
-- [**Juliana Martins**](https://www.linkedin.com/in/julianamaferr) — Documentação e pesquisas.
+- [**Maria Luiza Andrade**](https://www.linkedin.com/in/maria-luiza-concei%C3%A7%C3%A3o-da-silva-andrade-b95b21324) — Documentação, entrevistas e testes.  
+- [**Juliana Martins**](https://www.linkedin.com/in/julianamaferr) — Documentação, testes e pesquisas.
 
 ---
 
@@ -82,7 +86,6 @@ O **PatasPousadas** é uma plataforma online que conecta donos de animais de est
 - Esta versão serve para demonstrações, portfólio, apresentações e análise de design e usabilidade.
 
 ---
-
 
 ## 🔍 Diagramas e Modelagem
 
