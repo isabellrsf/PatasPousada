@@ -2,7 +2,9 @@
 
 ## 📌 Descrição do Projeto
 
-O projeto **PatasPousadas** é uma plataforma online que conecta donos de animais de estimação a anfitriões que oferecem hospedagem em suas casas, funcionando de forma semelhante ao Airbnb. A solução visa oferecer uma alternativa mais humana, acessível e confiável aos serviços tradicionais de hospedagem para pets, promovendo o bem-estar dos animais e proporcionando renda extra aos cuidadores. A plataforma se baseia em confiança, avaliações transparentes e uma comunidade de amantes de animais.
+O projeto **PatasPousadas** foi desenvolvido como parte do **Projeto Integrador III do curso de Análise e Desenvolvimento de Sistemas**, com o objetivo de aplicar na prática os conhecimentos adquiridos na formação acadêmica.
+
+O **PatasPousadas** é uma plataforma online que conecta donos de animais de estimação a anfitriões que oferecem hospedagem em suas casas, funcionando de forma semelhante ao Airbnb. A solução visa oferecer uma alternativa mais humana, acessível e confiável aos serviços tradicionais de hospedagem para pets, promovendo o bem-estar dos animais e proporcionando renda extra aos cuidadores. A plataforma se baseia em confiança, avaliações transparentes e uma comunidade de amantes de animais.
 
 ## 🌐 Acesse o site publicado
 
@@ -12,10 +14,10 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ## 👥 Equipe de Desenvolvimento
 
-- **Isabella Rodrigues:** Design da interface, documentação e programação.  
-- **Jessye Aguiar Torres:** Documentação, pesquisas, entrevistas e testes.  
-- **Maria Luiza Andrade:** Documentação e testes.  
-- **Juliana Martins:** Documentação e pesquisas.
+- [**Isabella Rodrigues**](https://www.linkedin.com/in/isabella-rodrigues-7486642a7/) — Design da interface, documentação e programação.  
+- [**Jessye Aguiar Torres**](https://www.linkedin.com/in/jessye-aguiar-torres-75628330b/) — Documentação, pesquisas, entrevistas e testes.  
+- [**Maria Luiza Andrade**](https://www.linkedin.com/in/maria-luiza-concei%C3%A7%C3%A3o-da-silva-andrade-b95b21324) — Documentação e testes.  
+- [**Juliana Martins**](https://www.linkedin.com/in/julianamaferr) — Documentação e pesquisas.
 
 ---
 
