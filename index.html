@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PousadaPatas</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+
+        .container-geral {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+
+        header {
+            background-color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            gap: 60px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Parkinsans', sans-serif;
+        }
+        nav .logo img {
+             width: 30px;
+             height: 30px;
+        }
+         nav .logo p {
+             font-size: 1.1em;
+             margin: 0;
+         }
+
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-family: 'Parkinsans', sans-serif;
+            font-size: 1.1em;
+        }
+         nav ul li a[href="Lartemp.html"] {
+            color: #d74f4f;
+         }
+
+        .auth-buttons-container {
+            max-width: 1200px;
+            margin: 15px auto;
+            padding: 0 20px;
+            text-align: right;
+        }
+
+        .auth-buttons-container .btn {
+            padding: 8px 18px;
+            background-color: #e2725b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-buttons-container .btn:hover {
+            background-color: #c65038;
+        }
+
+        .cuidadores h1 {
+            color: #c65038;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.0em;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .hero {
+            background: url('https://i.postimg.cc/GtxQ5LyR/canvapet2.png') no-repeat center center/cover;
+            height: 450px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            border: 1px solid #c65038; /* Cor da borda atualizada */
+        }
+
+        .search-container-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        #searchForm {
+            background-color: rgba(226, 114, 91, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .service-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .service-option {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            min-width: 200px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .service-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .service-option .content {
+             display: flex;
+             flex-direction: column;
+        }
+
+         .service-option .title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1em;
+         }
+         .service-option .description {
+            font-size: 0.85em;
+            color: #666;
+         }
+
+        .service-option .icon {
+             color: #333;
+             font-size: 1.5em;
+        }
+
+         .service-option.selected,
+         .service-option:has(input[type="radio"]:checked) {
+            border-color: #c65038;
+            box-shadow: 0 0 5px rgba(198, 80, 56, 0.4);
+         }
+
+        .service-option .radio-visual {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: auto;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .service-option input[type="radio"]:checked + .radio-visual {
+            border-color: #c65038;
+            background-color: #fff;
+        }
+
+        .service-option input[type="radio"]:checked + .radio-visual::after {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: #c65038;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .input-area button {
+            background-color: #fff;
+            color: #c65038;
+            border: 2px solid #e2725b;
+            border-radius: 8px;
+            padding: 0.7em 1.8em;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.25s ease-in-out;
+            flex-grow: 0;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .input-area button:hover {
+            background-color: #e2725b;
+            color: #fff;
+            border-color: #e2725b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+         .input-area button:active {
+             background-color: #c65038;
+             border-color: #c65038;
+             color: #fff;
+             transform: translateY(0px);
+             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+         }
+
+
+        .input-area button .search-icon {
+             font-size: 1.1em;
+             color: inherit;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            margin-bottom: 20px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 5px;
+        }
+
+        .footer-section ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: normal;
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png"
+                     alt="Icone Pata Pousada">
+                <p>Patas Pousada</p>
+            </a>
+            <ul>
+                <li><a href="reservas.html">Reservas</a></li>
+                <li><a href="ajuda.html">Ajuda</a></li>
+                <li><a href="Lartemp.html">Lar Temporário</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="auth-buttons-container">
+        <a href="login.html" class="btn">Criar conta ou entrar</a>
+    </div>
+
+    <div class="container-geral">
+        <div class="cuidadores">
+             <h1>Encontre cuidadores temporários para seu Pet</h1>
+         </div>
+     </div>
+
+    <main>
+         <section class="hero"></section>
+
+         <div class="search-container-wrapper">
+            <form id="searchForm" class="search-container">
+
+                <div class="service-options">
+                    <label class="service-option selected">
+                        <span class="icon">☀️</span>
+                        <div class="content">
+                            <span class="title">Day Care</span>
+                            <span class="description">Seu pet passa o dia se divertindo aos cuidados de outra pessoa</span>
+                        </div>
+                        <input type="radio" id="service_day_care" name="service_type" value="day_care" checked>
+                        <span class="radio-visual"></span>
+                    </label>
+
+                    <label class="service-option">
+                        <span class="icon">🏠</span>
+                        <div class="content">
+                            <span class="title">Hospedagem</span>
+                            <span class="description">Um cuidador hospeda seu pet pelo tempo que você precisar</span>
+                        </div>
+                        <input type="radio" id="service_hospedagem" name="service_type" value="hospedagem">
+                        <span class="radio-visual"></span>
+                    </label>
+
+                    <label class="service-option">
+                         <span class="icon">📍</span>
+                         <div class="content">
+                            <span class="title">Lar Temporário</span>
+                            <span class="description">Busque um lar para cuidar do seu pet temporariamente</span>
+                        </div>
+                        <input type="radio" id="service_lar_temporario" name="service_type" value="lar_temporario">
+                         <span class="radio-visual"></span>
+                    </label>
+                </div>
+
+                <div class="input-area">
+                    <button type="submit" class="search-button">
+                        <span class="search-icon">🔍</span> Buscar
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+             <div class="footer-section">
+                 <ul>
+                     <li><a href="#">Termos</a></li>
+                     <li><a href="#">Política de Privacidade</a></li>
+                 </ul>
+            </div>
+            <div class="footer-section">
+                 <h4>Ajuda</h4>
+                 <ul>
+                     <li><a href="ajuda.html">Ajuda e suporte</a></li>
+                     <li><a href="#">Opções de cancelamento</a></li>
+                 </ul>
+             </div>
+         </div>
+    </footer>
+
+     <script>
+         document.querySelectorAll('.service-option').forEach(label => {
+             label.addEventListener('click', () => {
+                 document.querySelectorAll(`input[name="${label.querySelector('input[type=radio]').name}"]`).forEach(radio => {
+                    radio.closest('.service-option').classList.remove('selected');
+                 });
+                 label.classList.add('selected');
+                 label.querySelector('input[type="radio"]').checked = true;
+             });
+         });
+         const initiallyChecked = document.querySelector('.service-option input[type="radio"]:checked');
+         if (initiallyChecked) {
+            initiallyChecked.closest('.service-option').classList.add('selected');
+         } else {
+             const firstOption = document.querySelector('.service-option');
+             if (firstOption) {
+                 firstOption.classList.add('selected');
+                 firstOption.querySelector('input[type="radio"]').checked = true;
+             }
+         }
+
+         const searchForm = document.getElementById('searchForm');
+
+         searchForm.addEventListener('submit', function(event) {
+             event.preventDefault();
+
+             const selectedServiceRadio = document.querySelector('input[name="service_type"]:checked');
+
+             if (selectedServiceRadio) {
+                 const serviceValue = selectedServiceRadio.value;
+                 console.log("Serviço selecionado:", serviceValue);
+
+                 if (serviceValue === 'day_care') {
+                     window.location.href = 'reservas.html';
+                 } else if (serviceValue === 'hospedagem') {
+                     window.location.href = 'reservas.html';
+                 } else if (serviceValue === 'lar_temporario') {
+                     window.location.href = 'lartemp.html';
+                 } else {
+                     alert('Tipo de serviço não reconhecido.');
+                 }
+
+             } else {
+                 alert('Por favor, selecione um tipo de serviço.');
+             }
+         });
+     </script>
+</body>
+</html>
