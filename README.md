@@ -81,11 +81,6 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ---
 
-### 🚩 Se quiser testar com funcionalidades reais (login, cadastro, etc.), é necessário hospedar o projeto em um servidor que suporte PHP, como:
-- [000webhost](https://www.000webhost.com/)
-- [InfinityFree](https://infinityfree.net/)
-
----
 
 ## 🔍 Diagramas e Modelagem
 
