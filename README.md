@@ -8,6 +8,7 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ➡️ [Acesse aqui o site](https://isabellrsf.github.io/PatasPousada/)  
 
+---
 
 ## 👥 Equipe de Desenvolvimento
 
@@ -46,6 +47,43 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 - 💬 Comunicação via chat interno (em desenvolvimento)  
 - 💰 Simulação de pagamentos (em desenvolvimento)  
 - ⭐ Sistema de avaliações e feedback (em desenvolvimento)  
+
+---
+
+## 🚀 Como Usar
+
+### ✅ Acesso ao Site
+1. Clique no link abaixo para acessar a plataforma:  
+👉 [https://isabellrsf.github.io/PatasPousada/](https://isabellrsf.github.io/PatasPousada/)
+
+2. Você será direcionado para a **página inicial**, onde poderá visualizar os serviços disponíveis.
+
+---
+
+### ✅ Navegação pelo Site
+- Utilize o menu superior para navegar entre as páginas:
+  - **Reservas:** Veja opções de hospedagem para seu pet.
+  - **Ajuda:** Tire suas dúvidas sobre o funcionamento da plataforma.
+  - **Lar Temporário:** Informações sobre como se tornar um anfitrião.
+  - **Login:** Acesse ou crie sua conta (⚠️ funcionalidade apenas visual, não funcional no GitHub Pages).
+
+---
+
+### ✅ Limitações da Versão no GitHub Pages
+- As páginas estão funcionando apenas como uma **demonstração visual da interface**.
+- Funcionalidades que dependem de banco de dados ou back-end (como login, cadastro, painel de usuário, reservas reais) **não estão ativas**, pois o GitHub Pages não executa códigos PHP.
+
+---
+
+### ✅ Visualização de Interfaces
+- Você pode navegar livremente pelas telas para entender o fluxo e a proposta da plataforma.
+- Esta versão serve para demonstrações, portfólio, apresentações e análise de design e usabilidade.
+
+---
+
+### 🚩 Se quiser testar com funcionalidades reais (login, cadastro, etc.), é necessário hospedar o projeto em um servidor que suporte PHP, como:
+- [000webhost](https://www.000webhost.com/)
+- [InfinityFree](https://infinityfree.net/)
 
 ---
 
