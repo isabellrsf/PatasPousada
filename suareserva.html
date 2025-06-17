@@ -85,7 +85,7 @@
         <nav>
             <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
             alt="Icone">
-            <a href="home.html" class="logo"><p>Patas Pousada</p></a>
+            <a href="index.html" class="logo"><p>Patas Pousada</p></a>
             <ul>
                 <li><a href="reservas.html">Reservas</a></li>
                 <li><a href="ajuda.html">Ajuda</a></li>
@@ -98,13 +98,12 @@
     </div>
 
     <script>
-        // Função para verificar se há reservas
-        function checkReservations() {
-            // Aqui você definiria a lógica real para verificar se há reservas.
-            // Para o exemplo, vamos simular a ausência de reservas com uma variável.
-            var hasReservations = false; // Altere para `true` se houver reservas
 
-            // Obtemos o elemento onde a mensagem será exibida
+        function checkReservations() {
+
+            var hasReservations = false; 
+
+    
             var messageElement = document.getElementById('reservation-message');
 
             if (hasReservations) {
@@ -114,7 +113,6 @@
             }
         }
 
-        // Chama a função para verificar reservas ao carregar a página
         window.onload = checkReservations;
     </script>
 </body>
