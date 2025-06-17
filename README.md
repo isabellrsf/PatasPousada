@@ -1,4 +1,3 @@
-
 # 🐾 PatasPousadas
 
 ## 📌 Descrição do Projeto
@@ -7,27 +6,29 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 ## 👥 Equipe de Desenvolvimento
 
-**Isabella Rodrigues:** Design da interface, documentação e programação.  
-**Jessye Aguiar:** Documentação, pesquisas, entrevistas e testes.
+- **Isabella Rodrigues:** Design da interface, documentação e programação.  
+- **Jessye Aguiar:** Documentação, pesquisas, entrevistas e testes.  
+- **Maria Luiza:** Documentação.  
+- **Juliana:** Documentação.
 
 ## ✅ Objetivo
 
 - **Aumentar a confiabilidade** na hospedagem de pets, por meio de sistemas de verificação e avaliações.
-- **Reduzir os custos** com hospedagem com hospedagem em compração a creches e hotéis tradicionais.
-- **Diminuir a solidão e ansiedade dos animais**, oferencedo ambientes familiares e cuidadosos.
+- **Reduzir os custos** com hospedagem em comparação a creches e hotéis tradicionais.
+- **Diminuir a solidão e ansiedade dos animais**, oferecendo ambientes familiares e cuidadosos.
 - **Melhorar a comunicação** entre donos e anfitriões, promovendo segurança e confiança.
-- **Oferecer uma solução prática e digital**, com usabilidade amigável e recursos como clandário, chat, pagamentos e perfis completos.
+- **Oferecer uma solução prática e digital**, com usabilidade amigável e recursos como calendário, chat, pagamentos e perfis completos.
 
-## Escopo e Requisitos do Projeto
+## 📦 Escopo e Requisitos do Projeto
 
 ### 🛠 Tecnologias utilizadas:
 - HTML, CSS e JavaScript
 - Node.js
 - Ferramentas de versionamento: Git e GitHub
 
-### Requisitos funcionais:
+### ✅ Requisitos funcionais:
 - Cadastro de donos de pets e anfitriões
-- Sistema de busca e filtragem por localização, tipo de animal, avaliações
+- Sistema de busca e filtragem por localização, tipo de animal e avaliações
 - Reservas com calendário integrado
 - Comunicação via chat interno
 - Pagamentos seguros
@@ -37,36 +38,34 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 O levantamento de requisitos foi realizado por meio da análise de mercado pet, entrevistas com donos de animais e pesquisas online sobre os principais problemas enfrentados com hospedagem tradicional. Foram levantados requisitos funcionais e não funcionais, além de definidos cenários de negócio para otimizar a plataforma.
 
-## Cronograma de Atividades
+## 🗓 Cronograma de Atividades
 
-| Etapa                     | Data Inicial | Data Final   | Responsável |
-|--------------------------|--------------|--------------|-------------|
-| Planejamento e Definição | 01/03/2024   | 15/03/2024   | Equipe      |
-| Desenvolvimento          | 16/03/2024   | 30/04/2024   | Equipe      |
-| Testes e Validação       | 01/05/2024   | 15/05/2024   | Equipe      |
-| Finalização e Apresentação| 16/05/2024  | 31/05/2024   | Equipe      |
+| Etapa                      | Data Inicial | Data Final   | Responsável |
+|----------------------------|--------------|--------------|-------------|
+| Planejamento e Definição   | 01/03/2024   | 15/03/2024   | Equipe      |
+| Desenvolvimento            | 16/03/2024   | 30/04/2024   | Equipe      |
+| Testes e Validação         | 01/05/2024   | 15/05/2024   | Equipe      |
+| Finalização e Apresentação | 16/05/2024   | 31/05/2024   | Equipe      |
 
-## Diagramas e Fluxogramas
+## 🔍 Diagramas e Fluxogramas
 
-**Duplo Diamante – Design Thinking**  
+### 🧠 Duplo Diamante – Design Thinking
 Metodologia utilizada para entender as necessidades dos donos de pets e propor soluções centradas no usuário.
 
-![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinking.png)
+![Design Thinking](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinking.png)
 
-## Diagrama de Casos de Uso
-
+### 🎯 Diagrama de Casos de Uso
 O diagrama ilustra as funcionalidades principais da plataforma como: cadastro, busca, reserva, comunicação, avaliações e pagamentos.
 
-*Imagem ilustrativa não disponível neste README*
+*Imagem ilustrativa não disponível neste README.*
 
-## Modelagem de Banco de Dados Física
-
+### 🗄 Modelagem de Banco de Dados Física
 Detalha a estrutura de tabelas, chaves primárias e estrangeiras, índices e restrições visando eficiência e segurança.
 
-![imagem](https://github.com/isabellrsf/PatasPousada/blob/main/assets/Bancodedados.png)
+![Banco de Dados](https://github.com/isabellrsf/PatasPousada/blob/main/assets/Bancodedados.png)
 
-## Apresentação do projeto com vídeo do protótipo do projeto:
+## 🎥 Apresentação do Projeto
+
 Protótipo desenvolvido de interface e funcionalidades, utilizando VSCODE e CANVA.
 
-https://www.canva.com/design/DAGSK2yjaeo/mgvhpMt38Mw3bmdVStndIQ/edit?utm_content=DAGSK2yjaeo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-
+🔗 [Acesse aqui o vídeo no Canva](https://www.canva.com/design/DAGSK2yjaeo/mgvhpMt38Mw3bmdVStndIQ/edit?utm_content=DAGSK2yjaeo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
