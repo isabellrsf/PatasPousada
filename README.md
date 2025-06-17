@@ -4,6 +4,14 @@
 
 O projeto **PatasPousadas** é uma plataforma online que conecta donos de animais de estimação a anfitriões que oferecem hospedagem em suas casas, funcionando de forma semelhante ao Airbnb. A solução visa oferecer uma alternativa mais humana, acessível e confiável aos serviços tradicionais de hospedagem para pets, promovendo o bem-estar dos animais e proporcionando renda extra aos cuidadores. A plataforma se baseia em confiança, avaliações transparentes e uma comunidade de amantes de animais.
 
+## 🌐 Acesse o site publicado
+
+➡️ [Acesse aqui o site](https://isabellrsf.github.io/PatasPousada/)  
+
+_(Substituir pelo link gerado no GitHub Pages se estiver diferente)_
+
+---
+
 ## 👥 Equipe de Desenvolvimento
 
 - **Isabella Rodrigues:** Design da interface, documentação e programação.  
@@ -11,7 +19,9 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 - **Maria Luiza:** Documentação.  
 - **Juliana:** Documentação.
 
-## ✅ Objetivo
+---
+
+## ✅ Objetivos do Projeto
 
 - **Aumentar a confiabilidade** na hospedagem de pets, por meio de sistemas de verificação e avaliações.
 - **Reduzir os custos** com hospedagem em comparação a creches e hotéis tradicionais.
@@ -19,53 +29,61 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 - **Melhorar a comunicação** entre donos e anfitriões, promovendo segurança e confiança.
 - **Oferecer uma solução prática e digital**, com usabilidade amigável e recursos como calendário, chat, pagamentos e perfis completos.
 
-## 📦 Escopo e Requisitos do Projeto
+---
 
-### 🛠 Tecnologias utilizadas:
-- HTML, CSS e JavaScript
-- Node.js
-- Ferramentas de versionamento: Git e GitHub
+## 🛠 Tecnologias utilizadas
 
-### ✅ Requisitos funcionais:
-- Cadastro de donos de pets e anfitriões
-- Sistema de busca e filtragem por localização, tipo de animal e avaliações
-- Reservas com calendário integrado
-- Comunicação via chat interno
-- Pagamentos seguros
-- Sistema de avaliações e feedback
+- HTML  
+- CSS  
+- JavaScript  
+- PHP (⚠️ Funcionalidades PHP não estão ativas no GitHub Pages)  
+- Ferramentas de versionamento: Git e GitHub  
 
-## 💡 Levantamento de Requisitos
+---
 
-O levantamento de requisitos foi realizado por meio da análise de mercado pet, entrevistas com donos de animais e pesquisas online sobre os principais problemas enfrentados com hospedagem tradicional. Foram levantados requisitos funcionais e não funcionais, além de definidos cenários de negócio para otimizar a plataforma.
+## 🗺 Funcionalidades
 
-## 🗓 Cronograma de Atividades
+- 🐶 Cadastro de donos de pets e anfitriões  
+- 🔍 Sistema de busca e filtragem por localização, tipo de animal e avaliações  
+- 📅 Reservas com calendário integrado  
+- 💬 Comunicação via chat interno (em desenvolvimento)  
+- 💰 Simulação de pagamentos (em desenvolvimento)  
+- ⭐ Sistema de avaliações e feedback (em desenvolvimento)  
 
-| Etapa                      | Data Inicial | Data Final   | Responsável |
-|----------------------------|--------------|--------------|-------------|
-| Planejamento e Definição   | 01/03/2024   | 15/03/2024   | Equipe      |
-| Desenvolvimento            | 16/03/2024   | 30/04/2024   | Equipe      |
-| Testes e Validação         | 01/05/2024   | 15/05/2024   | Equipe      |
-| Finalização e Apresentação | 16/05/2024   | 31/05/2024   | Equipe      |
+---
 
-## 🔍 Diagramas e Fluxogramas
+## 🔍 Diagramas e Modelagem
 
-### 🧠 Duplo Diamante – Design Thinking
-Metodologia utilizada para entender as necessidades dos donos de pets e propor soluções centradas no usuário.
-
+### 🧠 Design Thinking - Duplo Diamante
 ![Design Thinking](https://github.com/isabellrsf/PatasPousada/blob/main/assets/DesignThinking.png)
 
-### 🎯 Diagrama de Casos de Uso
-O diagrama ilustra as funcionalidades principais da plataforma como: cadastro, busca, reserva, comunicação, avaliações e pagamentos.
-
-*Imagem ilustrativa não disponível neste README.*
-
-### 🗄 Modelagem de Banco de Dados Física
-Detalha a estrutura de tabelas, chaves primárias e estrangeiras, índices e restrições visando eficiência e segurança.
-
+### 🗺️ Modelagem de Banco de Dados
 ![Banco de Dados](https://github.com/isabellrsf/PatasPousada/blob/main/assets/Bancodedados.png)
+
+---
+
+## 🗓️ Cronograma de Atividades
+
+| Etapa                          | Data Inicial | Data Final   | Responsável |
+|---------------------------------|--------------|--------------|-------------|
+| Planejamento e Definição        | 01/03/2024   | 15/03/2024   | Equipe      |
+| Desenvolvimento                 | 16/03/2024   | 30/04/2024   | Equipe      |
+| Testes e Validação              | 01/05/2024   | 15/05/2024   | Equipe      |
+| Finalização e Documentação      | 16/05/2024   | 31/05/2024   | Equipe      |
+| **Apresentação do Protótipo**   | **17/06/2025** | **17/06/2025** | **Equipe** |
+
+---
 
 ## 🎥 Apresentação do Projeto
 
-Protótipo desenvolvido de interface e funcionalidades, utilizando VSCODE e CANVA.
+🔗 [Clique aqui para assistir no Canva](https://www.canva.com/design/DAGSK2yjaeo/mgvhpMt38Mw3bmdVStndIQ/edit?utm_content=DAGSK2yjaeo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-🔗 [Acesse aqui o vídeo no Canva](https://www.canva.com/design/DAGSK2yjaeo/mgvhpMt38Mw3bmdVStndIQ/edit?utm_content=DAGSK2yjaeo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+---
+
+## ⚠️ Observações Importantes
+
+> Este projeto está hospedado no **GitHub Pages**, portanto, as funcionalidades que dependem de PHP (como login, cadastro e banco de dados) **não estão ativas nesta versão pública**, sendo apenas uma demonstração visual da interface e navegação do site.
+
+---
+
+## 🐾 Desenvolvido com ❤️ por apaixonados por pets!
