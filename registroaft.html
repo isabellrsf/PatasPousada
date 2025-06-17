@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Anfitriões</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+    
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f7f7f7;
+      margin: 10px;
+    }
+
+    header {
+      justify-content: center;
+      display: flex;
+      background-color: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      width: 30px;
+      height: 30px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e2725b;
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .container {
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .radio-group {
+      margin-bottom: 20px;
+    }
+
+    .radio-group label {
+      margin-right: 10px;
+    }
+
+    button {
+      width: 80%;
+      border: 2px solid #e2725b;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      margin: auto;
+      padding: 10px;
+      background-color: #e2725b;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: red;
+    }
+
+    .age-note {
+      color: #FF0000;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+    }
+
+    .criar {
+      display: flex;
+      justify-content: center;
+    }
+
+    .criar a {
+      text-align: center;
+      width: 70%;
+      color: black;
+      padding: 5px;
+      border-radius: 20px;
+      text-decoration: none;
+    }
+
+    .criar a:hover {
+      color: #FF0000;
+    }
+
+    .alerta-erro {
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #cc0000;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
+      <a href="home.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
+      <ul>
+        <li><a href="home.html" style="font-family: parkinsans;">Início</a></li>
+        <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <br>
+
+  <div class="container">
+    <h2>Cadastro</h2>
+
+    <div id="erro-container" class="alerta-erro"></div>
+
+    <form action="processaCadastroAnfitrioes.php" method="POST">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" name="name" required placeholder="Informe seu nome completo">
+
+      <label for="cpf">CPF:</label>
+      <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00">
+      <div class="age-note">Para se cadastrar, é necessário ter mais de 18 anos.</div>
+
+      <label for="age">Idade:</label>
+      <input type="number" id="age" name="age" min="18" required placeholder="mínimo 18 anos">
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required placeholder="Informe seu email">
+
+      <label for="password">Senha:</label>
+      <input type="password" id="password" name="password" required placeholder="Crie uma senha">
+
+      <label for="confirm_password">Confirmar Senha:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required placeholder="Repita sua senha">
+
+      <label for="city">Cidade:</label>
+      <select id="city" name="city" required>
+        <option value="">Selecione sua cidade</option>
+        <option value="Brasília">Brasília</option>
+        <option value="Gama">Gama</option>
+        <option value="Taguatinga">Taguatinga</option>
+        <option value="Ceilândia">Ceilândia</option>
+        <option value="Samambaia">Samambaia</option>
+        <option value="Planaltina">Planaltina</option>
+        <option value="Guará">Guará</option>
+        <option value="Santa Maria">Santa Maria</option>
+        <option value="Sobradinho">Sobradinho</option>
+        <option value="Recanto das Emas">Recanto das Emas</option>
+        <option value="Lago Sul">Lago Sul</option>
+        <option value="Riacho Fundo">Riacho Fundo</option>
+        <option value="Lago Norte">Lago Norte</option>
+        <option value="Candangolândia">Candangolândia</option>
+        <option value="Águas Claras">Águas Claras</option>
+        <option value="Riacho Fundo II">Riacho Fundo II</option>
+        <option value="Sudoeste/Octogonal">Sudoeste/Octogonal</option>
+        <option value="Varjão">Varjão</option>
+        <option value="Park Way">Park Way</option>
+        <option value="Sobradinho II">Sobradinho II</option>
+        <option value="Cruzeiro">Cruzeiro</option>
+        <option value="Asa Sul">Asa Sul</option>
+        <option value="Asa Norte">Asa Norte</option>
+        <option value="Vicente Pires">Vicente Pires</option>
+        <option value="SIA">SIA</option>
+        <option value="SCIA (Estrutural)">SCIA (Estrutural)</option>
+        <option value="Jardim Botânico">Jardim Botânico</option>
+        <option value="Itapoã">Itapoã</option>
+        <option value="SMPW (Park Way)">SMPW (Park Way)</option>
+        <option value="Núcleo Bandeirante">Núcleo Bandeirante</option>
+        <option value="Fercal">Fercal</option>
+      </select>
+
+      <label for="pets">Quantos pets você tem?</label>
+      <input type="number" id="pets" name="pets" min="0" required placeholder="Você possui pets? quantos?">
+
+      <div class="radio-group">
+        <label>Você mora em:</label>
+        <label for="house"><input type="radio" id="house" name="residence" value="Casa" required> Casa</label>
+        <label for="apartment"><input type="radio" id="apartment" name="residence" value="Apartamento"> Apartamento</label>
+        <label for="farm"><input type="radio" id="farm" name="residence" value="Chácara"> Chácara</label>
+      </div>
+
+      <button type="submit">Registrar</button><br>
+
+      <div class="criar">
+        <a href="login.html">Já tenho uma conta</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Validação de senha no front-end
+    document.querySelector('form').addEventListener('submit', function(event) {
+      const senha = document.getElementById('password').value;
+      const confirmar = document.getElementById('confirm_password').value;
+
+      if (senha !== confirmar) {
+        alert("As senhas não coincidem!");
+        event.preventDefault();
+      }
+    });
+
+    // Mostrar mensagem de erro via ?erro= na URL
+    const params = new URLSearchParams(window.location.search);
+    const erro = params.get("erro");
+    if (erro) {
+      const erroDiv = document.getElementById("erro-container");
+      erroDiv.textContent = decodeURIComponent(erro.replace(/\+/g, ' '));
+      erroDiv.style.display = "block";
+    }
+  </script>
+</body>
+</html>

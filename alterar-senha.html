@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterar Senha</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: black;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            justify-content: center;
+            display: flex;
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+
+        header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #fee9e8;
+            border: 1px solid #e87a7e;
+            border-radius: 5px;
+            color: #fff;
+        }
+        a {
+            color: #1da1f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            padding: 10px;
+            background-color: #e2725b;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #f4a7a7;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
+            alt="Icone">
+            <a href="home.html" class="logo" style="font-family: Parkinsans;">Patas Pousada</a>
+            <ul>
+                <li><a href="reservas.html" style="font-family: Parkinsans;">Reservas</a></li>
+                <li><a href="ajuda.html" style="font-family: Parkinsans;">Ajuda</a></li>
+            </ul>
+        </nav>
+    </header> <br>
+
+    <div class="container">
+        <h1>Altere sua senha</h1>
+        <form>
+            <label for="senha-atual">Senha atual</label>
+            <input type="password" id="senha-atual" placeholder="Senha atual">
+
+            <a href="#">Esqueceu sua senha?</a>
+
+            <label for="nova-senha">Nova senha</label>
+            <input type="password" id="nova-senha" placeholder="Nova senha">
+
+            <label for="confirmar-senha">Confirmar senha</label>
+            <input type="password" id="confirmar-senha" placeholder="Confirmar senha">
+
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+</body>
+</html>

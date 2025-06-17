@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7;
+            margin: 10px;
+        }
+
+        header {
+            justify-content: center;
+            display: flex;
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+
+        header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .ajudaesup{
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 10px auto; /* Ajuste o topo para evitar sobreposição com o header */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq, .contact, .form-section {
+            margin-bottom: 20px;
+        }
+
+        .faq h2, .contact h2, .form-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #e2725b;
+        }
+
+        .faq p, .contact p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input, form textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #e2725b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        form button:hover {
+            background-color: #d65b46;
+        }
+
+    </style>
+
+<header>
+    <nav>
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
+        alt="Icone">
+        <a href="home.html" class="logo" style="font-family: Parkinsans;">Patas Pousada</a>
+        <ul>
+            <li><a href="home.html" style="font-family: Parkinsans;">Início</a></li>
+            <li><a href="ajuda.html" style="font-family: Parkinsans;">Ajuda</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="ajudaesup">
+    <h1>Ajuda e suporte</h1>
+</div>
+
+<div class="container">
+
+    <div class="faq">
+        <h2>Perguntas Frequentes</h2>
+        <p><strong>1. Como faço uma reserva?</strong><br>
+        Você pode fazer uma reserva através do nosso site, na página de Reservas.</p>
+        
+        <p><strong>2. Posso cancelar minha reserva?</strong><br>
+        Sim, o cancelamento é possível até 24 horas antes da data de check-in. Para mais informações, consulte nossos termos de serviço.</p>
+
+        <p><strong>3. Como entro em contato com a pousada?</strong><br>
+        Você pode entrar em contato através do nosso formulário de suporte ou pelos contatos fornecidos abaixo.</p>
+    </div>
+
+
+    <div class="contact">
+        <h2>Informações de Contato</h2>
+        <p><strong>Email:</strong> suporte@patapousada.com</p>
+        <p><strong>Telefone:</strong> (61) 1234-5678</p>
+    </div>
+
+
+    <div class="form-section">
+        <h2>Entre em Contato Conosco</h2>
+        <form>
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+
+    
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueceu sua senha?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: black;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            justify-content: center;
+            display: flex;
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+
+        header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .container {
+            margin: 10px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .steps {
+            margin-top: 20px;
+        }
+        .steps li {
+            margin-bottom: 10px;
+        }
+        .email-input {
+            margin-top: 20px;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #e2725b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #cc6149;
+        }
+        .resend-link {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .resend-link button {
+            background-color: transparent;
+            color: #007BFF;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+        .resend-link button:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
+            alt="Icone">
+            <a href="home.html" class="logo" style="font-family: Parkinsans;">Patas Pousada</a>
+            <ul>
+                <li><a href="reservas.html" style="font-family: Parkinsans;">Reservas</a></li>
+                <li><a href="ajuda.html" style="font-family: Parkinsans;">Ajuda</a></li>
+            </ul>
+        </nav>
+    </header> <br>
+
+    <div class="container">
+        <h1>Esqueceu sua senha?</h1>
+        <p>Não se preocupe! Siga os passos abaixo para redefinir sua senha:</p>
+        <ol class="steps">
+            <li>Digite o endereço de e-mail associado à sua conta.</li>
+            <li>Verifique sua caixa de entrada e procure pelo e-mail de redefinição de senha.</li>
+            <li>Clique no link fornecido no e-mail.</li>
+            <li>Crie uma nova senha e confirme.</li>
+            <li>Faça login novamente com sua nova senha.</li>
+        </ol>
+        <p>Se você não receber o e-mail, verifique sua pasta de spam ou tente novamente.</p>
+        <div class="email-input">
+            <input type="email" placeholder="Digite seu e-mail" required>
+            <button>Enviar</button>
+        </div>
+        <div class="resend-link">
+            <button onclick="reenviarEmail()">Ainda não recebeu o e-mail? Clique aqui</button>
+        </div>
+    </div>
+
+    <script>
+        function reenviarEmail() {
+            alert("O e-mail de redefinição de senha foi reenviado. Verifique sua caixa de entrada.");
+            // Aqui você pode adicionar a lógica para realmente reenviar o e-mail usando uma API ou backend.
+        }
+    </script>
+</body>
+</html>

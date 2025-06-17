@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lar Temporário - Patas Pousada</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+                @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            justify-content: center;
+            display: flex;
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            
+        }
+
+        header p {
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+
+        header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #e2725b;
+}
+
+p {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+ol {
+    margin-left: 20px;
+    color: #555;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form input, form textarea, form button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form input:focus, form textarea:focus {
+    outline: none;
+    border-color: #e2725b;
+    box-shadow: 0 0 5px rgba(226, 114, 91, 0.5);
+}
+
+form button {
+    background-color: #e2725b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #cc6149;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #fff;
+    color: #777;
+    border-top: 1px solid #ddd;
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    form button {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
+            alt="Icone">
+            <a href="home.html" class="logo" style="font-family: Parkinsans;">Patas Pousada</a>
+            <ul>
+                <li><a href="reservas.html" style="font-family: Parkinsans;">Reservas</a></li>
+                <li><a href="ajuda.html" style="font-family: Parkinsans;">Ajuda</a></li>
+                <li><a href="Lartemp.html" style="color: #d74f4f; font-family: Parkinsans; ">Lar Temporário</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="about">
+            <h1>Lar Temporário para Animais</h1>
+            <p>
+                Você está disponível para dar um lar temporário a um bichinho? O lar temporário é uma oportunidade para oferecer um ambiente seguro e cheio de carinho para animais 
+                resgatados ou que precisam de assistência temporariamente enquanto eles aguardam adoção ou a volta de seu dono. Ao se tornar um lar temporário, você ajuda a transformar a vida 
+                desses bichinhos, dando a eles a chance de se recuperarem e se sentirem amados.
+            </p>
+            <p>
+                Se você ama animais e deseja contribuir, esta é uma maneira incrível de ajudar!
+            </p>
+        </section>
+
+        <section class="steps">
+            <h2>Como Funciona</h2>
+            <ol>
+                <li>Inscreva-se preenchendo o formulário abaixo.</li>
+                <li>A equipe da <strong>Patas Pousada</strong> irá examinar seu perfil e verificar se você é um bom perfil para ser um lar temporário.</li>
+                <li>Após a aprovação, você será responsável por cuidar de um animal temporariamente.</li>
+                <li>Deseja cadastrar seu bichinho para um lar temporário? <a href="TemporaryHome.html">Clique Aqui!</a></li>
+            </ol>
+        </section>
+
+        <section class="form-section">
+            <h2>Formulário de Inscrição</h2>
+            <form action="process_form.php" method="post">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" required placeholder="Digite seu telefone">
+
+                <label for="experiencia">Você já teve experiência com animais?</label>
+                <textarea id="experiencia" name="experiencia" rows="4" placeholder="Descreva sua experiência"></textarea>
+
+                <button type="submit">Enviar Inscrição</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Patas Pousada - Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

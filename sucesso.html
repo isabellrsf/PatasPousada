@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro Realizado</title>
+
+  <!-- Redirecionar automaticamente após 3 segundos -->
+  <meta http-equiv="refresh" content="3;url=login.html">
+  
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #e2725b;
+    }
+    p {
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #333;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #e2725b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #d2614b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cadastro realizado com sucesso! 🐾</h1>
+  <p>Você será redirecionado para o login em instantes...</p>
+
+  <!-- Botão para redirecionamento imediato -->
+  <button class="btn" onclick="window.location.href='login.html';">Ir agora para o login</button>
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patas Pousada - Reservas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+
+        :root {
+            --cor-principal: #e2725b;
+            --cor-secundaria: #c65038;
+            --cor-texto: #333;
+            --cor-fundo: #f7f7f7;
+            --cor-branco: #fff;
+            --cor-cinza-claro: #ccc;
+            --cor-cinza-medio: #ddd;
+            --cor-cinza-escuro: #333;
+            --font-principal: 'Nunito', Arial, sans-serif;
+            --font-destaque: 'Parkinsans', sans-serif;
+            --border-radius-padrao: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-principal);
+            line-height: 1.6;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+        }
+
+        .container-geral {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        main {
+            padding: 20px 0;
+        }
+
+        h2, h3 {
+            font-family: var(--font-destaque);
+            color: var(--cor-secundaria);
+            margin-bottom: 15px;
+        }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.3em; }
+
+        header {
+            background-color: var(--cor-branco);
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            gap: 60px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--cor-principal);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-destaque);
+        }
+        nav .logo img {
+             width: 30px;
+             height: 30px;
+        }
+         nav .logo p {
+             font-size: 1.1em;
+             margin: 0;
+         }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--cor-texto);
+            font-weight: bold;
+            font-family: var(--font-destaque);
+            font-size: 1.1em;
+            transition: color 0.2s ease;
+        }
+        nav ul li a:hover {
+            color: var(--cor-principal);
+        }
+         nav ul li a[href="Lartemp.html"] {
+            color: #d74f4f;
+         }
+         nav ul li a[href="reservas.html"] {
+             color: var(--cor-principal);
+         }
+
+        .filters-container {
+            background-color: var(--cor-branco);
+            padding: 20px 25px;
+            border-radius: var(--border-radius-padrao);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex-grow: 1;
+        }
+        .filter-group label {
+            font-weight: bold;
+            font-size: 0.9em;
+            color: var(--cor-secundaria);
+        }
+        .filter-group input[type="text"],
+        .filter-group select
+         {
+            padding: 10px;
+            border: 1px solid var(--cor-cinza-medio);
+            border-radius: 4px;
+            font-family: var(--font-principal);
+            font-size: 1em;
+            height: 40px;
+        }
+
+        .filter-group .select2-container {
+             width: 100% !important;
+        }
+
+        .filter-group .select2-container .select2-selection--single {
+            border: 1px solid var(--cor-cinza-medio);
+            border-radius: 4px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+
+         .filter-group .select2-container .select2-selection--single .select2-selection__rendered {
+             padding-left: 10px;
+             padding-right: 20px;
+             color: #555;
+         }
+
+         .filter-group .select2-container[dir="ltr"] .select2-selection--single .select2-selection__rendered {
+            text-align: left;
+         }
+
+         .filter-group .select2-container--default .select2-selection--single .select2-selection__arrow,
+         .filter-group .select2-container--classic .select2-selection--single .select2-selection__arrow {
+             position: absolute;
+             top: 1px;
+             right: 1px;
+             width: 20px;
+             height: 38px;
+         }
+
+          .filter-group .select2-container--default .select2-selection--single .select2-selection__arrow b,
+          .filter-group .select2-container--classic .select2-selection--single .select2-selection__arrow b {
+              margin-top: 0;
+              top: 50%;
+              transform: translateY(-50%);
+          }
+
+        .filter-group button {
+            padding: 10px 15px;
+            background-color: var(--cor-secundaria);
+            color: var(--cor-branco);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .filter-group button:hover {
+            background-color: var(--cor-principal);
+        }
+        .filter-group button i {
+            font-size: 1.1em;
+        }
+
+        .reservations-section h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reservations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--cor-branco);
+            border-radius: var(--border-radius-padrao);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .card .card-image-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: var(--cor-secundaria);
+        }
+
+        .card-rating {
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            color: #f0ad4e;
+        }
+        .card-rating .review-count {
+            color: #777;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+
+        .card-price {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--cor-texto);
+            margin-bottom: 15px;
+            margin-top: auto;
+        }
+        .card-price span {
+            font-weight: normal;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .reserve-button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--cor-branco);
+            color: var(--cor-secundaria);
+            border: 2px solid var(--cor-principal);
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+            margin-top: 10px;
+        }
+
+        .reserve-button:hover {
+            background-color: var(--cor-principal);
+            color: var(--cor-branco);
+            border-color: var(--cor-principal);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+             display: flex;
+             opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--cor-branco);
+            padding: 30px;
+            border-radius: var(--border-radius-padrao);
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+             transform: scale(1);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--cor-cinza-claro);
+            transition: color 0.2s ease;
+            line-height: 1;
+        }
+        .close-button:hover {
+             color: var(--cor-principal);
+        }
+
+        .modal-content h2 {
+             margin-top: 0;
+             margin-bottom: 20px;
+        }
+
+        #modal-description {
+             font-style: italic;
+             color: #555;
+             margin-bottom: 25px;
+        }
+
+        .modal-details {
+            text-align: left;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .modal-details p {
+             font-size: 0.95em;
+             display: flex;
+             align-items: baseline;
+             gap: 10px;
+             border-bottom: 1px solid #eee;
+             padding-bottom: 10px;
+             margin-bottom: 10px;
+        }
+        .modal-details p:last-child {
+             border-bottom: none;
+             margin-bottom: 0;
+             padding-bottom: 0;
+        }
+        .modal-details p strong {
+             color: var(--cor-secundaria);
+             flex-shrink: 0;
+             white-space: nowrap;
+             font-weight: bold;
+             padding-right: 5px;
+        }
+
+        footer {
+            background-color: var(--cor-cinza-escuro);
+            color: var(--cor-branco);
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-section {
+            margin-bottom: 20px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--cor-principal);
+            font-family: var(--font-destaque);
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #aaa;
+            text-decoration: none;
+            font-weight: normal;
+            transition: color 0.2s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--cor-branco);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="home.html" class="logo">
+            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone Pata Pousada">
+            <p>Patas Pousada</p>
+        </a>
+        <ul>
+            <li><a href="reservas.html">Reservas</a></li>
+            <li><a href="ajuda.html">Ajuda</a></li>
+            <li><a href="Lartemp.html">Lar Temporário</a></li>
+        </ul>
+    </nav>
+</header> <br>
+
+<main class="container-geral">
+
+    <section class="filters-container">
+        <div class="filter-group">
+            <label for="checkin">Check-in:</label>
+            <input type="text" id="checkin" placeholder="Selecione a data">
+        </div>
+        <div class="filter-group">
+            <label for="checkout">Check-out:</label>
+            <input type="text" id="checkout" placeholder="Selecione a data">
+        </div>
+        <div class="filter-group">
+            <label for="city-select">Cidade:</label>
+            <select id="city-select" name="cidades">
+                <option value="" disabled selected>Todas as cidades</option>
+                 <option value="AQ">ÁGUA QUENTE</option>
+                 <option value="AC">ÁGUAS CLARAS</option>
+                 <option value="ARNIQ">ARNIQUEIRA</option>
+                 <option value="ARPANGA">ARAPOANGA</option>
+                 <option value="BZ">BRAZLÂNDIA</option>
+                 <option value="CANDA">CANDANGOLÂNDIA</option>
+                 <option value="CEI">CEILÂNDIA</option>
+                 <option value="CR">CRUZEIRO</option>
+                 <option value="SCIA">ESTRUTURAL (SCIA)</option>
+                 <option value="FERCAL">FERCAL</option>
+                 <option value="GA">GAMA</option>
+                 <option value="GUARA">GUARÁ</option>
+                 <option value="ITP">ITAPOÃ</option>
+                 <option value="JB">JARDIM BOTÂNICO</option>
+                 <option value="LN">LAGO NORTE</option>
+                 <option value="LS">LAGO SUL</option>
+                 <option value="NB">NÚCLEO BANDEIRANTE</option>
+                 <option value="PW">PARK WAY</option>
+                 <option value="PRN">PARANOÁ</option>
+                 <option value="PN">PLANALTINA</option>
+                 <option value="PP">PLANO PILOTO</option>
+                 <option value="RDE">RECANTO DAS EMAS</option>
+                 <option value="RF">RIACHO FUNDO</option>
+                 <option value="RF2">RIACHO FUNDO 2</option>
+                 <option value="SAM">SAMAMBAIA</option>
+                 <option value="SEBAS">SÃO SEBASTIÃO</option>
+                 <option value="SIA">SIA</option>
+                 <option value="SB">SOBRADINHO</option>
+                 <option value="SB2">SOBRADINHO II</option>
+                 <option value="SNPDS">SOL NASCENTE E PÔR DO SOL</option>
+                 <option value="SO">SUDOESTE/OCTOGONAL</option>
+                 <option value="ST">SANTA MARIA</option>
+                 <option value="TG">TAGUATINGA</option>
+                 <option value="VJ">VARJÃO</option>
+                 <option value="VP">VICENTE PIRES</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>&nbsp;</label>
+            <button type="button"><i class="fas fa-search"></i>Filtrar</button>
+        </div>
+    </section>
+
+    <section class="reservations-section">
+        <h2>Perfis Disponíveis</h2>
+        <div class="reservations">
+            <div class="card">
+                <div class="card-image-container">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1373/1373255.png" alt="Foto Arthur">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Arthur</h3>
+                    <p class="card-rating">
+                        <i class="fas fa-star"></i> 5.0 <span class="review-count">(47 avaliações)</span>
+                    </p>
+                    <p class="card-price">R$ 55 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, 'Arthur', 'Experiente em cuidar de pets de pequeno porte.', '26 anos', 'Cuidador experiente com amor por animais.', 'Veterinário', 'Casado', 'Não')">Ver perfil</a>
+                </div>
+            </div>
+
+            <div class="card">
+                 <div class="card-image-container">
+                     <img src="https://cdn-icons-png.flaticon.com/512/1373/1373254.png" alt="Foto Jessye">
+                 </div>
+                <div class="card-body">
+                    <h3 class="card-title">Jessye</h3>
+                     <p class="card-rating">
+                        <i class="fas fa-star"></i> 5.0 <span class="review-count">(33 avaliações)</span>
+                    </p>
+                    <p class="card-price">R$ 45 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, 'Jessye', 'Especializada em cuidados de pets idosos.', '23 anos', 'Cuidadora de pets com grande carinho.', 'Zootecnista', 'Casada', 'Não')">Ver perfil</a>
+                </div>
+            </div>
+
+             <div class="card">
+                 <div class="card-image-container">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4842/4842664.png" alt="Foto Isabella">
+                 </div>
+                <div class="card-body">
+                    <h3 class="card-title">Isabella</h3>
+                     <p class="card-rating">
+                        <i class="fas fa-star"></i> 4.9 <span class="review-count">(27 avaliações)</span>
+                     </p>
+                    <p class="card-price">R$ 45 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, 'Isabella', 'Cuidadora com experiência em gatos e cães.', '23 anos', 'Adoro animais e tenho um coração enorme.', 'Psicologa', 'Casada', 'Não')">Ver perfil</a>
+                </div>
+            </div>
+
+             <div class="card">
+                 <div class="card-image-container">
+                     <img src="https://cdn-icons-png.flaticon.com/512/4427/4427372.png" alt="Foto João Victor">
+                 </div>
+                <div class="card-body">
+                    <h3 class="card-title">João Victor</h3>
+                     <p class="card-rating">
+                         <i class="fas fa-star"></i> 4.5 <span class="review-count">(13 avaliações)</span>
+                    </p>
+                    <p class="card-price">R$ 50 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, 'João Victor', 'Cuidando de pets com muito carinho.', '21 anos', 'Adoro fazer companhia para pets idosos.', 'Veterinário', 'Casado', 'Sim')">Ver perfil</a>
+                </div>
+            </div>
+
+            <div class="card">
+                 <div class="card-image-container">
+                     <img src="https://cdn-icons-png.flaticon.com/512/4440/4440876.png" alt="Foto Maria Luiza">
+                 </div>
+                <div class="card-body">
+                    <h3 class="card-title">Maria Luiza</h3>
+                     <p class="card-rating">
+                         <i class="fas fa-star"></i> 4.4 <span class="review-count">(17 avaliações)</span>
+                     </p>
+                    <p class="card-price">R$ 45 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, 'Maria Luiza', 'Cuidando de pets com muito amor e cuidado.', '19 anos', 'Adoro brincar com cães e gatos.', 'Pedagoga', 'Casada', 'Sim')">Ver perfil</a>
+                </div>
+            </div>
+
+            <div class="card">
+                 <div class="card-image-container">
+                    <img src="https://cdn-icons-png.flaticon.com/256/3577/3577429.png" alt="Foto Juliana">
+                 </div>
+                <div class="card-body">
+                    <h3 class="card-title">Juliana</h3>
+                     <p class="card-rating">
+                         <i class="fas fa-star"></i> 4.3 <span class="review-count">(11 avaliações)</span>
+                     </p>
+                    <p class="card-price">R$ 40 <span>/ noite</span></p>
+                    <a href="#" class="reserve-button" onclick="openModal(event, ' Juliana', 'Treinando e Cuidando de cachorros com muito amor.', '19 anos', 'Adoro treinar cães e ensina-los', 'Veterinário', 'Solteira', 'Nao')">Ver perfil</a>
+                </div>
+            </div>
+
+           <div class="card">
+                <div class="card-image-container">
+                   <img src="https://cdn-icons-png.flaticon.com/512/921/921018.png" alt="Foto Kadidja">
+                </div>
+               <div class="card-body">
+                   <h3 class="card-title">Kadidja Valéria</h3>
+                    <p class="card-rating">
+                        <i class="fas fa-star"></i> 4.9 <span class="review-count">(60 avaliações)</span>
+                    </p>
+                   <p class="card-price">R$ 70 <span>/ noite</span></p>
+                   <a href="#" class="reserve-button" onclick="openModal(event, ' Kadidja Valéria', 'Treinando e Cuidando de cachorros com muito amor.', '29 anos', 'Sou professora, e nas horas vagas uma excelente acolhedora de pets!', 'Professora e Pesquisadora em Ciência da Informação, Arquivologia e Tecnologias da Informação', 'Solteira', 'Nao')">Ver perfil</a>
+               </div>
+           </div>
+
+        </div>
+    </section>
+
+</main>
+
+<div id="profileModal" class="modal" onclick="closeModalOutside(event)">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2 id="modal-title">Nome do Perfil</h2>
+        <p id="modal-description">Descrição do perfil...</p>
+        <div class="modal-details">
+            <p><strong>Idade:</strong> <span id="modal-age"></span></p>
+            <p><strong>Sobre mim:</strong> <span id="modal-about"></span></p>
+            <p><strong>Profissão:</strong> <span id="modal-profession"></span></p>
+            <p><strong>Status de Relacionamento:</strong> <span id="modal-relationship-status"></span></p>
+            <p><strong>Tem filhos:</strong> <span id="modal-has-kids"></span></p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-container container-geral">
+         <div class="footer-section">
+             <h4>Navegação</h4>
+             <ul>
+                 <li><a href="home.html">Início</a></li>
+                 <li><a href="reservas.html">Reservas</a></li>
+                 <li><a href="#">Seja um Anfitrião</a></li>
+                 <li><a href="Lartemp.html">Lar Temporário</a></li>
+             </ul>
+        </div>
+         <div class="footer-section">
+             <h4>Legal</h4>
+             <ul>
+                 <li><a href="#">Termos de Serviço</a></li>
+                 <li><a href="#">Política de Privacidade</a></li>
+                 <li><a href="#">Política de Cookies</a></li>
+             </ul>
+        </div>
+        <div class="footer-section">
+             <h4>Ajuda</h4>
+             <ul>
+                 <li><a href="ajuda.html">Central de Ajuda</a></li>
+                 <li><a href="#">Opções de cancelamento</a></li>
+                 <li><a href="#">Fale Conosco</a></li>
+             </ul>
+         </div>
+     </div>
+     <div class="container-geral" style="text-align: center; margin-top: 20px; font-size: 0.85em; color: #aaa;">
+         &copy; 2025 Patas Pousada. Todos os direitos reservados.
+     </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+<script>
+    function openModal(event, name, description, age, about, profession, relationshipStatus, hasKids) {
+        event.preventDefault();
+        const modal = document.getElementById('profileModal');
+
+        document.getElementById('modal-title').textContent = name;
+        document.getElementById('modal-description').textContent = description;
+        document.getElementById('modal-age').textContent = age;
+        document.getElementById('modal-about').textContent = about;
+        document.getElementById('modal-profession').textContent = profession;
+        document.getElementById('modal-relationship-status').textContent = relationshipStatus;
+        document.getElementById('modal-has-kids').textContent = hasKids;
+
+        modal.classList.add('show');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('profileModal');
+        modal.classList.remove('show');
+    }
+
+    function closeModalOutside(event) {
+         if (event.target === document.getElementById('profileModal')) {
+             closeModal();
+         }
+     }
+
+    flatpickr("#checkin", {
+        locale: "pt",
+        dateFormat: "d/m/Y",
+        minDate: "today",
+        altInput: true,
+        altFormat: "d/m/Y",
+        onChange: function(selectedDates, dateStr, instance) {
+            const checkoutPicker = document.getElementById("checkout")._flatpickr;
+            if (selectedDates.length > 0) {
+                 let minCheckoutDate = new Date(selectedDates[0]);
+                 minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
+                 checkoutPicker.set("minDate", minCheckoutDate);
+             } else {
+                 checkoutPicker.set("minDate", "today");
+             }
+        }
+    });
+
+    flatpickr("#checkout", {
+        locale: "pt",
+        dateFormat: "d/m/Y",
+        minDate: "today",
+         altInput: true,
+         altFormat: "d/m/Y",
+    });
+
+    $(document).ready(function() {
+        $('#city-select').select2({
+            placeholder: "Selecione a cidade",
+            allowClear: true,
+        });
+
+        $('.filters-container button').on('click', function() {
+            const checkin = $('#checkin').val();
+            const checkout = $('#checkout').val();
+            const city = $('#city-select').val();
+
+            console.log("Filtrando por:", { checkin, checkout, city });
+            alert(`Filtro aplicado!\nData Entrada: ${checkin}\nData Saída: ${checkout}\nCidade: ${city || 'Qualquer uma'}`);
+        });
+    });
+
+</script>
+
+</body>
+</html>

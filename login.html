@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuário</title>
+</head>
+<body>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7;
+            margin: 10px;
+        }
+        header {
+            justify-content: center;
+            display: flex;
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+
+        header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e2725b;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+
+        .container {
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            width: 100%;
+            padding: 10px;
+            background-color: #e2725b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: red;
+        }
+
+        .signup-link {
+            text-align: start;
+            margin-bottom: 10px;
+        }
+
+        .signup-link a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover{
+            color: red;
+        }
+
+        .criar {
+            text-align: start;
+            display: flex;
+            padding-top: 10px;
+        }
+
+        .criar a {
+            color: black;
+            padding: 5px;
+            border-radius: 20px;
+            text-decoration: none;
+        }
+
+        .criar a:hover{
+            color: red;
+        }
+
+        .criartutor {
+            text-align: start;
+            display: flex;
+        }
+
+        .criartutor a {
+            color: black;
+            padding: 5px;
+            border-radius: 20px;
+            text-decoration: none;
+        }
+
+        .criartutor a:hover{
+            color: red;
+        }
+
+    </style>
+
+    <header>
+        <nav>
+            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
+            alt="Icone">
+            <a href="home.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
+            <ul>
+                <li><a href="home.html" style="font-family: parkinsans;">Início</a></li>
+                <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
+            </ul>
+        </nav>
+    </header>
+    <br>
+    <div class="container">
+        <h2>Entrar</h2>
+        <form action="login.php" method="POST">
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required placeholder="Digite seu email">
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+
+            <div class="signup-link">
+                <a href="equeceusenha.html">Esqueci minha senha</a>
+            </div>
+
+            <button type="submit">Entrar</button>
+ 
+            <div class="criar">
+                <a href="registroaft.html">🏡 Crie sua conta de Anfitrião </a>
+            </div>
+            <div class="criartutor">
+                <a href="registrotutores.html">🐾 Crie sua conta de Tutor</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
