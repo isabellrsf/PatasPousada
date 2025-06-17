@@ -13,8 +13,8 @@ O projeto **PatasPousadas** é uma plataforma online que conecta donos de animai
 
 - **Isabella Rodrigues:** Design da interface, documentação e programação.  
 - **Jessye Aguiar:** Documentação, pesquisas, entrevistas e testes.  
-- **Maria Luiza:** Documentação.  
-- **Juliana:** Documentação.
+- **Maria Luiza:** Documentação e testes.  
+- **Juliana:** Documentação e pesquisas.
 
 ---
 
