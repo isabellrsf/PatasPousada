@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Tutor - Patas Pousada</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Parkinsans:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #fafafa;
+      margin: 0;
+      color: #333;
+    }
+
+    /* ===== HEADER (mantido exatamente igual) ===== */
+    header {
+      justify-content: center;
+      display: flex;
+      background-color: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      width: 30px;
+      height: 30px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e2725b;
+      text-decoration: none;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-family: 'Parkinsans', sans-serif;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: red;
+    }
+
+    /* ===== CONTAINER CENTRALIZADO ===== */
+    .container {
+      background-color: #fff;
+      width: 420px;
+      min-height: 400px;
+      margin: 60px auto;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      padding: 40px 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    h2 {
+      color: #e2725b;
+      font-family: 'Parkinsans', sans-serif;
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 1.6em;
+      letter-spacing: 0.5px;
+    }
+
+    .patas {
+      color: #5c3b79;
+      font-size: 1.3em;
+      margin: 8px 0 18px;
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    p {
+      color: #444;
+      font-size: 0.96em;
+      line-height: 1.6;
+      margin-bottom: 35px;
+      max-width: 320px;
+    }
+
+    /* ===== BOTÕES ===== */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80%;
+      padding: 13px;
+      border-radius: 30px;
+      border: 2px solid #e2725b;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 15px;
+      font-family: 'Parkinsans', sans-serif;
+      transition: all 0.25s ease-in-out;
+      gap: 8px;
+      font-size: 0.95em;
+    }
+
+    .btn i {
+      font-size: 1.1em;
+    }
+
+    .btn-primary {
+      background-color: #e2725b;
+      color: white;
+      box-shadow: 0 2px 6px rgba(226, 114, 91, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: #d55c47;
+      box-shadow: 0 3px 8px rgba(226, 114, 91, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: #fff;
+      color: #e2725b;
+    }
+
+    .btn-secondary:hover {
+      background-color: #fff4f2;
+      box-shadow: 0 3px 8px rgba(226, 114, 91, 0.3);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85em;
+      color: #888;
+      margin-top: 50px;
+      padding: 20px;
+    }
+
+    /* ===== ALERTA ===== */
+    .alerta-sucesso {
+      display: none;
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #e2725b;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 20px auto;
+      text-align: center;
+      font-weight: bold;
+      width: 350px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+      <a href="index.html" class="logo">Patas Pousada</a>
+      <ul>
+        <li><a href="home_tutor.html">Início</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ALERTA -->
+  <div id="mensagem-sucesso" class="alerta-sucesso"></div>
+
+  <!-- CONTEÚDO CENTRALIZADO -->
+  <div class="container">
+    <h2>Bem-vindo(a), Tutor(a)! 🐾</h2>
+    <div class="patas">🐾 🐾 🐾</div>
+    <p>Agora você está pronto(a) para cuidar dos seus pets e acompanhar tudo aqui na Patas Pousada.</p>
+
+    <a href="menu_perfil.html" class="btn btn-primary">
+      <i>👤</i> Meu Perfil
+    </a>
+
+    <a href="cadastroPets.html" class="btn btn-secondary">
+      <i>➕</i> Cadastrar Novo Pet
+    </a>
+
+    <a href="perfis.html" class="btn btn-secondary">
+      <i>🐶</i> Ver Meus Pets
+    </a>
+  </div>
+
+  <footer>
+    © 2025 Patas Pousada • Todos os direitos reservados
+  </footer>
+
+  <script>
+    // Alerta animado de sucesso
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('sucesso')) {
+      const msg = decodeURIComponent(params.get('sucesso'));
+      const div = document.getElementById('mensagem-sucesso');
+      div.textContent = msg;
+      div.style.display = 'block';
+      setTimeout(() => div.style.opacity = '1', 100);
+      setTimeout(() => div.style.opacity = '0', 5000);
+    }
+  </script>
+
+</body>
+</html>

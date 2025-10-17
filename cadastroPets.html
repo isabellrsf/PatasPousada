@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Pets</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Parkinsans:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      line-height: 1.6;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      justify-content: center;
+      display: flex;
+      background-color: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      width: 30px;
+      height: 30px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e2725b;
+      text-decoration: none;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-family: 'Parkinsans', sans-serif;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: red;
+    }
+
+    .container {
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #e2725b;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: none;
+      height: 70px;
+    }
+
+    .radio-group {
+      margin-bottom: 15px;
+    }
+
+    .radio-group label {
+      margin-right: 10px;
+    }
+
+    .preview {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #e2725b;
+      display: none;
+    }
+
+    .main-btn {
+      width: 80%;
+      border: 2px solid #e2725b;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      margin: auto;
+      padding: 10px;
+      background-color: #e2725b;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    .main-btn:hover {
+      background-color: red;
+    }
+
+    .add-pet {
+      background-color: white;
+      color: #e2725b;
+      border: 2px solid #e2725b;
+    }
+
+    .add-pet:hover {
+      background-color: #ffe6e6;
+    }
+
+    .remove-pet-btn {
+      background: none;
+      border: none;
+      color: #e2725b;
+      font-size: 18px;
+      cursor: pointer;
+      margin-left: 5px;
+      transition: transform 0.2s ease, color 0.2s ease;
+      vertical-align: middle;
+    }
+
+    .remove-pet-btn:hover {
+      color: red;
+      transform: scale(1.2);
+    }
+
+    .pet-card {
+      position: relative;
+      border: 1px solid #eee;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #fafafa;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 15px;
+    }
+
+    .pet-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .pet-card.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .criar {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .criar a {
+      text-align: center;
+      width: 70%;
+      color: black;
+      padding: 5px;
+      border-radius: 20px;
+      text-decoration: none;
+    }
+
+    .criar a:hover {
+      color: #FF0000;
+    }
+
+    .pet-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .alerta-sucesso {
+      display: none;
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #e2725b;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 20px auto;
+      text-align: center;
+      font-weight: bold;
+      width: 320px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
+      <a href="index.html" class="logo">Patas Pousada</a>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="mensagem-sucesso" class="alerta-sucesso"></div>
+
+  <div class="container">
+    <h2>Cadastro de Pets 🐾</h2>
+
+    <form id="formPets" action="salvarPets.php" method="POST" enctype="multipart/form-data">
+      <div id="form-container"></div>
+
+      <button type="button" class="main-btn add-pet" onclick="adicionarPet()">+ Adicionar outro pet</button>
+      <button type="submit" class="main-btn" id="salvar">Salvar Pets</button>
+    </form>
+
+    <div class="criar">
+      <a href="dashboard.html">Voltar</a>
+    </div>
+  </div>
+
+  <script>
+    // Exibe alerta de sucesso (opcional)
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("sucesso")) {
+      const msg = decodeURIComponent(params.get("sucesso"));
+      const div = document.getElementById("mensagem-sucesso");
+      div.textContent = msg;
+      div.style.display = "block";
+      setTimeout(() => (div.style.opacity = "1"), 100);
+      setTimeout(() => (div.style.opacity = "0"), 5000);
+    }
+
+    let contadorPets = 0;
+
+    function adicionarPet() {
+      contadorPets++;
+      const container = document.getElementById("form-container");
+
+      const petDiv = document.createElement("div");
+      petDiv.classList.add("pet-card");
+      petDiv.setAttribute("id", `pet_${contadorPets}`);
+
+      const temBotaoRemover =
+        contadorPets > 1
+          ? `<button type="button" class="remove-pet-btn" onclick="removerPet(${contadorPets})" title="Remover este pet">✕</button>`
+          : "";
+
+      petDiv.innerHTML = `
+        <div class="pet-header">
+          <h4 style="text-align:center; color:#e2725b; margin:0;">🐶 Pet ${contadorPets}</h4>
+          ${temBotaoRemover}
+        </div>
+
+        <label>Nome do Pet:</label>
+        <input type="text" name="nome_pet_${contadorPets}" required placeholder="Ex: Thor">
+
+        <label>Espécie:</label>
+        <select name="especie_pet_${contadorPets}" required onchange="mostrarOutro(this, ${contadorPets})">
+          <option value="">Selecione</option>
+          <option value="Cachorro">Cachorro</option>
+          <option value="Gato">Gato</option>
+          <option value="Pássaro">Pássaro</option>
+          <option value="Roedor">Roedor</option>
+          <option value="Réptil">Réptil</option>
+          <option value="Outro">Outro</option>
+        </select>
+
+        <input type="text" id="outro_${contadorPets}" name="outro_especie_${contadorPets}" placeholder="Especifique a espécie" style="display:none;">
+
+        <label>Raça:</label>
+        <input type="text" name="raca_pet_${contadorPets}" placeholder="Ex: Poodle, Siamês...">
+
+        <div class="radio-group">
+          <label>Sexo:</label>
+          <label><input type="radio" name="sexo_pet_${contadorPets}" value="Macho" required> Macho</label>
+          <label><input type="radio" name="sexo_pet_${contadorPets}" value="Fêmea"> Fêmea</label>
+        </div>
+
+        <label>Idade (anos):</label>
+        <input type="number" name="idade_pet_${contadorPets}" min="0" max="40" required placeholder="Ex: 3">
+
+        <label>Porte:</label>
+        <select name="porte_pet_${contadorPets}" required>
+          <option value="">Selecione</option>
+          <option value="Pequeno">Pequeno</option>
+          <option value="Médio">Médio</option>
+          <option value="Grande">Grande</option>
+        </select>
+
+        <label>Observações:</label>
+        <textarea name="obs_pet_${contadorPets}" placeholder="Ex: Toma remédio, é sociável, etc."></textarea>
+
+        <label>Foto do Pet:</label>
+        <input type="file" name="foto_pet_${contadorPets}" accept="image/*" onchange="previewImagem(event, ${contadorPets})">
+        <div class="preview"><img id="preview_${contadorPets}" alt="Preview do pet"></div>
+      `;
+      container.appendChild(petDiv);
+    }
+
+    function mostrarOutro(select, id) {
+      const outro = document.getElementById(`outro_${id}`);
+      outro.style.display = select.value === "Outro" ? "block" : "none";
+    }
+
+    function previewImagem(event, id) {
+      const preview = document.getElementById(`preview_${id}`);
+      const arquivo = event.target.files[0];
+      if (arquivo) {
+        const leitor = new FileReader();
+        leitor.onload = () => {
+          preview.src = leitor.result;
+          preview.style.display = "block";
+        };
+        leitor.readAsDataURL(arquivo);
+      } else {
+        preview.style.display = "none";
+      }
+    }
+
+    function removerPet(id) {
+      const petCard = document.getElementById(`pet_${id}`);
+      petCard.classList.add("fade-out");
+      setTimeout(() => petCard.remove(), 300);
+    }
+
+    // ✅ Corrigido: cria o 1º pet assim que o DOM carrega
+    document.addEventListener("DOMContentLoaded", () => {
+      adicionarPet();
+    });
+
+    // ✅ Corrigido: impede envio só se não houver pet
+    document.addEventListener("submit", (e) => {
+      const form = e.target;
+      if (form.id === "formPets") {
+        const cards = document.querySelectorAll(".pet-card");
+        if (cards.length === 0) {
+          e.preventDefault();
+          alert("Adicione pelo menos 1 pet.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

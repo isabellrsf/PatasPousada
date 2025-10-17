@@ -1,200 +1,182 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Usuário</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Inicial - Tutor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f7f7f7;
+      margin: 10px;
+    }
+
+    header {
+      justify-content: center;
+      display: flex;
+      background-color: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      width: 30px;
+      height: 30px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e2725b;
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    /* -------- container principal -------- */
+    .container {
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #e2725b;
+    }
+
+    p {
+      color: #555;
+      font-size: 0.9em;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      border: 2px solid #e2725b;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background-color: #e2725b;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: red;
+      border-color: red;
+    }
+
+    .btn-secondary {
+      background-color: white;
+      color: #e2725b;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ffe6e6;
+    }
+
+    .alerta-sucesso {
+      display: none;
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #e2725b;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 20px auto;
+      text-align: center;
+      font-weight: bold;
+      width: 300px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85em;
+      color: #888;
+      margin-top: 30px;
+      padding: 10px;
+    }
+
+  </style>
 </head>
 <body>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f7f7f7;
-            margin: 10px;
-        }
-        header {
-            justify-content: center;
-            display: flex;
-            background-color: #fff;
-            padding: 20px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+  <header>
+    <nav>
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
+      <a href="index.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
+      <ul>
+        <li><a href="home_tutor.html" style="font-family: parkinsans;">Início</a></li>
+        <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
 
-        header p {
-            font-size: 20px;
-            margin-right: 20px;
-            margin-left: 10px;
-        }
+  <div id="mensagem-sucesso" class="alerta-sucesso"></div>
 
-        header img {
-            width: 30px;
-            height: 30px;
-        }
+  <div class="container">
+    <h2>Bem-vindo(a), Tutor(a)! 🐾</h2>
+    <p>Agora você está pronto(a) para cuidar dos seus pets e acompanhar tudo aqui na Patas Pousada.</p>
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    <a href="menu_perfil.html" class="btn btn-primary">👤 Meu Perfil</a>
+    <a href="cadastroPets.html" class="btn btn-secondary">➕ Cadastrar Novo Pet</a>
+    <a href="perfis.html" class="btn btn-secondary">🐶 Ver Meus Pets</a>
+  </div>
 
-        nav .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #e2725b;
-            text-decoration: none;
-        }
+  <footer>
+    © 2025 Patas Pousada • Todos os direitos reservados
+  </footer>
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 15px;
-        }
+  <script>
+    // Alerta animado de sucesso
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('sucesso')) {
+      const msg = decodeURIComponent(params.get('sucesso'));
+      const div = document.getElementById('mensagem-sucesso');
+      div.textContent = msg;
+      div.style.display = 'block';
+      setTimeout(() => div.style.opacity = '1', 100); // fade in
+      setTimeout(() => div.style.opacity = '0', 5000); // fade out
+    }
+  </script>
 
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-
-
-        .container {
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            margin-top: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input[type="email"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            display: flex;
-            justify-content: center;
-            margin: auto;
-            width: 100%;
-            padding: 10px;
-            background-color: #e2725b;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: red;
-        }
-
-        .signup-link {
-            text-align: start;
-            margin-bottom: 10px;
-        }
-
-        .signup-link a {
-            color: #333;
-            text-decoration: none;
-        }
-
-        .signup-link a:hover{
-            color: red;
-        }
-
-        .criar {
-            text-align: start;
-            display: flex;
-            padding-top: 10px;
-        }
-
-        .criar a {
-            color: black;
-            padding: 5px;
-            border-radius: 20px;
-            text-decoration: none;
-        }
-
-        .criar a:hover{
-            color: red;
-        }
-
-        .criartutor {
-            text-align: start;
-            display: flex;
-        }
-
-        .criartutor a {
-            color: black;
-            padding: 5px;
-            border-radius: 20px;
-            text-decoration: none;
-        }
-
-        .criartutor a:hover{
-            color: red;
-        }
-
-    </style>
-
-    <header>
-        <nav>
-            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" 
-            alt="Icone">
-            <a href="index.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
-            <ul>
-                <li><a href="home.html" style="font-family: parkinsans;">Início</a></li>
-                <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
-            </ul>
-        </nav>
-    </header>
-    <br>
-    <div class="container">
-        <h2>Entrar</h2>
-        <form action="login.php" method="POST">
-
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required placeholder="Digite seu email">
-
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" required placeholder="Digite sua senha">
-
-            <div class="signup-link">
-                <a href="equeceusenha.html">Esqueci minha senha</a>
-            </div>
-
-            <button type="submit">Entrar</button>
- 
-            <div class="criar">
-                <a href="registroaft.html">🏡 Crie sua conta de Anfitrião </a>
-            </div>
-            <div class="criartutor">
-                <a href="registrotutores.html">🐾 Crie sua conta de Tutor</a>
-            </div>
-        </form>
-    </div>
 </body>
 </html>
