@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patas Pousadas — Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --pri:#e2725b; --pri-dark:#d45f47; --bg:#f7f7f7; --card:#fff; --border:#e5e5e5;
+      --txt:#222; --muted:#6b7280; --role-tutor:#b14946; --role-host:#a65351;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Nunito,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);}
+    header{display:flex;justify-content:center;align-items:center;background:#fff;padding:20px 0;box-shadow:0 2px 4px rgba(0,0,0,.1);}
+    nav{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;}
+    .logo{display:flex;align-items:center;gap:10px;font-family:'Parkinsans',sans-serif;font-size:1.6em;font-weight:800;color:var(--pri);text-decoration:none;}
+    .logo img{width:30px;height:30px;margin-bottom:2px;}
+    nav ul{list-style:none;display:flex;justify-content:center;gap:24px;margin-top:6px;padding:0;}
+    nav ul li a{text-decoration:none;color:#1f2937;font-weight:700;font-family:'Parkinsans',sans-serif;transition:color .2s;}
+    nav ul li a:hover{ color:var(--pri-dark); }
+    main{max-width:980px;margin:24px auto;padding:0 16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 10px 20px rgba(0,0,0,.06);max-width:520px;margin:0 auto;}
+    h1{font-size:1.35rem;margin:0}
+    .hint{color:var(--muted);margin:6px 0 16px}
+    label{display:block;font-weight:800;margin:10px 0 6px}
+    input{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+    button{all:unset;background:var(--pri);color:#fff;padding:12px 16px;border-radius:20px;font-weight:900;cursor:pointer;min-width:160px;text-align:center;}
+    button:hover{background:var(--pri-dark)}
+    .text-link{color:var(--pri);text-decoration:none;font-weight:900}
+    .text-link:hover{text-decoration:underline}
+    .small-links{display:flex;justify-content:center;gap:12px;margin-top:10px}
+    .create-links{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:20px;}
+    .role-tutor{color:var(--role-tutor);font-weight:900;}
+    .role-host{color:var(--role-host);font-weight:900;}
+    .msg{margin-top:12px;padding:10px;border-radius:12px;font-weight:700;text-align:center;display:none}
+    .msg.ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;display:block}
+    .msg.err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;display:block}
+  </style>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+        Patas Pousada
+      </a>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Bem-vinda 👋</h1>
+      <p class="hint">Entre com sua conta ou crie uma nova</p>
+
+      <section>
+        <form id="form-login" autocomplete="on">
+          <label for="login-email">E-mail</label>
+          <input id="login-email" type="email" required placeholder="voce@exemplo.com">
+
+          <label for="login-pass">Senha</label>
+          <input id="login-pass" type="password" required placeholder="••••••••">
+
+          <div class="actions">
+            <button type="submit">Entrar</button>
+          </div>
+
+          <div class="small-links">
+            <a class="text-link" href="alterar-senha.html">Esqueci minha senha</a>
+          </div>
+
+          <div class="create-links">
+            <a class="text-link" href="registrotutores.html">🐾 Criar conta ➡️ <span class="role-tutor">Tutor</span></a>
+            <a class="text-link" href="registroaft.html">🏠 Criar conta ➡️ <span class="role-host">Anfitrião</span></a>
+          </div>
+
+          <div id="msg-login" class="msg"></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function setMsg(el, text, ok=false){
+      el.textContent = text;
+      el.className = "msg " + (ok ? "ok":"err");
+      el.style.display = text ? "block":"none";
+    }
+
+    // Se já estiver logada, pula direto para o "next" ou index
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { user } } = await sb.auth.getUser();
+      if (user) {
+        const params = new URLSearchParams(location.search);
+        const next = params.get('next') || 'index.html';
+        location.href = next;
+      }
+    });
+
+    document.getElementById('form-login').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const msg = document.getElementById('msg-login');
+      setMsg(msg, "Entrando…", true);
+
+      const email = document.getElementById('login-email').value.trim();
+      const pass  = document.getElementById('login-pass').value;
+
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if(error){ setMsg(msg, "Erro ao entrar: " + error.message); return; }
+
+      setMsg(msg, "Login ok! Redirecionando…", true);
+      const params = new URLSearchParams(location.search);
+      const next = params.get('next') || 'index.html';
+      setTimeout(()=> location.href = next, 300);
+    });
+  </script>
+</body>
+</html>

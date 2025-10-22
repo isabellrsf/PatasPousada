@@ -1,76 +1,37 @@
 <?php
-ob_start(); // Inicia o buffer de saída
+session_start();
+require __DIR__ . '/supabase.php';
 
-// Configurações do banco de dados
-$servername = "localhost";
-$username = "root";
-$password = "ceub123456";
-$database = "PatasPousada";
+$nome  = trim($_POST['name'] ?? '');
+$cpf   = trim($_POST['cpf'] ?? '');
+$data  = $_POST['birth_date'] ?? '';      // garanta que o form envia birth_date
+$email = trim($_POST['email'] ?? '');
+$senha = $_POST['password'] ?? '';
+$conf  = $_POST['confirm_password'] ?? '';
+$city  = trim($_POST['city'] ?? '');
+$pets_count = (int)($_POST['pets'] ?? 0);
+$residence  = trim($_POST['residence'] ?? '');
 
-// Criar conexão
-$conn = new mysqli($servername, $username, $password, $database);
+if ($senha !== $conf) { header("Location: registroaft.html?erro=Senhas+não+coincidem"); exit; }
+if (!$nome || !$cpf || !$data || !$email || !$senha) { header("Location: registroaft.html?erro=Campos+obrigatórios"); exit; }
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
-}
+$payload = [
+  'role'           => 'host',
+  'full_name'      => $nome,
+  'cpf'            => $cpf,
+  'birth_date'     => $data,
+  'email'          => $email,
+  'password_hash'  => password_hash($senha, PASSWORD_DEFAULT),
+  'city'           => $city,
+  'pets_count'     => $pets_count,
+  'residence_type' => $residence,
+];
 
-// Pegar os dados do formulário
-$nome = $_POST['name'];
-$cpf = $_POST['cpf'];
-$idade = $_POST['age'];
-$email = $_POST['email'];
-$senha = $_POST['password'];
-$confirm_senha = $_POST['confirm_password'];
-$cidade = $_POST['city'];
-$quantidade_pets = $_POST['pets'];
-$residencia = $_POST['residence'];
+list($st, $res) = sb_request('POST', '/rest/v1/profiles', $payload, true);
+if ($st >= 300) { header("Location: registroaft.html?erro=E-mail+ou+CPF+já+existe"); exit; }
 
-// Validar se senhas são iguais
-if ($senha !== $confirm_senha) {
-    header("Location: registroaft.html?erro=As+senhas+n%C3%A3o+coincidem.");
-    exit();
-}
+$_SESSION['profile_id'] = $res[0]['id'] ?? null;
+$_SESSION['full_name']  = $nome;
 
-// Verificar se o e-mail já está cadastrado
-$checkEmail = $conn->prepare("SELECT id FROM anfitrioes WHERE email = ?");
-$checkEmail->bind_param("s", $email);
-$checkEmail->execute();
-$checkEmail->store_result();
-
-if ($checkEmail->num_rows > 0) {
-    header("Location: registroaft.html?erro=Este+e-mail+j%C3%A1+est%C3%A1+cadastrado.");
-    exit();
-}
-
-// Verificar se o CPF já está cadastrado
-$checkCpf = $conn->prepare("SELECT id FROM anfitrioes WHERE cpf = ?");
-$checkCpf->bind_param("s", $cpf);
-$checkCpf->execute();
-$checkCpf->store_result();
-
-if ($checkCpf->num_rows > 0) {
-    header("Location: registroaft.html?erro=Este+CPF+j%C3%A1+est%C3%A1+cadastrado.");
-    exit();
-}
-
-// Criptografar senha
-$senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-// Inserir os dados
-$sql = "INSERT INTO anfitrioes (nome, cpf, idade, email, senha, cidade, quantidade_pets, residencia)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssisssis", $nome, $cpf, $idade, $email, $senha_hash, $cidade, $quantidade_pets, $residencia);
-
-if ($stmt->execute()) {
-    header("Location: sucesso.html");
-    exit();
-} else {
-    header("Location: registroaft.html?erro=Erro+ao+salvar+no+banco.");
-    exit();
-}
-
-$conn->close();
-?>
+header('Location: sucesso.html');
+exit;

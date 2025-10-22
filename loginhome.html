@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Página Inicial - Tutor</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+
+    :root{
+      --brand:#e2725b;
+      --brand-strong:#d35e46;
+      --brand-soft:#ffe6e6;
+      --text:#333;
+      --muted:#555;
+      --bg:#f7f7f7;
+      --white:#fff;
+      --shadow:0 8px 20px rgba(0,0,0,.08);
+      --radius:14px;
+    }
+
+    /* Resetzinho útil */
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: 'Nunito', system-ui, -apple-system, Arial, sans-serif;
+      line-height:1.6;
+      color:var(--text);
+      background:var(--bg);
+    }
+    img{ max-width:100%; height:auto; display:block; }
+
+    /* Header */
+    header{
+      background:var(--white);
+      box-shadow:0 2px 6px rgba(0,0,0,.06);
+    }
+    .nav{
+      max-width:1060px;
+      margin:0 auto;
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;           /* evita estourar em telas pequenas */
+    }
+    .nav__brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+    }
+    .nav__logo{
+      width:30px; height:30px; flex:0 0 auto;
+    }
+    .nav__title{
+      font-family:'Parkinsans', sans-serif;
+      font-size:1.25rem;
+      font-weight:800;
+      color:var(--brand);
+      letter-spacing:.2px;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .nav__spacer{ flex:1; }     /* empurra o menu pra direita */
+
+    .nav__list{
+      list-style:none;
+      display:flex;
+      gap:16px;
+      padding:0; margin:0;
+      flex-wrap:wrap;           /* quebra linhas se precisar */
+    }
+    .nav__link{
+      text-decoration:none;
+      color:var(--text);
+      font-weight:700;
+      font-family:'Parkinsans', sans-serif;
+      padding:8px 10px;
+      border-radius:10px;
+      transition:background .2s ease, color .2s ease;
+    }
+    .nav__link:hover{ background:#f1f1f1; color:#111; }
+
+    /* Main card */
+    .wrap{
+      max-width:1060px;
+      margin:28px auto;
+      padding:0 16px;
+    }
+
+    .card{
+      margin:0 auto;
+      width:100%;
+      max-width:560px;                 /* limite mais confortável */
+      background:var(--white);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px;
+      text-align:center;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:1.75rem;
+      color:var(--brand);
+      font-family:'Parkinsans', sans-serif;
+      font-weight:800;
+    }
+    .lead{
+      margin:0 auto 22px;
+      font-size:0.98rem;
+      color:var(--muted);
+      max-width:46ch;                 /* impede linhas longas */
+    }
+
+    /* Botões */
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      padding:14px 16px;
+      margin:10px 0;
+      border-radius:999px;
+      font-weight:800;
+      text-decoration:none;
+      border:2px solid var(--brand);
+      transition:transform .05s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+      will-change:transform;
+    }
+    .btn:active{ transform:translateY(1px); }
+
+    .btn--primary{
+      background:var(--brand);
+      color:var(--white);
+      box-shadow:0 6px 14px rgba(226,114,91,.3);
+    }
+    .btn--primary:hover{
+      background:var(--brand-strong);
+      border-color:var(--brand-strong);
+      box-shadow:0 8px 18px rgba(211,94,70,.35);
+    }
+
+    .btn--ghost{
+      background:var(--white);
+      color:var(--brand);
+    }
+    .btn--ghost:hover{
+      background:var(--brand-soft);
+    }
+
+    /* Toast de sucesso (fixo e animado) */
+    .toast{
+      position:fixed;
+      inset:auto 16px 16px 16px; /* bottom */
+      margin:0 auto;
+      max-width:520px;
+      background:var(--brand-soft);
+      color:#b10000;
+      border:1px solid var(--brand);
+      border-radius:12px;
+      padding:12px 14px;
+      text-align:center;
+      font-weight:800;
+      box-shadow:var(--shadow);
+      opacity:0;
+      transform:translateY(8px);
+      pointer-events:none;
+      transition:opacity .35s ease, transform .35s ease;
+    }
+    .toast--show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* Rodapé */
+    footer{
+      text-align:center;
+      font-size:.9rem;
+      color:#888;
+      margin:30px 0 24px;
+      padding:0 16px;
+    }
+
+    /* Pequenas melhorias para telas muito estreitas */
+    @media (max-width:420px){
+      .nav__title{ font-size:1.1rem; }
+      .card{ padding:22px; }
+      h1{ font-size:1.55rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav" aria-label="Navegação principal">
+      <a class="nav__brand" href="index.html">
+        <img class="nav__logo" src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone Patas Pousada">
+        <span class="nav__title">Patas Pousada</span>
+      </a>
+
+      <div class="nav__spacer"></div>
+
+      <ul class="nav__list">
+        <li><a class="nav__link" href="home_tutor.html">Início</a></li>
+        <li><a class="nav__link" href="ajuda.html">Ajuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <main class="wrap">
+    <section class="card" aria-labelledby="titulo">
+      <h1 id="titulo">Bem-vindo(a), Tutor(a)! 🐾</h1>
+      <p class="lead">
+        Agora você está pronto(a) para cuidar dos seus pets e acompanhar tudo aqui na Patas Pousada.
+      </p>
+
+      <a href="menu_perfil.html" class="btn btn--primary" aria-label="Ir para meu perfil">
+        <span>👤</span><span>Meu Perfil</span>
+      </a>
+
+      <a href="cadastroPets.html" class="btn btn--ghost" aria-label="Cadastrar novo pet">
+        <span>➕</span><span>Cadastrar Novo Pet</span>
+      </a>
+
+      <a href="perfis.html" class="btn btn--ghost" aria-label="Ver meus pets">
+        <span>🐶</span><span>Ver Meus Pets</span>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Patas Pousada • Todos os direitos reservados
+  </footer>
+
+  <script>
+    // Mostra toast de sucesso se vier ?sucesso= na URL
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const toast = document.getElementById('toast');
+      if(params.has('sucesso')){
+        toast.textContent = decodeURIComponent(params.get('sucesso'));
+        toast.classList.add('toast--show');
+        setTimeout(()=> toast.classList.remove('toast--show'), 5200);
+      }
+    })();
+  </script>
+</body>
+</html>

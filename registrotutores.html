@@ -6,193 +6,55 @@
   <title>Registro de Usuário</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+    body { font-family: Arial, sans-serif; line-height: 1.6; background:#f7f7f7; margin:10px; }
+    header { justify-content:center; display:flex; background:#fff; padding:20px 0; box-shadow:0 2px 4px rgba(0,0,0,.1); }
+    header img { width:30px; height:30px; }
+    nav { display:flex; justify-content:space-between; align-items:center; max-width:1200px; margin:0 auto; padding:0 20px; }
+    nav .logo { font-size:1.5em; font-weight:bold; color:#e2725b; text-decoration:none; }
+    nav ul { list-style:none; display:flex; gap:15px; }
+    nav ul li a { text-decoration:none; color:#333; font-weight:bold; }
 
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #f7f7f7;
-      margin: 10px;
+    .container { margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,.1); width:320px; margin-top:20px; }
+    h2 { text-align:center; margin-bottom:20px; color:#d35e46; font-family: Parkinsans, sans-serif; }
+    label { display:block; margin-bottom:8px; }
+    input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="number"], select {
+      width:100%; padding:10px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box;
     }
 
-    header {
-      justify-content: center;
-      display: flex;
-      background-color: #fff;
-      padding: 20px 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+    /* pets */
+    #pet-options label{ display:block; margin-bottom:6px; line-height:1.2; }
+    #quantidades-container{ margin-top:10px; padding-top:8px; border-top:1px solid #eee; }
+    #quantidades-container label{ font-size:.9em; margin-top:6px; }
+    #total-pets{ font-size:.9em; font-weight:bold; margin-top:10px; text-align:center; color:#333; }
+    #total-pets span{ color:#e2725b; }
 
-    header img {
-      width: 30px;
-      height: 30px;
-    }
+    /* idade */
+    #idade-calculada{ text-align:center; font-size:.9em; color:#333; margin-top:-6px; margin-bottom:8px; }
+    .age-note{ color:#F00; margin-top:-8px; margin-bottom:12px; font-size:.9em; text-align:center; display:none; }
 
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+    button{
+      width:80%; border:2px solid #e2725b; border-radius:20px; display:flex; justify-content:center;
+      margin:14px auto 0; padding:10px; background:#e2725b; color:#fff; cursor:pointer; font-size:16px; transition:background .3s;
+      font-weight: 700;
     }
+    button[disabled]{ opacity:.7; cursor:not-allowed; }
+    button:hover{ background:#d45f47; }
 
-    nav .logo {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #e2725b;
-      text-decoration: none;
-    }
+    .criar{ display:flex; justify-content:center; margin-top:8px; }
+    .criar a{ text-align:center; width:70%; color:black; padding:5px; border-radius:20px; text-decoration:none; }
+    .criar a:hover{ color:#F00; }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-    }
-
-    nav ul li a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .container {
-      margin: auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
-      margin-top: 20px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="date"], 
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    #pet-options label {
-      margin-bottom: 3px;
-      line-height: 1.2;
-    }
-
-    #quantidades-container {
-      margin-top: 12px;
-      padding-top: 5px;
-      border-top: 1px solid #eee;
-    }
-
-    #quantidades-container label {
-      font-size: 0.9em;
-      margin-top: 4px;
-    }
-
-    #total-pets {
-      font-size: 0.9em;
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
-      color: #333;
-    }
-
-    #total-pets span {
-      color: #e2725b;
-    }
-
-    #idade-calculada {
-      text-align: center;
-      font-size: 0.9em;
-      color: #333;
-      margin-top: -10px;
-      margin-bottom: 10px;
-    }
-
-    .age-note {
-      color: #FF0000;
-      margin-top: -10px;
-      margin-bottom: 15px;
-      font-size: 0.9em;
-      text-align: center;
-      display: none;
-    }
-
-    button {
-      width: 80%;
-      border: 2px solid #e2725b;
-      border-radius: 20px;
-      display: flex;
-      justify-content: center;
-      margin: auto;
-      padding: 10px;
-      background-color: #e2725b;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: red;
-    }
-
-    .criar {
-      display: flex;
-      justify-content: center;
-    }
-
-    .criar a {
-      text-align: center;
-      width: 70%;
-      color: black;
-      padding: 5px;
-      border-radius: 20px;
-      text-decoration: none;
-    }
-
-    .criar a:hover {
-      color: #FF0000;
-    }
-
-    .alerta-erro {
-      background-color: #ffe6e6;
-      color: #cc0000;
-      border: 1px solid #cc0000;
-      border-radius: 5px;
-      padding: 10px;
-      margin-bottom: 15px;
-      text-align: center;
-      font-weight: bold;
-      display: none;
-    }
+    .msg { text-align:center; font-size:.95em; margin-top:8px; min-height:1.2em; }
   </style>
 </head>
 <body>
-
   <header>
     <nav>
       <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
-      <a href="index.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
+      <a href="index.html" class="logo" style="font-family: Parkinsans;">Patas Pousada</a>
       <ul>
-        <li><a href="index.html" style="font-family: parkinsans;">Início</a></li>
-        <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
+        <li><a href="index.html" style="font-family: Parkinsans;">Início</a></li>
+        <li><a href="ajuda.html" style="font-family: Parkinsans;">Ajuda</a></li>
       </ul>
     </nav>
   </header>
@@ -200,7 +62,7 @@
   <div class="container">
     <h2>Cadastro</h2>
 
-    <form id="formCadastro" action="processaCadastroTutores.php" method="POST">
+    <form id="formCadastro">
       <label for="name">Nome:</label>
       <input type="text" id="name" name="name" required placeholder="Informe seu nome completo">
 
@@ -221,6 +83,7 @@
       <label for="confirm_password">Confirmar Senha:</label>
       <input type="password" id="confirm_password" name="confirm_password" required placeholder="Repita sua senha">
 
+      <!-- === Pets do Tutor === -->
       <label>Que tipo de pet você tem?</label>
       <div id="pet-options"></div>
 
@@ -228,161 +91,255 @@
 
       <p id="total-pets">🐾 Total: <span>0</span> pets</p>
 
-      <input type="text" id="other_pet" name="other_pet" placeholder="Especifique o tipo de pet" style="display:none; margin-top:10px;">
+      <input type="text" id="other_pet" name="other_pet" placeholder="Especifique o tipo de pet" style="display:none; margin-top:8px;">
 
       <button type="submit" id="btn-registrar">Registrar</button><br>
 
-      <div class="criar">
-        <a href="login.html">Já tenho uma conta</a>
-      </div>
+      <div class="criar"><a href="cadastrarouentrar.html">Já tenho uma conta</a></div>
+      <div class="msg" id="msg"></div>
     </form>
   </div>
 
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
-    // ----------- PET LÓGICA -----------
-    document.addEventListener("DOMContentLoaded", () => {
-      gerarTiposPets();
-    });
+    // ====== PETS: UI ======
+    document.addEventListener("DOMContentLoaded", () => { gerarTiposPets(); });
 
-    function gerarTiposPets() {
+    const TIPO_LABEL = {
+      cachorro: "Cachorro",
+      gato: "Gato",
+      passaro: "Pássaro",
+      roedor: "Roedor",
+      reptil: "Réptil",
+      outro: "Outro"
+    };
+
+    function gerarTiposPets(){
       const container = document.getElementById("pet-options");
-      const tipos = ["cachorro", "gato", "passaro", "roedor", "reptil", "outro"];
-      const labels = ["Cachorro", "Gato", "Pássaro", "Roedor", "Réptil", "Outro"];
-
-      tipos.forEach((tipo, i) => {
-        const label = document.createElement("label");
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.name = "pet_type[]";
-        input.value = tipo;
-        input.addEventListener("change", () => {
-          toggleOtherPetInput();
-          gerarCamposQuantidade();
-        });
-        label.appendChild(input);
-        label.append(" " + labels[i]);
+      const tipos = ["cachorro","gato","passaro","roedor","reptil","outro"];
+      tipos.forEach((tipo)=>{
+        const label=document.createElement("label");
+        const input=document.createElement("input");
+        input.type="checkbox"; input.name="pet_type[]"; input.value=tipo;
+        input.addEventListener("change",()=>{ toggleOtherPetInput(); gerarCamposQuantidade(); });
+        label.appendChild(input); label.append(" "+TIPO_LABEL[tipo]);
         container.appendChild(label);
       });
     }
 
-    function toggleOtherPetInput() {
+    function toggleOtherPetInput(){
       const inputs = document.querySelectorAll("input[name='pet_type[]']");
       const otherPet = document.getElementById("other_pet");
-      let outroSelecionado = false;
+      let outroMarcado = false;
+      inputs.forEach(i => { if(i.value === "outro" && i.checked) outroMarcado = true; });
+      otherPet.style.display = outroMarcado ? "block" : "none";
+      otherPet.required = outroMarcado;
 
-      inputs.forEach(i => {
-        if (i.value === "outro" && i.checked) outroSelecionado = true;
-      });
-
-      otherPet.style.display = outroSelecionado ? "block" : "none";
-      otherPet.required = outroSelecionado;
+      // sempre que mudar "Outro", reconstroi os campos de quantidade
+      gerarCamposQuantidade();
     }
 
-    function gerarCamposQuantidade() {
+    function gerarCamposQuantidade(){
       const selecionados = Array.from(document.querySelectorAll("input[name='pet_type[]']:checked"));
       const container = document.getElementById("quantidades-container");
       container.innerHTML = "";
 
-      selecionados.forEach(sel => {
-        if (sel.value !== "outro") {
+      selecionados.forEach(sel=>{
+        const tipo = sel.value;
+
+        // Tipos conhecidos
+        if(tipo !== "outro"){
           const label = document.createElement("label");
-          label.textContent = `Quantos ${sel.value}${sel.value.endsWith("s") ? "?" : "s?"}`;
+          label.textContent = `Quantos ${TIPO_LABEL[tipo]}${tipo.endsWith("s") ? "?" : "s?"}`;
+
           const input = document.createElement("input");
           input.type = "number";
-          input.name = `quantidade_${sel.value}`;
+          input.name = `quantidade_${tipo}`;
           input.min = 1;
           input.required = true;
           input.placeholder = "Ex: 2";
-          input.style.marginBottom = "10px";
+          input.style.marginBottom = "8px";
           input.addEventListener("input", atualizarTotal);
+
           container.appendChild(label);
           container.appendChild(input);
+        }
+
+        // Campo de quantidade para "Outro"
+        if(tipo === "outro"){
+          const outroNome = document.getElementById("other_pet").value.trim();
+          const label = document.createElement("label");
+          label.id = "label_quantidade_outro";
+          label.textContent = `Quantos ${outroNome ? outroNome : "pets (Outro)"}?`;
+
+          const input = document.createElement("input");
+          input.type = "number";
+          input.name = `quantidade_outro`;
+          input.min = 1;
+          input.required = true;
+          input.placeholder = "Ex: 1";
+          input.style.marginBottom = "8px";
+          input.addEventListener("input", atualizarTotal);
+
+          container.appendChild(label);
+          container.appendChild(input);
+
+          // Atualiza a label quando o usuário digitar o nome do "Outro"
+          const otherPet = document.getElementById("other_pet");
+          // Evita múltiplos listeners
+          if (otherPet.__update_outro_label__) {
+            otherPet.removeEventListener("input", otherPet.__update_outro_label__);
+          }
+          otherPet.__update_outro_label__ = function(){
+            const novoNome = otherPet.value.trim();
+            const lbl = document.getElementById("label_quantidade_outro");
+            if(lbl){ lbl.textContent = `Quantos ${novoNome ? novoNome : "pets (Outro)"}?`; }
+          };
+          otherPet.addEventListener("input", otherPet.__update_outro_label__);
         }
       });
 
       atualizarTotal();
     }
 
-    function atualizarTotal() {
+    function atualizarTotal(){
       const inputs = document.querySelectorAll("#quantidades-container input[type='number']");
       let soma = 0;
       let valido = true;
 
-      inputs.forEach(input => {
-        const valor = parseInt(input.value);
-        if (valor > 0) soma += valor;
-        else if (input.value !== "") valido = false;
+      inputs.forEach(input=>{
+        const valor = parseInt(input.value, 10);
+        if(valor > 0) soma += valor;
+        else if(input.value !== "") valido = false;
       });
 
       const totalDisplay = document.querySelector("#total-pets span");
       const totalTexto = document.getElementById("total-pets");
 
-      if (!valido) {
+      if(!valido){
         totalDisplay.textContent = "⚠️ valor inválido";
-        totalTexto.style.color = "#cc0000";
+        totalTexto.style.color = "#c00";
       } else {
         totalDisplay.textContent = soma;
         totalTexto.style.color = soma > 0 ? "#333" : "#999";
       }
     }
 
-    // ----------- IDADE LÓGICA -----------
+    // ====== IDADE ======
     const birthInput = document.getElementById("birth_date");
     const idadeTexto = document.getElementById("idade-calculada");
-    const msgIdade = document.getElementById("mensagem-idade");
-    const botao = document.getElementById("btn-registrar");
+    const msgIdade   = document.getElementById("mensagem-idade");
+    const botao      = document.getElementById("btn-registrar");
 
-    birthInput.addEventListener("input", () => {
-      const birthDate = new Date(birthInput.value);
-      const hoje = new Date();
-      let idade = hoje.getFullYear() - birthDate.getFullYear();
-      const mes = hoje.getMonth() - birthDate.getMonth();
-      if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) idade--;
-
-      if (!birthInput.value) {
-        idadeTexto.textContent = "";
-        msgIdade.style.display = "none";
-        return;
-      }
-
-      idadeTexto.textContent = `🎂 Sua idade: ${idade} anos`;
-
-      if (idade < 18 || idade > 100) {
-        msgIdade.style.display = "block";
-        idadeTexto.style.color = "#cc0000";
-        botao.disabled = true;
-        botao.style.backgroundColor = "#ccc";
-        botao.style.borderColor = "#aaa";
-        botao.style.cursor = "not-allowed";
+    birthInput.addEventListener("input", ()=>{
+      const birthDate=new Date(birthInput.value);
+      const hoje=new Date();
+      let idade=hoje.getFullYear()-birthDate.getFullYear();
+      const mes=hoje.getMonth()-birthDate.getMonth();
+      if(mes<0 || (mes===0 && hoje.getDate()<birthDate.getDate())) idade--;
+      if(!birthInput.value){ idadeTexto.textContent=""; msgIdade.style.display="none"; return; }
+      idadeTexto.textContent=`🎂 Sua idade: ${idade} anos`;
+      if(idade<18 || idade>100){
+        msgIdade.style.display="block"; idadeTexto.style.color="#c00";
+        botao.disabled=true; botao.style.backgroundColor="#ccc"; botao.style.borderColor="#aaa"; botao.style.cursor="not-allowed";
       } else {
-        msgIdade.style.display = "none";
-        idadeTexto.style.color = "#333";
-        botao.disabled = false;
-        botao.style.backgroundColor = "#e2725b";
-        botao.style.borderColor = "#e2725b";
-        botao.style.cursor = "pointer";
+        msgIdade.style.display="none"; idadeTexto.style.color="#333";
+        botao.disabled=false; botao.style.backgroundColor="#e2725b"; botao.style.borderColor="#e2725b"; botao.style.cursor="pointer";
       }
     });
 
-    // ----------- SENHA LÓGICA -----------
-    document.querySelector('form').addEventListener('submit', function(event) {
-      const senha = document.getElementById('password').value;
-      const confirmar = document.getElementById('confirm_password').value;
+    // ====== SUPABASE (seguro: sem upsert em profiles) ======
+    const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      if (senha !== confirmar) {
-        alert("As senhas não coincidem!");
-        event.preventDefault();
+    const form = document.getElementById("formCadastro");
+    const msg  = document.getElementById("msg");
+    const btn  = document.getElementById("btn-registrar");
+
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      msg.textContent = "Enviando…";
+      btn.disabled = true; btn.textContent = "Enviando…";
+
+      const nome  = document.getElementById("name").value.trim();
+      const cpf   = document.getElementById("cpf").value.trim().replace(/\D/g,'');
+      const dataN = document.getElementById("birth_date").value;
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const pass  = document.getElementById("password").value;
+      const conf  = document.getElementById("confirm_password").value;
+
+      // ===== Coleta dados de pets =====
+      const marcados = Array.from(document.querySelectorAll("input[name='pet_type[]']:checked")).map(i=>i.value);
+      const outroTxt = document.getElementById("other_pet").value.trim();
+
+      // petTypes: substitui "outro" pelo nome digitado (se houver)
+      const petTypes = marcados.includes("outro")
+        ? [...marcados.filter(v=>v!=="outro"), ...(outroTxt ? [outroTxt] : ["outro"])]
+        : marcados;
+
+      // petCounts por tipo
+      const petCounts = {};
+      marcados.forEach(v=>{
+        if(v !== "outro"){
+          const n = parseInt(document.querySelector(`input[name="quantidade_${v}"]`)?.value || "0", 10);
+          if (n > 0) petCounts[v] = n;
+        }
+      });
+      // quantidade do "outro"
+      if (marcados.includes("outro")) {
+        const nOutro = parseInt(document.querySelector(`input[name="quantidade_outro"]`)?.value || "0", 10);
+        if (nOutro > 0) petCounts[outroTxt || "outro"] = nOutro;
       }
 
-      const birthDate = new Date(birthInput.value);
-      const hoje = new Date();
-      let idade = hoje.getFullYear() - birthDate.getFullYear();
-      const mes = hoje.getMonth() - birthDate.getMonth();
-      if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) idade--;
+      const totalPets = Object.values(petCounts).reduce((a,b)=>a+b,0);
 
-      if (idade < 18 || idade > 100) {
-        alert("Idade inválida! É necessário ter entre 18 e 100 anos.");
-        event.preventDefault();
+      if(pass !== conf){ msg.textContent = "As senhas não coincidem."; btn.disabled=false; btn.textContent="Registrar"; return; }
+      if(!nome || !cpf || !dataN || !email || !pass){ msg.textContent = "Preencha todos os campos."; btn.disabled=false; btn.textContent="Registrar"; return; }
+
+      try {
+        // 1) Cria usuário — o TRIGGER no banco criará o perfil automaticamente (sem RLS)
+        const { data: sign, error: signErr } = await sb.auth.signUp({
+          email, password: pass,
+          options: {
+            // Metadados NÃO sensíveis (apenas conveniência; profiles é criado via trigger)
+            data: {
+              full_name: nome,
+              pet_types: petTypes,       // ex.: ["cachorro","gato","coelho"]
+              pet_counts: petCounts,     // ex.: { cachorro: 2, gato: 1, coelho: 1 }
+              has_pets_total: totalPets  // ex.: 4
+            }
+            // emailRedirectTo: location.origin + "/cadastrarouentrar.html?next=cadastroPets.html"
+          }
+        });
+        if (signErr) { msg.textContent = "Erro ao criar conta: " + signErr.message; btn.disabled=false; btn.textContent="Registrar"; return; }
+
+        // 2) Guarda no localStorage para pré-preencher a próxima tela
+        localStorage.setItem("prefillPets", JSON.stringify({ petTypes, petCounts, totalPets }));
+
+        // 3) Verifica sessão (se confirmação de e-mail estiver ligada, normalmente não haverá sessão)
+        const { data: sess } = await sb.auth.getSession();
+        const session = sess?.session || null;
+
+        if (!session) {
+          msg.textContent = "Conta criada! Verifique seu e-mail para confirmar e depois faça login.";
+          btn.disabled = false; btn.textContent = "Registrar";
+          return;
+        }
+
+        // 4) Sessão ativa → segue para cadastro de pets
+        msg.textContent = "Cadastro concluído! Redirecionando…";
+        btn.textContent = "Sucesso!";
+        setTimeout(()=> {
+          window.location.href = "cadastroPets.html?sucesso=" + encodeURIComponent("Agora cadastre seus pets.");
+        }, 700);
+
+      } catch (err){
+        console.error(err);
+        msg.textContent = "Falha inesperada. Veja o console do navegador.";
+        btn.disabled=false; btn.textContent="Registrar";
       }
     });
   </script>

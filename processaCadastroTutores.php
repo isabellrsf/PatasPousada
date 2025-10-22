@@ -1,72 +1,117 @@
 <?php
 // processaCadastroTutores.php
 session_start();
-require 'conexao.php';
+require __DIR__ . '/supabase.php';
 
-// 1) coletar dados
-$nome            = trim($_POST['name'] ?? '');
-$cpf             = trim($_POST['cpf'] ?? '');
-$birth_date_raw  = $_POST['birth_date'] ?? ''; // YYYY-MM-DD
-$email           = trim($_POST['email'] ?? '');
-$senha           = $_POST['password'] ?? '';
-$confirm_senha   = $_POST['confirm_password'] ?? '';
-$tipos           = $_POST['pet_type'] ?? [];   // checkboxes (se existirem)
-$especificacao   = trim($_POST['other_pet'] ?? '');
-
-// 2) validações básicas
-if ($senha !== $confirm_senha) {
-  header("Location: registrotutores.html?erro=As+senhas+n%C3%A3o+coincidem");
-  exit();
-}
-if (!$nome || !$cpf || !$birth_date_raw || !$email || !$senha) {
-  header("Location: registrotutores.html?erro=Preencha+todos+os+campos+obrigat%C3%B3rios");
-  exit();
+// Só POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  http_response_code(405);
+  exit('Method Not Allowed');
 }
 
-// 3) calcular idade no servidor (18 a 100)
-$birth_date = date('Y-m-d', strtotime($birth_date_raw));
-$hoje = new DateTime();
-$nasc = new DateTime($birth_date);
-$idade = $hoje->diff($nasc)->y;
-if ($idade < 18 || $idade > 100) {
-  header("Location: registrotutores.html?erro=Idade+inv%C3%A1lida%3A+permitido+entre+18+e+100+anos");
-  exit();
+$nome  = trim($_POST['name'] ?? '');
+$cpf   = trim($_POST['cpf'] ?? '');
+$data  = trim($_POST['birth_date'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$senha = $_POST['password'] ?? '';
+$conf  = $_POST['confirm_password'] ?? '';
+
+if ($senha !== $conf) {
+  header("Location: registrotutores.html?erro=" . urlencode('Senhas não coincidem'));
+  exit;
+}
+if (!$nome || !$cpf || !$data || !$email || !$senha) {
+  header("Location: registrotutores.html?erro=" . urlencode('Preencha todos os campos obrigatórios'));
+  exit;
 }
 
-// 4) checar duplicados (email e cpf)
-$stmt = $conn->prepare("SELECT id FROM tutores WHERE email = ? OR cpf = ?");
-$stmt->bind_param("ss", $email, $cpf);
-$stmt->execute();
-$stmt->store_result();
-if ($stmt->num_rows > 0) {
-  header("Location: registrotutores.html?erro=E-mail+ou+CPF+j%C3%A1+est%C3%A3o+cadastrados");
-  exit();
-}
-$stmt->close();
+/**
+ * 1) CRIAR USUÁRIO NO AUTH
+ *
+ * Opção A (sem confirmar e-mail): criar via Admin API
+ * - Requer SERVICE ROLE no cabeçalho (NUNCA no front-end)
+ * - Usuário entra ativo imediatamente
+ */
+$use_admin_create = true;
 
-// 5) hash de senha
-$senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+if ($use_admin_create) {
+  // Admin: POST /auth/v1/admin/users
+  $payloadCreate = [
+    'email'    => $email,
+    'password' => $senha,
+    'user_metadata' => [
+      'full_name' => $nome,
+      'role'      => 'tutor',
+      'cpf'       => $cpf,
+      'birth_date'=> $data,
+    ],
+  ];
+  list($stCreate, $resCreate) = sb_request('POST', '/auth/v1/admin/users', $payloadCreate, 'service'); // service role
+  if ($stCreate >= 300 || empty($resCreate['id'])) {
+    $msg = $resCreate['message'] ?? 'Falha ao criar usuário';
+    header("Location: registrotutores.html?erro=" . urlencode($msg));
+    exit;
+  }
+  $user_id = $resCreate['id'];
 
-// 6) preparar campos opcionais
-$tipo_pet_str = is_array($tipos) ? implode(',', $tipos) : null;
-$especificacao = $especificacao ?: null;
-
-// 7) inserir
-$sql = "INSERT INTO tutores (nome, cpf, birth_date, idade, email, senha, tipo_pet, especificacao_pet)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssissss", $nome, $cpf, $birth_date, $idade, $email, $senha_hash, $tipo_pet_str, $especificacao);
-
-if ($stmt->execute()) {
-  $id = $stmt->insert_id;
-  // abrir sessão do tutor
-  $_SESSION['id_tutor']  = $id;
-  $_SESSION['nome_tutor'] = $nome;
-
-  // redirecionar para cadastro de pets (obrigatório)
-  header("Location: cadastroPets.html?sucesso=Cadastro+conclu%C3%ADdo%21+Agora+cadastre+seus+pets.");
-  exit();
 } else {
-  header("Location: registrotutores.html?erro=Erro+ao+salvar+no+banco");
-  exit();
+  /**
+   * Opção B (com confirmação de e-mail): signup normal
+   * - POST /auth/v1/signup (com anon key)
+   * - Se confirmação estiver habilitada, o user pode vir null até confirmar
+   */
+  $payloadSignup = [
+    'email'    => $email,
+    'password' => $senha,
+    'data'     => [
+      'full_name' => $nome,
+      'role'      => 'tutor',
+      'cpf'       => $cpf,
+      'birth_date'=> $data,
+    ],
+  ];
+  list($stSignup, $resSignup) = sb_request('POST', '/auth/v1/signup', $payloadSignup, 'anon'); // anon key
+  if ($stSignup >= 300) {
+    $msg = $resSignup['msg'] ?? $resSignup['message'] ?? 'Erro no cadastro';
+    header("Location: registrotutores.html?erro=" . urlencode($msg));
+    exit;
+  }
+  // Pode vir em chaves diferentes conforme versão
+  $user_id = $resSignup['user']['id'] ?? $resSignup['id'] ?? null;
+  if (!$user_id) {
+    header("Location: registrotutores.html?sucesso=" . urlencode('Conta criada! Confirme seu e-mail e depois faça login.'));
+    exit;
+  }
 }
+
+/**
+ * 2) UPSERT NO PROFILES
+ * - id = user_id do Auth
+ * - NÃO salve senha/CPF em texto puro no frontend.
+ * - Aqui usamos SERVICE ROLE para ignorar RLS com segurança (servidor).
+ */
+$payloadProfile = [
+  'id'         => $user_id,
+  'full_name'  => $nome,
+  'role'       => 'tutor',
+  'cpf'        => $cpf,
+  'birth_date' => $data,
+  'created_at' => gmdate('c'),
+];
+
+list($stProf, $resProf) = sb_request('POST', '/rest/v1/profiles', $payloadProfile, 'service', [
+  'Prefer: resolution=merge-duplicates,return=representation'
+]);
+if ($stProf >= 300) {
+  $msg = is_array($resProf) && isset($resProf['message']) ? $resProf['message'] : 'Falha ao salvar perfil';
+  header("Location: registrotutores.html?erro=" . urlencode($msg));
+  exit;
+}
+
+// Sessão local do seu site (opcional)
+$_SESSION['profile_id'] = $user_id;
+$_SESSION['full_name']  = $nome;
+
+// Redireciona para o cadastro de pets (front com Supabase JS)
+header("Location: cadastroPets.html?sucesso=" . urlencode("Cadastro concluído! Agora cadastre seus pets."));
+exit;

@@ -1,67 +1,87 @@
 <?php
+// salvarPets.php
 session_start();
-require 'auth.php';
-require 'conexao.php';
+require __DIR__ . '/supabase.php';
 
-// ID do tutor logado
-$tutor_id = (int)$_SESSION['id_tutor'];
+// 0) Dono do(s) pet(s)
+$owner = $_POST['owner_id'] ?? ($_SESSION['profile_id'] ?? '');
+if (!$owner) {
+  http_response_code(401);
+  echo "Sem owner_id na sessão ou no formulário.";
+  exit;
+}
 
-// Conta quantos pets foram enviados
-$contador = 0;
-foreach ($_POST as $key => $value) {
-    if (strpos($key, 'nome_pet_') === 0) {
-        $contador++;
+// 1) Quantos blocos vieram?
+$max = 0;
+foreach ($_POST as $k => $v) {
+  if (preg_match('/^nome_pet_(\d+)$/', $k, $m)) $max = max($max, (int)$m[1]);
+}
+if ($max === 0) {
+  echo "<script>alert('Adicione pelo menos 1 pet.');history.back();</script>";
+  exit;
+}
+
+$rows = [];
+
+for ($i = 1; $i <= $max; $i++) {
+  $nome = trim($_POST["nome_pet_$i"] ?? '');
+  if ($nome === '') continue;
+
+  $especie  = $_POST["especie_pet_$i"] ?? '';
+  $outroEsp = $_POST["outro_especie_$i"] ?? '';
+  if (strcasecmp($especie, 'Outro') === 0 && $outroEsp) $especie = $outroEsp;
+
+  $raca   = $_POST["raca_pet_$i"]   ?? null;
+  $sexo   = $_POST["sexo_pet_$i"]   ?? null;
+  $idade  = $_POST["idade_pet_$i"]  ?? null;   // não há campo "age" na sua tabela; manteremos apenas para texto/obs
+  $porte  = $_POST["porte_pet_$i"]  ?? null;
+  $obs    = $_POST["obs_pet_$i"]    ?? null;
+
+  // 2) Upload opcional de foto
+  $fotoKey = "foto_pet_$i";
+  $photoUrl = null;
+  if (!empty($_FILES[$fotoKey]['tmp_name'])) {
+    try {
+      $ext   = pathinfo($_FILES[$fotoKey]['name'], PATHINFO_EXTENSION);
+      $dest  = "pets/$owner/" . date('Ymd_His') . '_' . uniqid('img_', true) . '.' . $ext;
+      // bucket "public" (crie/garanta que exista no Storage e esteja público)
+      $photoUrl = upload_to_bucket('public', $dest, $_FILES[$fotoKey]['tmp_name']);
+    } catch (Exception $e) {
+      // Se quiser, trate erro de upload (não bloqueia inserção)
+      // error_log("Upload falhou: " . $e->getMessage());
     }
+  }
+
+  // 3) Monta linha para inserir na tabela "pets"
+  $rows[] = [
+    'owner_id'      => $owner,
+    'name'          => $nome,
+    'species'       => $especie,
+    'breed'         => $raca ?: null,
+    'sex'           => $sexo ?: null,
+    'size'          => $porte ?: null,
+    'special_needs' => $obs ?: null,
+    'photo_url'     => $photoUrl,
+    // Se depois quiser armazenar idade de forma consistente,
+    // adicione um campo na tabela (ex.: age_years integer) e inclua aqui.
+  ];
 }
 
-// Nenhum pet?
-if ($contador === 0) {
-    echo "<script>alert('Nenhum pet foi adicionado.'); window.location='cadastroPets.html';</script>";
-    exit();
+// 4) Faz INSERT (em lote) via REST: /rest/v1/pets
+if (!$rows) {
+  echo "<script>alert('Nada para salvar.');history.back();</script>";
+  exit;
 }
 
-// Cria pasta de uploads se não existir
-$uploadDir = "uploads/";
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+list($status, $res) = sb_request('POST', '/rest/v1/pets?select=id', $rows);
+
+if ($status >= 200 && $status < 300) {
+  $qtd = is_array($res) ? count($res) : 1;
+  header('Location: meusPets.php?sucesso=' . urlencode("{$qtd} pet(s) cadastrado(s)"));
+  exit;
 }
 
-// Loop para salvar cada pet
-for ($i = 1; $i <= $contador; $i++) {
-    $nome = $_POST["nome_pet_$i"] ?? '';
-    $especie = $_POST["especie_pet_$i"] ?? '';
-    $outro_especie = $_POST["outro_especie_$i"] ?? null;
-    $raca = $_POST["raca_pet_$i"] ?? null;
-    $sexo = $_POST["sexo_pet_$i"] ?? '';
-    $idade = $_POST["idade_pet_$i"] ?? 0;
-    $porte = $_POST["porte_pet_$i"] ?? '';
-    $obs = $_POST["obs_pet_$i"] ?? null;
-
-    // Foto
-    $foto_path = null;
-    $fotoKey = "foto_pet_$i";
-    if (!empty($_FILES[$fotoKey]['name'])) {
-        $nomeFoto = time() . "_" . basename($_FILES[$fotoKey]['name']);
-        $destino = $uploadDir . $nomeFoto;
-        if (move_uploaded_file($_FILES[$fotoKey]['tmp_name'], $destino)) {
-            $foto_path = $destino;
-        }
-    }
-
-    // Insere no banco usando tutor_id (igual ao seu banco)
-    $stmt = $conn->prepare("INSERT INTO pets 
-        (tutor_id, nome, especie, outro_especie, raca, sexo, idade, porte, observacoes, foto)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("isssssssss", 
-        $tutor_id, $nome, $especie, $outro_especie, $raca, $sexo, $idade, $porte, $obs, $foto_path
-    );
-    $stmt->execute();
-}
-
-$stmt->close();
-$conn->close();
-
-// Redireciona para a página de pets
-header("Location: meusPets.php?sucesso=" . urlencode("Pets cadastrados com sucesso!"));
-exit();
-?>
+// 5) Erro – mostre para diagnosticar
+http_response_code(500);
+echo "Falha ao salvar pet(s) (HTTP $status):<br>";
+echo "<pre>" . htmlspecialchars(is_string($res) ? $res : print_r($res, true)) . "</pre>";
