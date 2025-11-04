@@ -103,16 +103,27 @@
       el.style.display = text ? "block":"none";
     }
 
-    // Se já estiver logada, pula direto para o "next" ou index
-    document.addEventListener('DOMContentLoaded', async () => {
+    // 1) Callback da confirmação por e-mail: cria a sessão se vier access_token na hash
+    (async function handleEmailCallback(){
+      const hash = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = hash.get('access_token');
+      const refresh_token = hash.get('refresh_token');
+
+      if (access_token && refresh_token) {
+        await sb.auth.setSession({ access_token, refresh_token });
+        history.replaceState(null, '', window.location.pathname + window.location.search); // limpa hash
+      }
+
+      // Se já estiver logada, pula direto
       const { data: { user } } = await sb.auth.getUser();
       if (user) {
         const params = new URLSearchParams(location.search);
         const next = params.get('next') || 'index.html';
         location.href = next;
       }
-    });
+    })();
 
+    // 2) Login normal (email/senha)
     document.getElementById('form-login').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const msg = document.getElementById('msg-login');

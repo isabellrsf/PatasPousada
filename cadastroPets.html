@@ -194,13 +194,6 @@
       return user;
     }
 
-    function slugify(str){
-      return String(str||"")
-        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-        .toLowerCase().replace(/[^a-z0-9]+/g,"-")
-        .replace(/(^-|-$)+/g,"");
-    }
-
     async function uploadFoto(userId, idx, file){
       if(!file) return null;
       const ext  = (file.name.split(".").pop() || "jpg").toLowerCase();
@@ -229,13 +222,10 @@
     document.addEventListener("DOMContentLoaded", async ()=>{
       const user = await requireAuth();
       if(!user) return;
-      // Só cria o primeiro card depois de logada
-      adicionarPet();
 
-      // Botão de add outro pet
+      adicionarPet();
       document.getElementById("btnAdd").addEventListener("click", adicionarPet);
 
-      // Submit
       document.getElementById("formPets").addEventListener("submit", async (e)=>{
         e.preventDefault();
 

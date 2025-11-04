@@ -136,9 +136,7 @@
       inputs.forEach(i => { if(i.value === "outro" && i.checked) outroMarcado = true; });
       otherPet.style.display = outroMarcado ? "block" : "none";
       otherPet.required = outroMarcado;
-
-      // sempre que mudar "Outro", reconstroi os campos de quantidade
-      gerarCamposQuantidade();
+      gerarCamposQuantidade(); // sempre recalcula os campos de quantidade
     }
 
     function gerarCamposQuantidade(){
@@ -186,9 +184,8 @@
           container.appendChild(label);
           container.appendChild(input);
 
-          // Atualiza a label quando o usuário digitar o nome do "Outro"
+          // Atualiza a label quando digitar o nome do "Outro"
           const otherPet = document.getElementById("other_pet");
-          // Evita múltiplos listeners
           if (otherPet.__update_outro_label__) {
             otherPet.removeEventListener("input", otherPet.__update_outro_label__);
           }
@@ -250,7 +247,7 @@
       }
     });
 
-    // ====== SUPABASE (seguro: sem upsert em profiles) ======
+    // ====== SUPABASE (caminho seguro) ======
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -266,7 +263,7 @@
 
       const nome  = document.getElementById("name").value.trim();
       const cpf   = document.getElementById("cpf").value.trim().replace(/\D/g,'');
-      const dataN = document.getElementById("birth_date").value;
+      const dataN = document.getElementById("birth_date").value; // YYYY-MM-DD
       const email = document.getElementById("email").value.trim().toLowerCase();
       const pass  = document.getElementById("password").value;
       const conf  = document.getElementById("confirm_password").value;
@@ -300,36 +297,57 @@
       if(!nome || !cpf || !dataN || !email || !pass){ msg.textContent = "Preencha todos os campos."; btn.disabled=false; btn.textContent="Registrar"; return; }
 
       try {
-        // 1) Cria usuário — o TRIGGER no banco criará o perfil automaticamente (sem RLS)
+        // 1) Cria usuário — o TRIGGER cria o profile mínimo (id/email/role/defaults).
         const { data: sign, error: signErr } = await sb.auth.signUp({
           email, password: pass,
           options: {
-            // Metadados NÃO sensíveis (apenas conveniência; profiles é criado via trigger)
+            emailRedirectTo: 'https://patas-pousada.vercel.app/cadastrarouentrar.html?next=cadastroPets.html',
+            // Metadados NÃO sensíveis
             data: {
               full_name: nome,
-              pet_types: petTypes,       // ex.: ["cachorro","gato","coelho"]
-              pet_counts: petCounts,     // ex.: { cachorro: 2, gato: 1, coelho: 1 }
-              has_pets_total: totalPets  // ex.: 4
+              role: 'tutor',
+              pet_types: petTypes,
+              pet_counts: petCounts,
+              has_pets_total: totalPets
             }
-            // emailRedirectTo: location.origin + "/cadastrarouentrar.html?next=cadastroPets.html"
           }
         });
-        if (signErr) { msg.textContent = "Erro ao criar conta: " + signErr.message; btn.disabled=false; btn.textContent="Registrar"; return; }
+        if (signErr) {
+          msg.textContent = "Erro ao criar conta: " + signErr.message;
+          btn.disabled=false; btn.textContent="Registrar";
+          return;
+        }
 
-        // 2) Guarda no localStorage para pré-preencher a próxima tela
-        localStorage.setItem("prefillPets", JSON.stringify({ petTypes, petCounts, totalPets }));
-
-        // 3) Verifica sessão (se confirmação de e-mail estiver ligada, normalmente não haverá sessão)
+        // 2) Se já existir sessão imediata (confirmação de e-mail desativada),
+        // atualiza o profile com dados sensíveis via UPDATE (passa no RLS).
         const { data: sess } = await sb.auth.getSession();
         const session = sess?.session || null;
 
+        if (session && sign?.user?.id) {
+          const { error: upErr } = await sb
+            .from('profiles')
+            .update({ full_name: nome, cpf, birth_date: dataN, role: 'tutor' })
+            .eq('id', sign.user.id);
+          if (upErr) {
+            console.warn('Falha ao completar perfil agora:', upErr);
+            // guarda para tentar depois do login
+            localStorage.setItem("pendingProfile", JSON.stringify({ full_name: nome, cpf, birth_date: dataN }));
+          }
+        } else {
+          // 3) Sem sessão agora (e-mail precisa ser confirmado): guarda para completar após login
+          localStorage.setItem("pendingProfile", JSON.stringify({ full_name: nome, cpf, birth_date: dataN }));
+        }
+
+        // 4) Guarda preferências de pets para pré-preencher próximo passo
+        localStorage.setItem("prefillPets", JSON.stringify({ petTypes, petCounts, totalPets }));
+
+        // 5) Feedback e rota
         if (!session) {
           msg.textContent = "Conta criada! Verifique seu e-mail para confirmar e depois faça login.";
           btn.disabled = false; btn.textContent = "Registrar";
           return;
         }
 
-        // 4) Sessão ativa → segue para cadastro de pets
         msg.textContent = "Cadastro concluído! Redirecionando…";
         btn.textContent = "Sucesso!";
         setTimeout(()=> {
