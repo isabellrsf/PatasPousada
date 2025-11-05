@@ -1,17 +1,16 @@
 ```mermaid
 erDiagram
-  AUTH_USERS {
+  USUARIOS_AUTH {
     uuid id PK
-    text email
+    text email UK
   }
 
-  PROFILES {
+  PERFIS {
     uuid id PK, FK
-    text role
+    text role "ex: 'tutor', 'host'"
     text full_name
     text cpf
     date birth_date
-    text email UK
     text city
     text residence_type
     bigint pets_count
@@ -31,7 +30,7 @@ erDiagram
     text photo_url
   }
 
-  LISTINGS {
+  ANUNCIOS {
     uuid id PK
     uuid host_id FK
     text title
@@ -41,18 +40,22 @@ erDiagram
     text[] photos
   }
 
-  BOOKINGS {
+  RESERVAS {
     uuid id PK
     uuid listing_id FK
     uuid tutor_id FK
-    uuid pet_id FK
     date start_date
     date end_date
     numeric total_amount
-    text status
+    text status "ex: 'pendente', 'confirmada', 'cancelada'"
   }
 
-  REVIEWS {
+  RESERVAS_PETS {
+    uuid booking_id FK
+    uuid pet_id FK
+  }
+
+  AVALIACOES {
     uuid id PK
     uuid booking_id FK
     uuid author_id FK
@@ -60,12 +63,19 @@ erDiagram
     text comment
   }
 
-  AUTH_USERS ||--|| PROFILES : "1:1"
-  PROFILES ||--o{ PETS : "1:N"
-  PROFILES ||--o{ LISTINGS : "1:N"
-  PROFILES ||--o{ BOOKINGS : "1:N (tutor)"
-  PROFILES ||--o{ REVIEWS : "1:N (autor)"
-  PETS ||--o{ BOOKINGS : "1:N"
-  LISTINGS ||--o{ BOOKINGS : "1:N"
-  BOOKINGS ||--|| REVIEWS : "1:1"
+  %% --- Relacionamentos ---
+  USUARIOS_AUTH ||--|| PERFIS : "1:1"
+
+  PERFIS ||--o{ PETS : "1:N (é dono de)"
+  PERFIS ||--o{ ANUNCIOS : "1:N (é anfitrião de)"
+  PERFIS ||--o{ RESERVAS : "1:N (é tutor em)"
+  PERFIS ||--o{ AVALIACOES : "1:N (é autor de)"
+
+  ANUNCIOS ||--o{ RESERVAS : "1:N (pertence a)"
+
+  AVALIACOES }o--|| RESERVAS : "N:1 (são sobre)"
+
+  %% Relação N:N para Pets em Reservas
+  RESERVAS ||--o{ RESERVAS_PETS : "1:N"
+  PETS ||--o{ RESERVAS_PETS : "1:N"
 ```

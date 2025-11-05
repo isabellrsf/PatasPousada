@@ -63,12 +63,11 @@
     </form>
 
     <div class="criar">
-      <a href="dashboard.html">Voltar</a>
+      <a href="home_tutor.html">Voltar</a>
     </div>
   </div>
 
   <script>
-    // Mensagem de sucesso (opcional)
     const params = new URLSearchParams(window.location.search);
     if (params.has("sucesso")) {
       const msg = decodeURIComponent(params.get("sucesso"));
@@ -79,7 +78,6 @@
       setTimeout(() => (div.style.opacity = "0"), 5000);
     }
 
-    // ===== Form dinâmico de pets =====
     let contadorPets = 0;
     function adicionarPet(){
       contadorPets++;
@@ -181,10 +179,9 @@
     // ====== CONFIG ======
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
-    const BUCKET = "pets";
+    const BUCKET = "pet-photos"; // use o bucket correto
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Guarda de sessão: se não logada, manda para login com next
     async function requireAuth(){
       const { data: { user } } = await sb.auth.getUser();
       if(!user){
@@ -218,7 +215,6 @@
       return { nome, especie, raca, sexo, idade: idade?Number(idade):null, porte, obs, file };
     }
 
-    // Inicialização com guarda de sessão
     document.addEventListener("DOMContentLoaded", async ()=>{
       const user = await requireAuth();
       if(!user) return;
@@ -268,8 +264,10 @@
             total++;
           }
 
-          alert(`✔ ${total} pet(s) cadastrados com sucesso!`);
-          window.location.href = "meusPets.php";
+          // ✅ Redireciona para a home do tutor (HTML)
+          const msg = encodeURIComponent("Pets cadastrados com sucesso!");
+          window.location.href = `home_tutor.html?sucesso=${msg}`;
+
         }catch(err){
           console.error(err);
           alert("Falha ao salvar pets: " + (err?.message || err));

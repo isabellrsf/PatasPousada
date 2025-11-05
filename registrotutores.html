@@ -45,6 +45,37 @@
     .criar a:hover{ color:#F00; }
 
     .msg { text-align:center; font-size:.95em; margin-top:8px; min-height:1.2em; }
+
+    /* === MODAL TERMOS === */
+    .modal-backdrop{
+      position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      display:none; align-items:center; justify-content:center; z-index: 999;
+    }
+    .modal{
+      width: min(720px, 92vw); max-height: 86vh; overflow: hidden; background:#fff; border-radius:16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      display:flex; flex-direction:column;
+      font-family: Nunito, Arial, sans-serif;
+    }
+    .modal header{
+      display:flex; align-items:center; justify-content:space-between; padding:14px 16px; box-shadow:none; border-bottom:1px solid #eee; background:#fff;
+    }
+    .modal h3{ margin:0; font-size:1.1rem; color:#333; }
+    .modal .modal-body{
+      padding:16px; overflow:auto; line-height:1.55; font-size:.95rem;
+    }
+    .modal footer{
+      display:flex; gap:10px; justify-content:flex-end; padding:12px 16px; border-top:1px solid #eee; background:#fafafa;
+    }
+    .link-termos{
+      font-size:.9rem; color:#0b69c7; text-decoration:underline; cursor:pointer;
+    }
+    .termos-check{ display:flex; align-items:flex-start; gap:8px; font-size:.9rem; margin:8px 0 12px; }
+    .pill{
+      display:inline-block; font-size:.72rem; background:#f1f5f9; color:#334155; border:1px solid #e2e8f0;
+      padding:2px 8px; border-radius:999px; margin-right:6px;
+    }
+    .bullet { margin-left: 1rem; }
   </style>
 </head>
 <body>
@@ -86,18 +117,105 @@
       <!-- === Pets do Tutor === -->
       <label>Que tipo de pet você tem?</label>
       <div id="pet-options"></div>
-
       <div id="quantidades-container"></div>
 
       <p id="total-pets">🐾 Total: <span>0</span> pets</p>
 
       <input type="text" id="other_pet" name="other_pet" placeholder="Especifique o tipo de pet" style="display:none; margin-top:8px;">
 
+      <!-- === TERMOS: check + link para abrir modal === -->
+      <div class="termos-check">
+        <input type="checkbox" id="terms_consent" />
+        <label for="terms_consent" style="user-select:none">
+          Declaro que <strong>li e concordo</strong> com os
+          <span id="open-terms" class="link-termos">Termos de Uso &amp; Consentimento de Dados (Brasil)</span>.
+        </label>
+      </div>
+
       <button type="submit" id="btn-registrar">Registrar</button><br>
 
       <div class="criar"><a href="cadastrarouentrar.html">Já tenho uma conta</a></div>
       <div class="msg" id="msg"></div>
     </form>
+  </div>
+
+  <!-- === MODAL com Termos (LGPD, Marco Civil, CDC, etc.) === -->
+  <div id="termos-backdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="termos-title">
+      <header>
+        <h3 id="termos-title">Termos de Uso & Consentimento de Dados — Patas Pousada (v1.1)</h3>
+        <button type="button" id="close-terms" aria-label="Fechar" style="border:none;background:transparent;font-size:1.2rem;cursor:pointer;">✕</button>
+      </header>
+      <div class="modal-body">
+        <p><span class="pill">Brasil</span><span class="pill">LGPD</span><span class="pill">Marco Civil</span><span class="pill">CDC</span></p>
+
+        <h4>1. Objeto do serviço</h4>
+        <p>Conectamos tutores e anfitriões de pets como um <em>marketplace</em>. Não controlamos ou garantimos anúncios, condutas, acomodações ou serviços de terceiros.</p>
+
+        <h4>2. Requisitos e cadastro</h4>
+        <ul class="bullet">
+          <li>Você declara ser maior de 18 anos e fornecer dados verdadeiros.</li>
+          <li>Não compartilhe suas credenciais. Você é responsável por manter seu acesso seguro.</li>
+        </ul>
+
+        <h4>3. Regras de uso & conduta</h4>
+        <ul class="bullet">
+          <li>Cumpra leis locais, normas sanitárias e regras dos anúncios.</li>
+          <li>É vedado conteúdo ilegal, fraudulento, discriminatório ou que infrinja direitos de terceiros.</li>
+        </ul>
+
+        <h4>4. Pagamentos, taxas e cancelamentos</h4>
+        <p>Poderão existir taxas de serviço e políticas de cancelamento/reembolso definidas no anúncio. Ao reservar, você aceita essas condições.</p>
+
+        <h4>5. Avaliações</h4>
+        <p>Devem ser honestas e respeitosas. Podemos moderá-las quando violarem estes Termos ou a legislação aplicável.</p>
+
+        <h4>6. Privacidade & Proteção de Dados (LGPD)</h4>
+        <p>Tratamos seus dados conforme a <strong>Lei 13.709/2018 (LGPD)</strong>. Principais pontos:</p>
+        <ul class="bullet">
+          <li><strong>Controlador:</strong> Patas Pousada (contato do Encarregado/DPO: <em>dpo@pataspousada.com.br</em> — altere para o e-mail oficial).</li>
+          <li><strong>Finalidades:</strong> criação e gestão de conta, segurança, prevenção a fraudes, suporte, personalização, comunicação transacional, cumprimento legal e melhoria do serviço.</li>
+          <li><strong>Bases legais:</strong> consentimento; execução de contrato; cumprimento de obrigação legal/regulatória; legítimo interesse (ex.: segurança, métricas); exercício regular de direitos.</li>
+          <li><strong>Direitos do titular:</strong> confirmação, acesso, correção, anonimização, bloqueio/eliminação, portabilidade, informação sobre compartilhamentos e revogação do consentimento.</li>
+          <li><strong>Compartilhamento:</strong> com processadores (provedores de nuvem, autenticação, pagamento) sob contrato e medidas de segurança; autoridades quando exigido.</li>
+          <li><strong>Transferência internacional:</strong> pode ocorrer mediante salvaguardas adequadas (cláusulas padrão, certificações) e avaliação de risco.</li>
+          <li><strong>Retenção:</strong> mantemos dados pelo tempo necessário às finalidades e prazos legais (ex.: contábil, defesa de direitos) e depois eliminamos ou anonimizamos.</li>
+          <li><strong>Segurança:</strong> medidas técnicas e organizacionais razoáveis (criptografia em trânsito, controles de acesso, registro de eventos). Nenhuma plataforma é 100% imune a incidentes.</li>
+          <li><strong>Cookies/analytics:</strong> usamos para funcionalidades, segurança e métricas. Você pode ajustar preferências no navegador; algumas funções podem ser impactadas.</li>
+          <li><strong>Comunicações:</strong> e-mails transacionais e avisos operacionais. Marketing é opcional e pode ser revogado.</li>
+          <li><strong>Atendimento LGPD:</strong> para solicitações, contate o DPO. Responderemos nos prazos legais.</li>
+        </ul>
+
+        <h4>7. Marco Civil da Internet</h4>
+        <p>Observamos a <strong>Lei 12.965/2014</strong>, incluindo guarda de registros, proteção de dados e neutralidade de rede.</p>
+
+        <h4>8. Relações de consumo</h4>
+        <p>Aplicam-se princípios do <strong>Código de Defesa do Consumidor (Lei 8.078/1990)</strong> e do <strong>Decreto 7.962/2013</strong> (comércio eletrônico), quando cabível.</p>
+
+        <h4>9. Responsabilidades e Limitações</h4>
+        <ul class="bullet">
+          <li><strong>Responsabilidade do usuário:</strong> você é exclusivamente responsável pelas informações que fornece, pela veracidade de seus dados, pelas decisões de contratação e pela supervisão e bem-estar do seu pet durante a estadia/serviço.</li>
+          <li><strong>Eventos alheios ao software:</strong> não nos responsabilizamos por perdas, danos, acidentes, ferimentos, desaparecimentos ou quaisquer tragédias que não decorram de erro de software da plataforma, <em>salvo quando exigido por lei</em>.</li>
+          <li><strong>Terceiros:</strong> anfitriões e demais usuários são independentes. Não respondemos por atos, omissões ou conduta de terceiros.</li>
+          <li><strong>Força maior:</strong> não nos responsabilizamos por eventos fora do nosso controle razoável (ex.: interrupções de internet, desastres, decisões governamentais).</li>
+          <li><strong>Limitação:</strong> na medida permitida pela lei, nossa responsabilidade total por danos diretos relacionados ao uso da plataforma se limita aos valores que você nos pagou pelos serviços diretamente prestados por nós nos 12 meses anteriores ao evento.</li>
+        </ul>
+
+        <h4>10. Atualizações</h4>
+        <p>Podemos atualizar estes Termos e a Política de Privacidade. Mudanças materiais serão comunicadas; o uso contínuo após a atualização indica concordância.</p>
+
+        <div style="margin-top:12px; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;">
+          <label style="display:flex; gap:8px; align-items:flex-start;">
+            <input type="checkbox" id="modal_accept">
+            <span>Li e concordo com os Termos de Uso & Consentimento de Dados (Brasil), incluindo LGPD, Marco Civil da Internet e CDC, e reconheço minhas responsabilidades como usuário.</span>
+          </label>
+        </div>
+      </div>
+      <footer>
+        <button type="button" id="btn-decline" style="background:#fff;color:#111;border:1px solid #ddd;border-radius:10px;padding:8px 14px;cursor:pointer;">Cancelar</button>
+        <button type="button" id="btn-accept" style="background:#e2725b;color:#fff;border:2px solid #e2725b;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;">Concordo e fechar</button>
+      </footer>
+    </div>
   </div>
 
   <!-- Supabase SDK -->
@@ -136,7 +254,7 @@
       inputs.forEach(i => { if(i.value === "outro" && i.checked) outroMarcado = true; });
       otherPet.style.display = outroMarcado ? "block" : "none";
       otherPet.required = outroMarcado;
-      gerarCamposQuantidade(); // sempre recalcula os campos de quantidade
+      gerarCamposQuantidade();
     }
 
     function gerarCamposQuantidade(){
@@ -147,7 +265,6 @@
       selecionados.forEach(sel=>{
         const tipo = sel.value;
 
-        // Tipos conhecidos
         if(tipo !== "outro"){
           const label = document.createElement("label");
           label.textContent = `Quantos ${TIPO_LABEL[tipo]}${tipo.endsWith("s") ? "?" : "s?"}`;
@@ -165,7 +282,6 @@
           container.appendChild(input);
         }
 
-        // Campo de quantidade para "Outro"
         if(tipo === "outro"){
           const outroNome = document.getElementById("other_pet").value.trim();
           const label = document.createElement("label");
@@ -184,7 +300,6 @@
           container.appendChild(label);
           container.appendChild(input);
 
-          // Atualiza a label quando digitar o nome do "Outro"
           const otherPet = document.getElementById("other_pet");
           if (otherPet.__update_outro_label__) {
             otherPet.removeEventListener("input", otherPet.__update_outro_label__);
@@ -230,24 +345,80 @@
     const msgIdade   = document.getElementById("mensagem-idade");
     const botao      = document.getElementById("btn-registrar");
 
+    function idadeValida(){
+      const birthDate=new Date(birthInput.value);
+      if(!birthInput.value) return false;
+      const hoje=new Date();
+      let idade=hoje.getFullYear()-birthDate.getFullYear();
+      const mes=hoje.getMonth()-birthDate.getMonth();
+      if(mes<0 || (mes===0 && hoje.getDate()<birthDate.getDate())) idade--;
+      return idade>=18 && idade<=100;
+    }
+
+    function atualizarEstadoBotao(){
+      const termosOk = document.getElementById('terms_consent').checked;
+      const idadeOk  = idadeValida();
+      if(!idadeOk){
+        botao.disabled = true;
+        botao.style.backgroundColor="#ccc"; botao.style.borderColor="#aaa"; botao.style.cursor="not-allowed";
+        return;
+      }
+      botao.disabled = !termosOk;
+      botao.style.backgroundColor = termosOk ? "#e2725b" : "#ccc";
+      botao.style.borderColor     = termosOk ? "#e2725b" : "#aaa";
+      botao.style.cursor          = termosOk ? "pointer" : "not-allowed";
+    }
+
     birthInput.addEventListener("input", ()=>{
       const birthDate=new Date(birthInput.value);
       const hoje=new Date();
       let idade=hoje.getFullYear()-birthDate.getFullYear();
       const mes=hoje.getMonth()-birthDate.getMonth();
       if(mes<0 || (mes===0 && hoje.getDate()<birthDate.getDate())) idade--;
-      if(!birthInput.value){ idadeTexto.textContent=""; msgIdade.style.display="none"; return; }
+      if(!birthInput.value){ idadeTexto.textContent=""; msgIdade.style.display="none"; atualizarEstadoBotao(); return; }
       idadeTexto.textContent=`🎂 Sua idade: ${idade} anos`;
       if(idade<18 || idade>100){
         msgIdade.style.display="block"; idadeTexto.style.color="#c00";
-        botao.disabled=true; botao.style.backgroundColor="#ccc"; botao.style.borderColor="#aaa"; botao.style.cursor="not-allowed";
       } else {
         msgIdade.style.display="none"; idadeTexto.style.color="#333";
-        botao.disabled=false; botao.style.backgroundColor="#e2725b"; botao.style.borderColor="#e2725b"; botao.style.cursor="pointer";
       }
+      atualizarEstadoBotao();
     });
 
-    // ====== SUPABASE (caminho seguro) ======
+    // === TERMOS: abrir/fechar modal e sincronizar checks ===
+    const chkPrincipal = document.getElementById('terms_consent');
+    const openTerms = document.getElementById('open-terms');
+    const backdrop  = document.getElementById('termos-backdrop');
+    const closeBtn  = document.getElementById('close-terms');
+    const btnDecline= document.getElementById('btn-decline');
+    const btnAccept = document.getElementById('btn-accept');
+    const modalAccept = document.getElementById('modal_accept');
+
+    function abrirTermos(){
+      backdrop.style.display='flex';
+      modalAccept.checked = false;
+    }
+    function fecharTermos(){
+      backdrop.style.display='none';
+    }
+
+    openTerms.addEventListener('click', (e)=>{ e.preventDefault(); abrirTermos(); });
+    closeBtn.addEventListener('click', fecharTermos);
+    btnDecline.addEventListener('click', fecharTermos);
+
+    btnAccept.addEventListener('click', ()=>{
+      if(!modalAccept.checked){
+        alert('Para prosseguir, marque “Li e concordo” nos Termos.');
+        return;
+      }
+      chkPrincipal.checked = true;
+      fecharTermos();
+      atualizarEstadoBotao();
+    });
+
+    chkPrincipal.addEventListener('change', atualizarEstadoBotao);
+
+    // ====== SUPABASE (signUp com metadados necessários pro trigger)
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -258,26 +429,30 @@
 
     form.addEventListener("submit", async (e)=>{
       e.preventDefault();
+
+      if(!chkPrincipal.checked){
+        msg.textContent = "Você precisa aceitar os Termos de Uso & Consentimento de Dados para concluir o cadastro.";
+        atualizarEstadoBotao();
+        return;
+      }
+
       msg.textContent = "Enviando…";
       btn.disabled = true; btn.textContent = "Enviando…";
 
       const nome  = document.getElementById("name").value.trim();
       const cpf   = document.getElementById("cpf").value.trim().replace(/\D/g,'');
-      const dataN = document.getElementById("birth_date").value; // YYYY-MM-DD
+      const dataN = document.getElementById("birth_date").value;
       const email = document.getElementById("email").value.trim().toLowerCase();
       const pass  = document.getElementById("password").value;
       const conf  = document.getElementById("confirm_password").value;
 
-      // ===== Coleta dados de pets =====
       const marcados = Array.from(document.querySelectorAll("input[name='pet_type[]']:checked")).map(i=>i.value);
       const outroTxt = document.getElementById("other_pet").value.trim();
 
-      // petTypes: substitui "outro" pelo nome digitado (se houver)
       const petTypes = marcados.includes("outro")
-        ? [...marcados.filter(v=>v!=="outro"), ...(outroTxt ? [outroTxt] : ["outro"])]
+        ? [...marcados.filter(v=>v!=="outro"), ...(outroTxt ? [outroTxt] : ["outro"]) ]
         : marcados;
 
-      // petCounts por tipo
       const petCounts = {};
       marcados.forEach(v=>{
         if(v !== "outro"){
@@ -285,7 +460,6 @@
           if (n > 0) petCounts[v] = n;
         }
       });
-      // quantidade do "outro"
       if (marcados.includes("outro")) {
         const nOutro = parseInt(document.querySelector(`input[name="quantidade_outro"]`)?.value || "0", 10);
         if (nOutro > 0) petCounts[outroTxt || "outro"] = nOutro;
@@ -297,18 +471,25 @@
       if(!nome || !cpf || !dataN || !email || !pass){ msg.textContent = "Preencha todos os campos."; btn.disabled=false; btn.textContent="Registrar"; return; }
 
       try {
-        // 1) Cria usuário — o TRIGGER cria o profile mínimo (id/email/role/defaults).
+        const consentVersion = "1.1";
+        const consentAt = new Date().toISOString();
+
         const { data: sign, error: signErr } = await sb.auth.signUp({
           email, password: pass,
           options: {
             emailRedirectTo: 'https://patas-pousada.vercel.app/cadastrarouentrar.html?next=cadastroPets.html',
-            // Metadados NÃO sensíveis
             data: {
               full_name: nome,
               role: 'tutor',
+              cpf,
+              birth_date: dataN,
               pet_types: petTypes,
               pet_counts: petCounts,
-              has_pets_total: totalPets
+              has_pets_total: totalPets,
+              consent_accepted: true,
+              consent_version: consentVersion,
+              consent_accepted_at: consentAt,
+              consent_jurisdiction: "BR"
             }
           }
         });
@@ -318,30 +499,9 @@
           return;
         }
 
-        // 2) Se já existir sessão imediata (confirmação de e-mail desativada),
-        // atualiza o profile com dados sensíveis via UPDATE (passa no RLS).
         const { data: sess } = await sb.auth.getSession();
         const session = sess?.session || null;
 
-        if (session && sign?.user?.id) {
-          const { error: upErr } = await sb
-            .from('profiles')
-            .update({ full_name: nome, cpf, birth_date: dataN, role: 'tutor' })
-            .eq('id', sign.user.id);
-          if (upErr) {
-            console.warn('Falha ao completar perfil agora:', upErr);
-            // guarda para tentar depois do login
-            localStorage.setItem("pendingProfile", JSON.stringify({ full_name: nome, cpf, birth_date: dataN }));
-          }
-        } else {
-          // 3) Sem sessão agora (e-mail precisa ser confirmado): guarda para completar após login
-          localStorage.setItem("pendingProfile", JSON.stringify({ full_name: nome, cpf, birth_date: dataN }));
-        }
-
-        // 4) Guarda preferências de pets para pré-preencher próximo passo
-        localStorage.setItem("prefillPets", JSON.stringify({ petTypes, petCounts, totalPets }));
-
-        // 5) Feedback e rota
         if (!session) {
           msg.textContent = "Conta criada! Verifique seu e-mail para confirmar e depois faça login.";
           btn.disabled = false; btn.textContent = "Registrar";
@@ -360,6 +520,8 @@
         btn.disabled=false; btn.textContent="Registrar";
       }
     });
+
+    atualizarEstadoBotao();
   </script>
 </body>
 </html>

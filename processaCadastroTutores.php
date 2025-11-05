@@ -9,13 +9,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   exit('Method Not Allowed');
 }
 
+// Coleta e saneamento básico
 $nome  = trim($_POST['name'] ?? '');
-$cpf   = trim($_POST['cpf'] ?? '');
+$cpf   = preg_replace('/\D+/', '', $_POST['cpf'] ?? ''); // só dígitos
 $data  = trim($_POST['birth_date'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['password'] ?? '';
 $conf  = $_POST['confirm_password'] ?? '';
 
+// Normaliza data: aceita "dd/mm/yyyy" ou "yyyy-mm-dd"
+if ($data) {
+  if (preg_match('#^\d{2}/\d{2}/\d{4}$#', $data)) {
+    [$d, $m, $y] = explode('/', $data);
+    $data = sprintf('%04d-%02d-%02d', (int)$y, (int)$m, (int)$d);
+  } elseif (!preg_match('#^\d{4}-\d{2}-\d{2}$#', $data)) {
+    header("Location: registrotutores.html?erro=" . urlencode('Data de nascimento inválida'));
+    exit;
+  }
+}
+
+// Validações
 if ($senha !== $conf) {
   header("Location: registrotutores.html?erro=" . urlencode('Senhas não coincidem'));
   exit;
@@ -25,73 +38,32 @@ if (!$nome || !$cpf || !$data || !$email || !$senha) {
   exit;
 }
 
-/**
- * 1) CRIAR USUÁRIO NO AUTH
- *
- * Opção A (sem confirmar e-mail): criar via Admin API
- * - Requer SERVICE ROLE no cabeçalho (NUNCA no front-end)
- * - Usuário entra ativo imediatamente
- */
-$use_admin_create = true;
+// 1) CRIAR USUÁRIO VIA ADMIN API (SERVICE ROLE) — dispara o TRIGGER
+$payloadCreate = [
+  'email'    => $email,
+  'password' => $senha,
+  'user_metadata' => [
+    'full_name'  => $nome,
+    'role'       => 'tutor',
+    'cpf'        => $cpf,   // lido pelo trigger se necessário
+    'birth_date' => $data,  // lido pelo trigger se necessário
+  ],
+];
 
-if ($use_admin_create) {
-  // Admin: POST /auth/v1/admin/users
-  $payloadCreate = [
-    'email'    => $email,
-    'password' => $senha,
-    'user_metadata' => [
-      'full_name' => $nome,
-      'role'      => 'tutor',
-      'cpf'       => $cpf,
-      'birth_date'=> $data,
-    ],
-  ];
-  list($stCreate, $resCreate) = sb_request('POST', '/auth/v1/admin/users', $payloadCreate, 'service'); // service role
-  if ($stCreate >= 300 || empty($resCreate['id'])) {
-    $msg = $resCreate['message'] ?? 'Falha ao criar usuário';
-    header("Location: registrotutores.html?erro=" . urlencode($msg));
-    exit;
-  }
-  $user_id = $resCreate['id'];
+[$stCreate, $resCreate] = sb_request('POST', '/auth/v1/admin/users', $payloadCreate);
 
-} else {
-  /**
-   * Opção B (com confirmação de e-mail): signup normal
-   * - POST /auth/v1/signup (com anon key)
-   * - Se confirmação estiver habilitada, o user pode vir null até confirmar
-   */
-  $payloadSignup = [
-    'email'    => $email,
-    'password' => $senha,
-    'data'     => [
-      'full_name' => $nome,
-      'role'      => 'tutor',
-      'cpf'       => $cpf,
-      'birth_date'=> $data,
-    ],
-  ];
-  list($stSignup, $resSignup) = sb_request('POST', '/auth/v1/signup', $payloadSignup, 'anon'); // anon key
-  if ($stSignup >= 300) {
-    $msg = $resSignup['msg'] ?? $resSignup['message'] ?? 'Erro no cadastro';
-    header("Location: registrotutores.html?erro=" . urlencode($msg));
-    exit;
-  }
-  // Pode vir em chaves diferentes conforme versão
-  $user_id = $resSignup['user']['id'] ?? $resSignup['id'] ?? null;
-  if (!$user_id) {
-    header("Location: registrotutores.html?sucesso=" . urlencode('Conta criada! Confirme seu e-mail e depois faça login.'));
-    exit;
-  }
+if ($stCreate >= 300 || empty($resCreate['id'])) {
+  $msg = $resCreate['message'] ?? $resCreate['error_description'] ?? 'Falha ao criar usuário';
+  header("Location: registrotutores.html?erro=" . urlencode($msg));
+  exit;
 }
 
-/**
- * 2) UPSERT NO PROFILES
- * - id = user_id do Auth
- * - NÃO salve senha/CPF em texto puro no frontend.
- * - Aqui usamos SERVICE ROLE para ignorar RLS com segurança (servidor).
- */
+$user_id = $resCreate['id'];
+
+// 2) UPSERT EM profiles (idempotente, caso o trigger já tenha inserido)
 $payloadProfile = [
   'id'         => $user_id,
+  'email'      => $email,     // obrigatório na sua tabela (unique not null)
   'full_name'  => $nome,
   'role'       => 'tutor',
   'cpf'        => $cpf,
@@ -99,19 +71,26 @@ $payloadProfile = [
   'created_at' => gmdate('c'),
 ];
 
-list($stProf, $resProf) = sb_request('POST', '/rest/v1/profiles', $payloadProfile, 'service', [
-  'Prefer: resolution=merge-duplicates,return=representation'
-]);
+// sobrescreve o Prefer padrão pra permitir merge-duplicates + representation
+[$stProf, $resProf] = sb_request(
+  'POST',
+  '/rest/v1/profiles',
+  $payloadProfile,
+  ['Prefer: resolution=merge-duplicates,return=representation']
+);
+
 if ($stProf >= 300) {
-  $msg = is_array($resProf) && isset($resProf['message']) ? $resProf['message'] : 'Falha ao salvar perfil';
+  $msg = (is_array($resProf) && isset($resProf['message']))
+    ? $resProf['message']
+    : 'Falha ao salvar perfil';
   header("Location: registrotutores.html?erro=" . urlencode($msg));
   exit;
 }
 
-// Sessão local do seu site (opcional)
+// 3) Sessão local opcional
 $_SESSION['profile_id'] = $user_id;
 $_SESSION['full_name']  = $nome;
 
-// Redireciona para o cadastro de pets (front com Supabase JS)
+// 4) Redireciona para cadastro de pets
 header("Location: cadastroPets.html?sucesso=" . urlencode("Cadastro concluído! Agora cadastre seus pets."));
 exit;

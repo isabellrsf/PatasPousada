@@ -1,179 +1,215 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Editar Perfil - Patas Pousada</title>
-    <style>
-        /* Fontes e Reset (mantidos) */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu de Perfil • Patas Pousada</title>
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f7f7f7;
-        }
+  <!-- Font Awesome igual à página Meus Pets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        /* Header e Nav (mantidos) */
-        header { justify-content: center; display: flex; background-color: #fff; padding: 20px 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; }
-        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; width: 100%; padding: 0 20px; }
-        nav img { width: 30px; height: 30px; }
-        nav .logo { font-size: 1.5em; font-weight: bold; color: #e2725b; text-decoration: none; display: flex; align-items: center; }
-        nav .logo p { font-family: 'Parkinsans', sans-serif; margin-left: 10px; font-size: 20px; }
-        nav ul { list-style: none; display: flex; gap: 25px; align-items: center; }
-        nav ul li a { text-decoration: none; color: #333; font-weight: bold; font-family: 'Parkinsans', sans-serif; }
-        nav ul li a:hover { color: #d74f4f; }
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Parkinsans:wght@600;700&display=swap');
+    :root{
+      --brand:#e2725b;--brand-strong:#d45f47;--bg:#f7f7f7;--ink:#111;
+      --line:#eee;--shadow:0 8px 20px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Nunito,system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    header{background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+    .nav{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--brand);font:700 20px Parkinsans,sans-serif}
+    .logo img{width:30px;height:30px}
+    .nav ul{list-style:none;display:flex;gap:24px;margin-left:auto;margin-right:8px}
+    .nav a.link{font:700 16px Parkinsans,sans-serif;color:#222;text-decoration:none}
+    .nav a.link:hover{color:var(--brand)}
+    .user{position:relative}
+    .user__trigger{display:flex;align-items:center;gap:8px;cursor:pointer}
+    .badge{width:28px;height:28px;border-radius:50%;background:#ffe6e6;display:grid;place-items:center;color:#c54a34;font-weight:800}
+    .user__dropdown{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #eee;border-radius:12px;box-shadow:var(--shadow);min-width:220px;display:none;padding:8px;z-index:20}
+    .user:hover .user__dropdown{display:block}
+    .user__item{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;color:#111;text-decoration:none;font-weight:800}
+    .user__item:hover{background:#f7f7f7}
+    .dropdown-sep{height:1px;background:#eee;margin:6px 0}
 
-        /* Menu do Usuário no Header (Estilos básicos mantidos) */
-        .user-menu {
-            position: relative;
-            margin-left: 30px;
-        }
+    .wrap{max-width:1100px;margin:28px auto;padding:0 16px}
+    .title{font:800 26px Parkinsans,sans-serif;color:#222;text-align:center;margin-bottom:6px}
+    .lead{color:#6b7280;text-align:center;margin-bottom:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .card{background:#fff;border:1px solid #eee;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);padding:18px;display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:#111;transition:transform .08s, box-shadow .2s}
+    .card:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,.08)}
+    .card h3{font:800 18px Parkinsans,sans-serif;margin-bottom:6px}
+    .card p{color:#6b7280;font-size:14px}
+    .carret{margin-left:auto;color:#aaa;font-weight:900}
 
-        /* Trigger (Área Isabella) - Não precisa mais ser botão */
-        .user-menu-trigger {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer; /* Mantém cursor de ponteiro */
-            padding: 5px; /* Adiciona um pequeno padding para facilitar o hover */
-            /* Removemos background/border caso fosse botão */
-        }
+    /* Pretty Confirm — excluir conta (UI) */
+    .pp-wrap{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;z-index:60}
+    .pp-card{width:min(460px,92vw);background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;transform:translateY(8px);opacity:0;transition:.18s}
+    .pp-card.show{transform:translateY(0);opacity:1}
+    .pp-card header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #f1f5f9;background:#fff1f0}
+    .pp-card header .ic{width:20px;height:20px;display:grid;place-items:center;border-radius:999px;background:#fee2e2;color:#b91c1c;font-weight:900}
+    .pp-card h4{margin:0;font-weight:900;color:#991b1b}
+    .pp-body{padding:16px}
+    .pp-body p{margin-bottom:8px}
+    .pp-body input{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin:6px 0 10px}
+    .pp-ft{display:flex;gap:10px;justify-content:flex-end;padding:12px 14px;background:#fafafa;border-top:1px solid #eef2f7}
+    .pp-btn{border-radius:12px;padding:9px 14px;font-weight:900;border:2px solid #e2e8f0;background:#fff;cursor:pointer}
+    .pp-ok{background:#b91c1c;color:#fff;border-color:#b91c1c}
+    .pp-danger{color:#b91c1c}
 
-        .user-menu-trigger img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #eee; }
-        .user-menu-trigger span { font-weight: bold; font-size: 15px; }
-        .user-menu-trigger svg { width: 16px; height: 16px; fill: #555; transition: transform 0.2s ease; }
-
-        /* <<< MODIFICAÇÃO CSS HOVER >>> */
-        /* Gira a seta quando o user-menu está em hover */
-        .user-menu:hover .user-menu-trigger svg {
-            transform: rotate(180deg);
-        }
-
-        /* Dropdown (Escondido por padrão) */
-        .user-dropdown {
-            display: none; /* Escondido por padrão */
-            position: absolute;
-            top: calc(100% + 0px); /* Ajuste o espaço se necessário */
-            right: 0;
-            background-color: #fff;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 180px;
-            z-index: 100;
-            padding: 8px 0;
-            list-style: none;
-            margin: 0;
-             /* Transição suave para aparecer (opcional) */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(5px);
-            transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out, transform 0.15s ease-in-out;
-        }
-
-        /* Mostra o dropdown quando o user-menu está em hover */
-        .user-menu:hover .user-dropdown {
-            display: block; /* Ou use visibility/opacity para transições */
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        /* <<< FIM MODIFICAÇÃO CSS HOVER >>> */
-
-
-        .user-dropdown li a {
-            display: flex; align-items: center; gap: 12px; padding: 10px 15px;
-            font-size: 14px; color: #333; text-decoration: none; white-space: nowrap;
-            font-weight: normal; font-family: 'Nunito', sans-serif;
-        }
-         .user-dropdown li a .icon { width: 16px; height: 16px; opacity: 0.7; }
-        .user-dropdown li a:hover { background-color: #f5f5f5; }
-
-
-        /* Estilos do Conteúdo Principal (mantidos) */
-        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .profile-title-section { margin-bottom: 30px; text-align: center; }
-        .profile-title-section h1 { font-size: 28px; color: #333; margin-bottom: 5px; font-weight: 700; }
-        .profile-title-section p { font-size: 16px; color: #777; }
-        .profile-menu-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .menu-card { display: flex; align-items: center; gap: 15px; background-color: #fff; padding: 25px 20px; border-radius: 10px; border: 1px solid #e8e8e8; text-decoration: none; color: inherit; transition: box-shadow 0.3s ease, transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .menu-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: translateY(-3px); }
-        .menu-card-icon img { width: 40px; height: 40px; }
-        .menu-card-content { flex: 1; }
-        .menu-card-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 4px; }
-        .menu-card-description { font-size: 14px; color: #777; line-height: 1.4; }
-        .menu-card-arrow { font-size: 24px; color: #aaa; font-weight: bold; }
-
-    </style>
+    /* Toast */
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25);font-size:.92rem;display:none;z-index:70}
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
-    <header>
-        <nav>
-            <a href="index.html" class="logo">
-                <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
-                <p>Patas Pousada</p>
-            </a>
-            <ul>
-                <li><a href="#">Reservas</a></li>
-                <li><a href="#">Ajuda</a></li>
-                <li><a href="#" style="color: #d74f4f;">Lar Temporário</a></li>
-                <li class="user-menu">
-                    <div class="user-menu-trigger">
-                        <img src="https://images.icon-icons.com/1146/PNG/512/1486485564-add-character-include-more-person-user_81147.png" alt="Foto de Isabella">
-                        <span>Usuário</span>
-                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"></path></svg>
-                    </div>
-
-                    <ul class="user-dropdown">
-                         <li>
-                            <a href="menu_perfil.html">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
-                                Editar perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.83-1.17c.38-.38.38-.99 0-1.37l-2.08-2.08c-.38-.38-.99-.38-1.37 0l-2.08 2.08c-.38.38-.38.99 0 1.37l2.08 2.08c.37.39.98.39 1.37 0l2.08-2.08zm-9.66 0c.38-.38.38-.99 0-1.37l-2.08-2.08c-.38-.38-.99-.38-1.37 0l-2.08 2.08c-.38.38-.38.99 0 1.37l2.08 2.08c.37.39.98.39 1.37 0l2.08-2.08zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></svg>
-                                Meus pets
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></svg>
-                                Sair
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="main-container">
-         <div class="profile-title-section">
-            <h1>Editar perfil</h1>
-            <p>Edite suas informações e preferências, faça a gestão dos seus preços e perfil.</p>
-        </div>
-        <div class="profile-menu-options">
-             <a href="perfil.html" class="menu-card">
-                <div class="menu-card-icon"><img src="https://www.centrodemedicina.com.br/wp-content/uploads/2021/07/personal-information.png" alt=""></div>
-                <div class="menu-card-content"><h3 class="menu-card-title">Dados pessoais</h3><p class="menu-card-description">Ajuste aqui os seus dados, seu endereço, documentos, telefone e seus contatos de emergência.</p></div>
-                <div class="menu-card-arrow">&gt;</div>
-            </a>
-            <a href="#" class="menu-card">
-                <div class="menu-card-icon"><img src="https://cdn-icons-png.flaticon.com/512/5184/5184018.png" alt=""></div>
-                <div class="menu-card-content"><h3 class="menu-card-title">Seus pets</h3><p class="menu-card-description">Edite ou adicione seus pets.</p></div>
-                <div class="menu-card-arrow">&gt;</div>
-            </a>
-            <a href="#" class="menu-card">
-                <div class="menu-card-icon"><img src="https://cdn-icons-png.flaticon.com/512/16794/16794845.png" alt=""></div>
-                <div class="menu-card-content"><h3 class="menu-card-title">Configurações</h3><p class="menu-card-description">Redefina aqui sua senha de acesso.</p></div>
-                <div class="menu-card-arrow">&gt;</div>
-            </a>
-        </div>
+<header>
+  <nav class="nav">
+    <a class="logo" href="index.html">
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="">
+      Patas Pousada
+    </a>
+    <ul>
+      <li><a class="link" href="reservas.html">Reservas</a></li>
+      <li><a class="link" href="ajuda.html">Ajuda</a></li>
+      <li><a class="link" href="Lartemp.html" style="color:#d74f4f">Lar Temporário</a></li>
+    </ul>
+    <div class="user">
+      <div class="user__trigger">
+        <div class="badge" id="userInitial">U</div>
+        <span id="userName" style="font-weight:800">Usuário</span>
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#666" d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="user__dropdown">
+        <a class="user__item" href="menu_perfil.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+        <a class="user__item" href="meusPets.html"><i class="fa-solid fa-paw"></i> Meus pets</a>
+        <a class="user__item" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+        <div class="dropdown-sep"></div>
+        <!-- Ícone atualizado para combinar com Meus Pets -->
+        <a class="user__item pp-danger" href="#" id="deleteAccountLink">
+          <i class="fa-solid fa-user-xmark"></i> Excluir conta
+        </a>
+      </div>
     </div>
+  </nav>
+</header>
 
-    </body>
+<main class="wrap">
+  <h1 class="title">Editar perfil</h1>
+  <p class="lead">Edite suas informações e preferências, faça a gestão dos seus preços e perfil.</p>
+
+  <div class="grid">
+    <a class="card" href="perfil.html">
+      <img src="https://www.centrodemedicina.com.br/wp-content/uploads/2021/07/personal-information.png" width="38" height="38" alt="">
+      <div>
+        <h3>Dados pessoais</h3>
+        <p>Ajuste dados, endereço, documentos, telefones e contatos de emergência.</p>
+      </div>
+      <div class="carret">›</div>
+    </a>
+
+    <a class="card" href="meusPets.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/5184/5184018.png" width="38" height="38" alt="">
+      <div>
+        <h3>Seus pets</h3>
+        <p>Edite ou adicione seus pets.</p>
+      </div>
+      <div class="carret">›</div>
+    </a>
+
+    <a class="card" href="alterar-senha.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/16794/16794845.png" width="38" height="38" alt="">
+      <div>
+        <h3>Configurações</h3>
+        <p>Redefina sua senha de acesso.</p>
+      </div>
+      <div class="carret">›</div>
+    </a>
+  </div>
+</main>
+
+<!-- MODAL: Excluir conta -->
+<div class="pp-wrap" id="ppDelete" style="display:none">
+  <div class="pp-card" role="dialog" aria-modal="true">
+    <header>
+      <span class="ic">!</span>
+      <h4>Excluir sua conta</h4>
+    </header>
+    <div class="pp-body">
+      <p>Esta ação é <strong>irreversível</strong>. Todos os seus dados (perfil, pets, reservas, arquivos) serão removidos.</p>
+      <p>Para confirmar, digite <strong>EXCLUIR</strong>:</p>
+      <input id="delConfirmText" type="text" placeholder="EXCLUIR">
+      <p>Por segurança, informe sua <strong>senha atual</strong>:</p>
+      <input id="delPassword" type="password" placeholder="Senha atual">
+    </div>
+    <div class="pp-ft">
+      <button class="pp-btn" id="delCancel">Cancelar</button>
+      <button class="pp-btn pp-ok" id="delOk">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function toast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.style.display='block';
+    setTimeout(()=>t.style.display='none',2200);
+  }
+
+  async function requireAuth(){
+    const { data: { user } } = await sb.auth.getUser();
+    if(!user){ location.href = "cadastrarouentrar.html?next=menu_perfil.html"; return null; }
+    return user;
+  }
+
+  (async ()=>{
+    const user = await requireAuth(); if(!user) return;
+    const name = user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário";
+    document.getElementById("userName").textContent = name;
+    document.getElementById("userInitial").textContent = (name[0]||"U").toUpperCase();
+
+    document.getElementById("btnLogout").addEventListener("click", async (e)=>{
+      e.preventDefault(); await sb.auth.signOut(); location.href = "index.html";
+    });
+  })();
+
+  // ===== Modal excluir conta (UI)
+  const ppDelete = document.getElementById('ppDelete');
+  const delCancel = document.getElementById('delCancel');
+  const delOk = document.getElementById('delOk');
+  const delConfirmText = document.getElementById('delConfirmText');
+  const delPassword = document.getElementById('delPassword');
+
+  function openDeleteModal(){
+    ppDelete.style.display='flex';
+    requestAnimationFrame(()=>ppDelete.querySelector('.pp-card').classList.add('show'));
+    setTimeout(()=>delConfirmText?.focus(), 80);
+  }
+  function closeDeleteModal(){
+    ppDelete.querySelector('.pp-card').classList.remove('show');
+    setTimeout(()=>{ ppDelete.style.display='none'; }, 140);
+    delConfirmText.value=''; delPassword.value='';
+  }
+
+  document.getElementById('deleteAccountLink')?.addEventListener('click', (e)=>{
+    e.preventDefault(); openDeleteModal();
+  });
+  delCancel?.addEventListener('click', closeDeleteModal);
+  ppDelete?.addEventListener('click', e=>{ if(e.target.id==='ppDelete') closeDeleteModal(); });
+
+  delOk?.addEventListener('click', ()=>{
+    const okWord = delConfirmText.value.trim().toUpperCase() === 'EXCLUIR';
+    if(!okWord){ toast('Digite EXCLUIR para confirmar.'); delConfirmText.focus(); return; }
+    if(!delPassword.value.trim()){ toast('Informe sua senha atual.'); delPassword.focus(); return; }
+    toast('Confirmação recebida. (Implementaremos a exclusão real no próximo passo)');
+    closeDeleteModal();
+  });
+</script>
+</body>
 </html>

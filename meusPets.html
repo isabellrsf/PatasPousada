@@ -1,208 +1,409 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meus Pets - Patas Pousada</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meus Pets — Patas Pousada</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Parkinsans:wght@400;700&display=swap');
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    body {
-      font-family: 'Nunito', sans-serif;
-      background-color: #fafafa;
-      margin: 0;
-      color: #333;
-    }
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
 
-    /* ===== HEADER PADRÃO ===== */
-    header {
-      justify-content: center;
-      display: flex;
-      background-color: #fff;
-      padding: 20px 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+  :root{
+    --brand:#e2725b; --brand-strong:#d45f47; --ink:#333; --muted:#777; --bg:#f7f7f7; --white:#fff;
+    --radius:12px; --shadow:0 6px 14px rgba(0,0,0,.08); --line:#ececec;
+    --chip:#fff4f1; --chip-border:#ffd8cf;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Nunito,system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  a{color:inherit}
 
-    header img {
-      width: 30px;
-      height: 30px;
-    }
+  /* HEADER (layout da referência) */
+  header{display:flex;justify-content:center;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+  nav{max-width:1200px;width:100%;padding:16px 20px;display:flex;align-items:center;gap:20px}
+  .logo{display:flex;align-items:center;text-decoration:none;color:var(--brand);font-family:Parkinsans,sans-serif;font-weight:800}
+  .logo img{width:30px;height:30px;margin-right:10px}
+  nav ul{list-style:none;display:flex;gap:22px;margin:0 0 0 auto;padding:0}
+  nav ul a{font-family:Parkinsans,sans-serif;font-weight:700;text-decoration:none;color:#222}
+  nav ul a:hover{color:var(--brand)}
+  .pill{color:#d74f4f}
 
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+  /* User menu (hover) */
+  .user-menu{position:relative}
+  .user-trigger{display:flex;align-items:center;gap:10px;cursor:pointer}
+  .user-trigger img{width:32px;height:32px;border-radius:50%;border:1px solid #eee;background:#f2f2f2;object-fit:cover}
+  .user-trigger svg{width:14px;height:14px;fill:#666;transition:transform .2s}
+  .user-menu:hover .user-trigger svg{transform:rotate(180deg)}
+  .dropdown{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e6e6e6;border-radius:8px;box-shadow:var(--shadow);width:220px;opacity:0;visibility:hidden;transform:translateY(6px);transition:.15s;z-index:30}
+  .user-menu:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+  .dropdown a{display:flex;gap:10px;padding:10px 12px;text-decoration:none;color:#333;font-weight:800}
+  .dropdown a:hover{background:#f7f7f7}
 
-    nav .logo {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #e2725b;
-      text-decoration: none;
-      font-family: 'Parkinsans', sans-serif;
-    }
+  /* Página */
+  .wrap{max-width:1100px;margin:28px auto;padding:0 20px}
+  h2{font:800 28px Parkinsans,sans-serif;color:var(--brand);text-align:center;margin:6px 0 22px}
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-    }
+  .actions-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  .btn-pill{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--brand);color:var(--brand);background:#fff;padding:9px 14px;border-radius:999px;font-weight:900;text-decoration:none}
+  .btn-pill:hover{background:#fff1ee}
+  .btn-primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-strong)}
 
-    nav ul li a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-      font-family: 'Parkinsans', sans-serif;
-      transition: 0.3s;
-    }
+  /* Grid de pets */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .card{background:#fff;border:1px solid #eee;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
+  .photo{width:100%;height:150px;background:#f1f1f1}
+  .photo img{width:100%;height:100%;object-fit:cover}
+  .body{padding:12px 14px;text-align:center}
+  .body h3{margin:0 0 6px;color:var(--brand);font:800 17px Parkinsans,sans-serif}
+  .body p{margin:4px 0;color:#555;font-size:.92rem}
+  .card-cta{display:flex;gap:8px;justify-content:center;padding:0 0 14px}
+  .btn{all:unset;display:inline-block;border:2px solid var(--brand);color:var(--brand);background:#fff;padding:7px 10px;border-radius:12px;font-weight:900;cursor:pointer}
+  .btn:hover{background:#fff1ee}
+  .btn-danger{border-color:#ffb4a8;color:#b80000;background:#ffeceb}
+  .btn-danger:hover{background:#ffd9d4}
+  .empty{padding:16px;border:1px dashed #e5e5e5;border-radius:12px;color:#777;background:#fff;text-align:center}
 
-    nav ul li a:hover {
-      color: red;
-    }
+  /* Modal edição */
+  .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);z-index:50}
+  .modal.show{display:grid}
+  .box{background:#fff;border-radius:16px;max-width:640px;width:92%;box-shadow:var(--shadow);overflow:hidden}
+  .box-hd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .box-hd h3{margin:0;font:800 18px Parkinsans,sans-serif}
+  .box-bd{padding:14px 16px;max-height:70vh;overflow:auto}
+  .box-bd label{display:block;margin:8px 0 4px;font-weight:700}
+  .box-bd input, .box-bd select, .box-bd textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px}
+  .box-ft{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid var(--line);background:#fafafa}
+  .x{cursor:pointer;border:none;background:transparent;font-size:20px}
 
-    /* ===== CONTAINER ===== */
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+  /* Pretty Confirm — alerta */
+  .pp-wrap{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;z-index:60}
+  .pp-card{width:min(460px,92vw);background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;transform:translateY(8px);opacity:0;transition:.18s}
+  .pp-card.show{transform:translateY(0);opacity:1}
+  .pp-card header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #f1f5f9;background:#fff1f0}
+  .pp-card header .ic{width:20px;height:20px;display:grid;place-items:center;border-radius:999px;background:#fee2e2;color:#b91c1c;font-weight:900}
+  .pp-card h4{margin:0;font-weight:900;color:#991b1b}
+  .pp-body{padding:16px}
+  .pp-ft{display:flex;gap:10px;justify-content:flex-end;padding:12px 14px;background:#fafafa;border-top:1px solid #eef2f7}
+  .pp-btn{border-radius:12px;padding:9px 14px;font-weight:900;border:2px solid #e2e8f0;background:#fff;cursor:pointer}
+  .pp-ok{background:#b91c1c;color:#fff;border-color:#b91c1c}
 
-    h2 {
-      text-align: center;
-      color: #e2725b;
-      font-family: 'Parkinsans', sans-serif;
-      font-size: 1.8em;
-      margin-bottom: 30px;
-    }
+  /* Toast simples */
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25);font-size:.92rem;display:none;z-index:70}
+</style>
 
-    /* ===== BOTÃO ADICIONAR ===== */
-    .add-btn {
-      display: inline-block;
-      background-color: #e2725b;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-      font-family: 'Parkinsans', sans-serif;
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 8px rgba(226, 114, 91, 0.3);
-    }
-
-    .add-btn:hover {
-      background-color: #d65a47;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(226, 114, 91, 0.4);
-    }
-
-    /* ===== GRID DE PETS ===== */
-    .pets-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .pet-card {
-      background-color: #fff;
-      border-radius: 15px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .pet-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
-    }
-
-    .pet-photo {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background-color: #f0f0f0;
-    }
-
-    .pet-info {
-      padding: 15px;
-    }
-
-    .pet-info h3 {
-      margin: 0;
-      color: #e2725b;
-      font-family: 'Parkinsans', sans-serif;
-      font-size: 1.2em;
-    }
-
-    .pet-info p {
-      margin: 6px 0;
-      color: #555;
-      font-size: 0.9em;
-      line-height: 1.4;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.85em;
-      color: #888;
-      margin-top: 50px;
-      padding: 20px;
-    }
-  </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="">
+      <span>Patas Pousada</span>
+    </a>
 
-  <!-- HEADER -->
-  <header>
-    <nav>
-      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
-      <a href="index.html" class="logo">Patas Pousada</a>
-      <ul>
-        <li><a href="home_tutor.html">Início</a></li>
-        <li><a href="ajuda.html">Ajuda</a></li>
-      </ul>
-    </nav>
-  </header>
+    <ul>
+      <li><a href="reservas.html">Reservas</a></li>
+      <li><a href="ajuda.html">Ajuda</a></li>
+      <li><a class="pill" href="#">Lar Temporário</a></li>
 
-  <div class="container">
-    <h2>🐾 Meus Pets</h2>
-    <a href="cadastroPets.html" class="add-btn">➕ Cadastrar Novo Pet</a>
-
-    <div class="pets-grid">
-      <!-- Exemplo de pet -->
-      <div class="pet-card">
-        <img src="https://place-puppy.com/400x300" alt="Pet" class="pet-photo">
-        <div class="pet-info">
-          <h3>Thor</h3>
-          <p><strong>Espécie:</strong> Cachorro</p>
-          <p><strong>Raça:</strong> Poodle</p>
-          <p><strong>Idade:</strong> 3 anos</p>
-          <p><strong>Porte:</strong> Pequeno</p>
-          <p><strong>Observações:</strong> Muito sociável e adora brincar.</p>
+      <!-- Menu do usuário -->
+      <li class="user-menu" id="userMenuRoot" style="display:none">
+        <div class="user-trigger">
+          <img id="userAvatar" alt="avatar">
+          <strong id="userName">Usuário</strong>
+          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"></path></svg>
         </div>
-      </div>
-
-      <div class="pet-card">
-        <img src="https://placekitten.com/400/300" alt="Pet" class="pet-photo">
-        <div class="pet-info">
-          <h3>Luna</h3>
-          <p><strong>Espécie:</strong> Gato</p>
-          <p><strong>Raça:</strong> Siamês</p>
-          <p><strong>Idade:</strong> 2 anos</p>
-          <p><strong>Porte:</strong> Pequeno</p>
-          <p><strong>Observações:</strong> Gosta de dormir em lugares altos.</p>
+        <div class="dropdown">
+          <a href="menu_perfil.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+          <a href="meusPets.html"><i class="fa-solid fa-paw"></i> Meus pets</a>
+          <a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+          <div style="height:1px;background:#eee;margin:6px 0"></div>
+          <!-- NOVO: Excluir conta -->
+          <a href="#" id="deleteAccountLink" style="color:#b91c1c;font-weight:900;">
+            <i class="fa-solid fa-user-xmark"></i> Excluir conta
+          </a>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h2>🐾 Meus Pets</h2>
+
+  <div class="actions-top">
+    <a class="btn-pill" href="home_tutor.html"><i class="fa-solid fa-arrow-left"></i> Voltar à página inicial</a>
+    <a class="btn-pill btn-primary" href="cadastroPets.html"><i class="fa-solid fa-plus"></i> Cadastrar novo pet</a>
   </div>
 
-  <footer>
-    © 2025 Patas Pousada • Todos os direitos reservados
-  </footer>
+  <div id="petsWrap">
+    <div class="empty">Carregando seus pets…</div>
+  </div>
+</div>
+
+<!-- MODAL EDIÇÃO -->
+<div id="editModal" class="modal" aria-hidden="true">
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <div class="box-hd">
+      <h3 id="editTitle">Editar Pet</h3>
+      <button class="x" id="closeEdit">×</button>
+    </div>
+    <div class="box-bd">
+      <form id="editForm">
+        <input type="hidden" id="edit_id">
+        <label for="edit_name">Nome</label>
+        <input type="text" id="edit_name" required>
+        <label for="edit_species">Espécie</label>
+        <input type="text" id="edit_species" placeholder="Ex.: Cachorro, Gato" required>
+        <label for="edit_breed">Raça</label>
+        <input type="text" id="edit_breed" placeholder="Opcional">
+        <label for="edit_sex">Sexo</label>
+        <select id="edit_sex">
+          <option value="">Selecione…</option>
+          <option value="Macho">Macho</option>
+          <option value="Fêmea">Fêmea</option>
+        </select>
+        <label for="edit_size">Porte</label>
+        <select id="edit_size">
+          <option value="">Selecione…</option>
+          <option value="Pequeno">Pequeno</option>
+          <option value="Médio">Médio</option>
+          <option value="Grande">Grande</option>
+        </select>
+        <label for="edit_notes">Observações / Necessidades especiais</label>
+        <textarea id="edit_notes" placeholder="Alergias, medicações, comportamento…" rows="4"></textarea>
+        <label for="edit_photo_url">Foto (URL)</label>
+        <input type="url" id="edit_photo_url" placeholder="https://…">
+      </form>
+    </div>
+    <div class="box-ft">
+      <button class="btn" id="cancelEdit">Cancelar</button>
+      <button class="btn btn-primary" id="saveEdit">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM BONITO: Excluir Pet (existente) -->
+<div class="pp-wrap" id="ppConfirm" aria-hidden="true">
+  <div class="pp-card" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppMsg">
+    <header>
+      <span class="ic">!</span>
+      <h4 id="ppTitle">Ação irreversível</h4>
+    </header>
+    <div class="pp-body"><p id="ppMsg">Tem certeza?</p></div>
+    <div class="pp-ft">
+      <button class="pp-btn" id="ppCancel">Cancelar</button>
+      <button class="pp-btn pp-ok" id="ppOk">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOVO: CONFIRM DELETAR CONTA -->
+<div class="pp-wrap" id="ppDelete" style="display:none">
+  <div class="pp-card" role="dialog" aria-modal="true">
+    <header>
+      <span class="ic">!</span>
+      <h4>Excluir sua conta</h4>
+    </header>
+    <div class="pp-body">
+      <p>Esta ação é <strong>irreversível</strong>. Todos os seus dados (perfil, pets, reservas, arquivos) serão removidos.</p>
+      <p>Para confirmar, digite <strong>EXCLUIR</strong>:</p>
+      <input id="delConfirmText" type="text" placeholder="EXCLUIR" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin:6px 0 10px">
+      <p>Por segurança, informe sua <strong>senha atual</strong>:</p>
+      <input id="delPassword" type="password" placeholder="Senha atual" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px">
+    </div>
+    <div class="pp-ft">
+      <button class="pp-btn" id="delCancel">Cancelar</button>
+      <button class="pp-btn pp-ok" id="delOk">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== Supabase
+  const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const petsWrap = document.getElementById('petsWrap');
+  const userMenuRoot = document.getElementById('userMenuRoot');
+
+  function toast(text){const t=document.getElementById('toast');t.textContent=text;t.style.display='block';setTimeout(()=>t.style.display='none',2200);}
+
+  async function requireAuth(){
+    const { data:{ user } } = await sb.auth.getUser();
+    if(!user){ location.href="cadastrarouentrar.html?next=meusPets.html"; return null; }
+    return user;
+  }
+
+  async function setupUser(user){
+    // nome + avatar (iniciais se não houver)
+    let display = user.email;
+    try{
+      const { data } = await sb.from('profiles').select('full_name, avatar_url').eq('id', user.id).single();
+      display = data?.full_name || user.user_metadata?.full_name || user.email;
+      const avatarUrl = data?.avatar_url || user.user_metadata?.avatar_url;
+      if(avatarUrl){
+        userAvatar.src = avatarUrl;
+      }else{
+        const c=document.createElement('canvas');c.width=64;c.height=64;const cx=c.getContext('2d');
+        cx.fillStyle='#ffe6e6';cx.fillRect(0,0,64,64);cx.fillStyle='#e2725b';cx.font='bold 26px Nunito';cx.textAlign='center';cx.textBaseline='middle';
+        const ini=(display?.split(' ')[0]?.[0]||'U').toUpperCase();cx.fillText(ini,32,34);userAvatar.src=c.toDataURL();
+      }
+    }catch{}
+    userName.textContent = display;
+    userMenuRoot.style.display='block';
+
+    // logout
+    logoutLink.addEventListener('click', async (e)=>{
+      e.preventDefault(); await sb.auth.signOut(); location.href="cadastrarouentrar.html";
+    });
+  }
+
+  // ===== Listagem de pets
+  function card(p){
+    const el=document.createElement('div');
+    el.className='card';
+    el.innerHTML=`
+      <div class="photo">${p.photo_url?`<img src="${p.photo_url}" alt="${p.name||'Pet'}">`:''}</div>
+      <div class="body">
+        <h3>${p.name || 'Sem nome'}</h3>
+        <p><strong>Espécie:</strong> ${p.species || '-'}</p>
+        ${p.breed?`<p><strong>Raça:</strong> ${p.breed}</p>`:''}
+        ${p.sex?`<p><strong>Sexo:</strong> ${p.sex}</p>`:''}
+        ${p.size?`<p><strong>Porte:</strong> ${p.size}</p>`:''}
+        ${p.special_needs?`<p><strong>Obs:</strong> ${p.special_needs}</p>`:''}
+      </div>
+      <div class="card-cta">
+        <button class="btn" data-action="edit" data-id="${p.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+        <button class="btn btn-danger" data-action="delete" data-id="${p.id}" data-name="${p.name||'este pet'}"><i class="fa-solid fa-trash"></i> Excluir</button>
+      </div>`;
+    return el;
+  }
+
+  async function loadPets(){
+    petsWrap.innerHTML = `<div class="empty">Carregando seus pets…</div>`;
+    const { data:{ user } } = await sb.auth.getUser();
+    const { data, error } = await sb.from('pets')
+      .select('id,name,species,breed,sex,size,special_needs,photo_url,created_at')
+      .eq('owner_id', user.id)
+      .order('created_at', { ascending:false });
+
+    if(error){ petsWrap.innerHTML=`<div class="empty">Erro: ${error.message}</div>`; return; }
+    if(!data?.length){ petsWrap.innerHTML=`<div class="empty">Você ainda não cadastrou pets. <a href="cadastroPets.html">Cadastrar agora</a></div>`; return; }
+
+    const g=document.createElement('div');g.className='grid';
+    data.forEach(p=>g.appendChild(card(p)));
+    petsWrap.innerHTML=""; petsWrap.appendChild(g);
+    g.addEventListener('click', onGridClick);
+  }
+
+  // ===== Editar pet
+  const editModal = document.getElementById('editModal');
+  const closeEdit  = document.getElementById('closeEdit');
+  const cancelEdit = document.getElementById('cancelEdit');
+  const saveEdit   = document.getElementById('saveEdit');
+
+  function openEdit(){ editModal.classList.add('show'); }
+  function closeEditModal(){ editModal.classList.remove('show'); editForm.reset(); edit_id.value=''; }
+  closeEdit.onclick = ()=>closeEditModal();
+  cancelEdit.onclick= ()=>closeEditModal();
+  editModal.addEventListener('click', e=>{ if(e.target.id==='editModal') closeEditModal(); });
+
+  async function loadPetToForm(id){
+    const { data, error } = await sb.from('pets').select('*').eq('id', id).single();
+    if(error){ toast('Erro ao abrir edição'); return; }
+    edit_id.value = data.id;
+    edit_name.value   = data.name || '';
+    edit_species.value= data.species || '';
+    edit_breed.value  = data.breed || '';
+    edit_sex.value    = data.sex || '';
+    edit_size.value   = data.size || '';
+    edit_notes.value  = data.special_needs || '';
+    edit_photo_url.value = data.photo_url || '';
+    openEdit();
+  }
+
+  saveEdit.addEventListener('click', async ()=>{
+    const id = edit_id.value; if(!id) return;
+    const payload = {
+      name: edit_name.value.trim(),
+      species: edit_species.value.trim(),
+      breed: edit_breed.value.trim() || null,
+      sex: edit_sex.value || null,
+      size: edit_size.value || null,
+      special_needs: edit_notes.value.trim() || null,
+      photo_url: edit_photo_url.value.trim() || null
+    };
+    if(!payload.name || !payload.species){ toast('Informe ao menos Nome e Espécie.'); return; }
+    const { error } = await sb.from('pets').update(payload).eq('id', id);
+    if(error){ toast('Erro ao salvar'); return; }
+    toast('Alterações salvas!');
+    closeEditModal();
+    await loadPets();
+  });
+
+  // ===== Confirm bonito para excluir pet
+  function prettyConfirm(message){
+    return new Promise(res=>{
+      const wrap=document.getElementById('ppConfirm');
+      const card=wrap.querySelector('.pp-card');
+      ppMsg.textContent = message;
+      wrap.style.display='flex'; requestAnimationFrame(()=>card.classList.add('show'));
+      const cleanup=v=>{ card.classList.remove('show'); setTimeout(()=>{wrap.style.display='none';},140); res(v); };
+      ppOk.onclick=()=>cleanup(true); ppCancel.onclick=()=>cleanup(false);
+      wrap.onclick=e=>{ if(e.target.id==='ppConfirm') cleanup(false); };
+      document.onkeydown = (e)=>{ if(e.key==='Escape') cleanup(false); if(e.key==='Enter') cleanup(true); };
+    });
+  }
+
+  async function onGridClick(e){
+    const b=e.target.closest('button[data-action]'); if(!b) return;
+    const id=b.dataset.id; const name=b.dataset.name||'este pet';
+    if(b.dataset.action==='edit'){ await loadPetToForm(id); }
+    if(b.dataset.action==='delete'){
+      if(await prettyConfirm(`Tem certeza que deseja excluir ${name}? Esta ação não pode ser desfeita.`)){
+        const { error } = await sb.from('pets').delete().eq('id', id);
+        if(error){ toast('Erro ao excluir'); return; }
+        toast('Pet excluído!');
+        await loadPets();
+      }
+    }
+  }
+
+  // ======== NOVO: Modal Excluir Conta (apenas UI por enquanto)
+  const ppDelete   = document.getElementById('ppDelete');
+  const delCancel  = document.getElementById('delCancel');
+  const delOk      = document.getElementById('delOk');
+
+  function openDeleteModal(){
+    ppDelete.style.display='flex';
+    requestAnimationFrame(()=>ppDelete.querySelector('.pp-card').classList.add('show'));
+  }
+  function closeDeleteModal(){
+    ppDelete.querySelector('.pp-card').classList.remove('show');
+    setTimeout(()=>{ ppDelete.style.display='none'; }, 140);
+    delConfirmText.value=''; delPassword.value='';
+  }
+
+  document.getElementById('deleteAccountLink')?.addEventListener('click', (e)=>{
+    e.preventDefault(); openDeleteModal();
+  });
+  delCancel?.addEventListener('click', closeDeleteModal);
+  ppDelete?.addEventListener('click', (e)=>{ if(e.target.id==='ppDelete') closeDeleteModal(); });
+  // por enquanto, só fecha (no próximo passo colocamos a exclusão real)
+  delOk?.addEventListener('click', closeDeleteModal);
+
+  // boot
+  (async function init(){
+    const user = await requireAuth(); if(!user) return;
+    await setupUser(user);
+    await loadPets();
+  })();
+</script>
 </body>
 </html>

@@ -18,6 +18,19 @@ function env($key) {
   return $vars[$key] ?? null;
 }
 
+// -------------- Util: configurações SSL para cURL --------------
+function apply_curl_ssl_opts($ch) {
+  $cafile = env('SUPABASE_CA_FILE') ?: env('CURL_CA_BUNDLE');
+  if ($cafile && is_file($cafile)) {
+    curl_setopt($ch, CURLOPT_CAINFO, $cafile);
+  } else {
+    if (env('DEV_NO_SSL_VERIFY') === '1') {
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    }
+  }
+}
+
 // -------------- Chamada REST genérica ao Supabase (server-side) --------------
 function sb_request($method, $path, $json = null, array $extraHeaders = []) {
   $base = rtrim(env('SUPABASE_URL'), '/');
@@ -36,7 +49,10 @@ function sb_request($method, $path, $json = null, array $extraHeaders = []) {
     CURLOPT_HTTPHEADER     => $headers,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POSTFIELDS     => ($json !== null ? json_encode($json) : null),
+    CURLOPT_TIMEOUT        => 30,
   ]);
+
+  apply_curl_ssl_opts($ch);
 
   $body   = curl_exec($ch);
   $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -67,14 +83,19 @@ function upload_to_bucket($bucket, $destPath, $localTmpPath) {
     CURLOPT_HTTPHEADER      => $headers,
     CURLOPT_RETURNTRANSFER  => true,
     CURLOPT_POSTFIELDS      => file_get_contents($localTmpPath),
+    CURLOPT_TIMEOUT         => 60,
   ]);
+
+  apply_curl_ssl_opts($ch);
 
   $res  = curl_exec($ch);
   $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $err  = curl_error($ch);
   curl_close($ch);
 
-  if ($code >= 300) throw new Exception("Falha no upload ($code): $res");
+  if ($code >= 300) {
+    throw new Exception("Falha no upload ($code): " . ($res ?: $err));
+  }
 
-  // URL pública (se o bucket for público)
   return "$base/storage/v1/object/public/$bucket/$destPath";
 }
