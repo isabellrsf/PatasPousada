@@ -144,6 +144,19 @@
       display: none;
       font-size: 0.9em;
     }
+
+    .alerta-sucesso {
+      background-color: #e6ffea;
+      color: #0a7a28;
+      border: 1px solid #0a7a28;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 
@@ -163,8 +176,10 @@
     <h2>Cadastro de Anfitriões</h2>
 
     <div id="erro-container" class="alerta-erro"></div>
+    <div id="sucesso-container" class="alerta-sucesso"></div>
 
-    <form id="formCadastro" action="processaCadastroAnfitrioes.php" method="POST">
+    <!-- FORM SEM ACTION / SEM METHOD (AGORA É 100% JS) -->
+    <form id="formCadastro">
       <label for="name">Nome:</label>
       <input type="text" id="name" name="name" required placeholder="Informe seu nome completo">
 
@@ -229,14 +244,29 @@
     </form>
   </div>
 
-  <script>
+  <!-- TUDO EM UM ÚNICO SCRIPT MODULE: VALIDAÇÃO + SUPABASE -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // 🔐 DADOS DO PROJETO SUPABASE
+    const supabaseUrl = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Ymd6b2t0dGpna2lwd3pmZ3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjAyOTAsImV4cCI6MjA3NjIzNjI5MH0.jSdZ7TT8lH5y1P79VuFBOhOzNT1_5DG_aQk1fmyzmnk";
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
     const birthInput = document.getElementById("birth_date");
     const idadeTexto = document.getElementById("idade-calculada");
     const msgIdade = document.getElementById("mensagem-idade");
     const botao = document.getElementById("btn-registrar");
+    const form = document.getElementById("formCadastro");
+    const erroDiv = document.getElementById("erro-container");
+    const sucessoDiv = document.getElementById("sucesso-container");
 
-    birthInput.addEventListener("input", () => {
-      const birthDate = new Date(birthInput.value);
+    function calcularIdade(dateStr) {
+      if (!dateStr) return null;
+      const birthDate = new Date(dateStr);
+      if (isNaN(birthDate.getTime())) return null;
+
       const hoje = new Date();
       let idade = hoje.getFullYear() - birthDate.getFullYear();
       const mes = hoje.getMonth() - birthDate.getMonth();
@@ -244,8 +274,14 @@
       if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) {
         idade--;
       }
+      return idade;
+    }
 
-      if (!birthInput.value) {
+    // 🧮 Atualiza idade em tempo real
+    birthInput.addEventListener("input", () => {
+      const idade = calcularIdade(birthInput.value);
+
+      if (!birthInput.value || idade === null) {
         idadeTexto.textContent = "";
         msgIdade.style.display = "none";
         return;
@@ -270,35 +306,144 @@
       }
     });
 
-    // Validação de senha + idade no submit
-    document.querySelector('form').addEventListener('submit', function(event) {
-      const senha = document.getElementById('password').value;
-      const confirmar = document.getElementById('confirm_password').value;
-      const birthDate = new Date(birthInput.value);
-      const hoje = new Date();
-      let idade = hoje.getFullYear() - birthDate.getFullYear();
-      const mes = hoje.getMonth() - birthDate.getMonth();
-      if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) idade--;
+    function mostrarErro(msg) {
+      erroDiv.textContent = msg;
+      erroDiv.style.display = "block";
+      sucessoDiv.style.display = "none";
+    }
+
+    function mostrarSucesso(msg) {
+      sucessoDiv.textContent = msg;
+      sucessoDiv.style.display = "block";
+      erroDiv.style.display = "none";
+    }
+
+    // 🧾 SUBMIT: VALIDAÇÃO + SUPABASE
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      erroDiv.style.display = "none";
+      sucessoDiv.style.display = "none";
+
+      const formData = new FormData(form);
+      const nome       = formData.get("name")?.trim() || "";
+      const cpf        = formData.get("cpf")?.trim() || "";
+      const birth_date = formData.get("birth_date");
+      const email      = (formData.get("email") || "").toString().trim().toLowerCase();
+      const senha      = formData.get("password") || "";
+      const confirmar  = formData.get("confirm_password") || "";
+      const city       = formData.get("city") || "";
+      const pets_count = Number(formData.get("pets") || 0);
+      const residence  = formData.get("residence") || "";
+
+      // Validação básica
+      if (!nome || !cpf || !birth_date || !email || !senha || !city || !residence) {
+        mostrarErro("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      const idade = calcularIdade(birth_date);
+      if (idade === null || idade < 18 || idade > 100) {
+        mostrarErro("Idade inválida! É necessário ter entre 18 e 100 anos.");
+        return;
+      }
 
       if (senha !== confirmar) {
-        alert("As senhas não coincidem!");
-        event.preventDefault();
+        mostrarErro("As senhas não coincidem.");
+        return;
       }
 
-      if (idade < 18 || idade > 100) {
-        alert("Idade inválida! É necessário ter entre 18 e 100 anos.");
-        event.preventDefault();
+      if (senha.length < 6) {
+        mostrarErro("A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      botao.disabled = true;
+      botao.textContent = "Cadastrando...";
+      botao.style.cursor = "wait";
+
+      try {
+        // 1) Cria usuário no Auth
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password: senha,
+          options: {
+            data: {
+              full_name: nome,
+              role: "host",
+              origem: "cadastro_frontend"
+            }
+          }
+        });
+
+        if (signUpError) {
+          let msg = signUpError.message || "Erro ao criar usuário.";
+          if (msg.includes("already registered")) {
+            msg = "Este e-mail já está cadastrado.";
+          }
+          mostrarErro("Erro no cadastro: " + msg);
+          return;
+        }
+
+        // 2) Garante sessão autenticada (necessário para RLS)
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password: senha
+        });
+
+        if (signInError) {
+          mostrarErro("Erro ao autenticar após o cadastro: " + signInError.message);
+          return;
+        }
+
+        // 3) Recupera o usuário autenticado (id = auth.uid())
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError || !userData?.user) {
+          mostrarErro("Não foi possível confirmar o usuário autenticado.");
+          return;
+        }
+
+        const user = userData.user;
+
+        // 4) Insere na tabela hosts já como authenticated
+        const { error: insertError } = await supabase
+          .from("hosts")
+          .insert({
+            id:             user.id,
+            full_name:      nome,
+            cpf:            cpf,
+            birth_date:     birth_date,
+            email:          email,
+            city:           city,
+            pets_count:     pets_count,
+            residence_type: residence
+          });
+
+        if (insertError) {
+          let msg = insertError.message || "Erro ao salvar perfil.";
+          if (msg.includes("duplicate key") && msg.includes("cpf")) {
+            msg = "Este CPF já está cadastrado em outra conta.";
+          }
+          mostrarErro(msg);
+          return;
+        }
+
+        // (Opcional) guardar nome do host
+        localStorage.setItem("host_name", nome);
+
+        mostrarSucesso("Cadastro realizado com sucesso! Redirecionando...");
+        setTimeout(() => {
+          window.location.href = "home_host.html";
+        }, 1200);
+
+      } catch (err) {
+        console.error(err);
+        mostrarErro("Erro inesperado ao cadastrar. Tente novamente mais tarde.");
+      } finally {
+        botao.disabled = false;
+        botao.textContent = "Registrar";
+        botao.style.cursor = "pointer";
       }
     });
-
-    // Mostrar mensagem de erro vinda de ?erro= na URL
-    const params = new URLSearchParams(window.location.search);
-    const erroMsg = params.get('erro');
-    if (erroMsg) {
-      const erroDiv = document.getElementById('erro-container');
-      erroDiv.textContent = erroMsg;
-      erroDiv.style.display = 'block';
-    }
   </script>
 </body>
 </html>

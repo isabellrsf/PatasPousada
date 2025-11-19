@@ -96,7 +96,9 @@
        CONFIGURAÇÃO SUPABASE
     ============================================= */
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Ymd6b2t0dGpna2lwd3pmZ3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjAyOTAsImV4cCI6MjA3NjIzNjI5MH0.jSdZ7TT8lH5y1P79VuFBOhOzNT1_5DG_aQk1fmyzmnk";
+
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function setMsg(el, text, ok=false){
@@ -127,10 +129,10 @@
         .maybeSingle();
 
       if (!error && data) {
-        return "home_host.php";   // 👈 AGORA PHP
+        return "home_host.html";   // 🔁 AGORA HTML
       }
 
-      return "home_tutor.php";    // 👈 AGORA PHP
+      return "home_tutor.html";    // 🔁 AGORA HTML
     }
 
     /* ============================================
@@ -159,7 +161,7 @@
           return;
         }
 
-        // Cria sessão PHP
+        // Cria sessão PHP (se estiver em ambiente com PHP; na Vercel isso simplesmente não terá efeito)
         await bridgeSession(data.session?.access_token, data.session?.refresh_token);
 
         setMsg(msgEl, "Login ok! Carregando…", true);
@@ -176,15 +178,20 @@
     });
 
     /* ============================================
-       SESSÃO PHP
+       SESSÃO PHP (IGNORADO NA VERCEL)
     ============================================= */
     async function bridgeSession(access_token, refresh_token){
       if (!access_token) return;
-      await fetch('session_bridge.php', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ access_token, refresh_token })
-      });
+      try{
+        await fetch('session_bridge.php', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ access_token, refresh_token })
+        });
+      }catch(e){
+        // Em ambiente sem PHP (Vercel), isso vai falhar silenciosamente, e tudo bem.
+        console.warn("bridgeSession falhou (provavelmente sem PHP backend):", e);
+      }
     }
   </script>
 </body>
