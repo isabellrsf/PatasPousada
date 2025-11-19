@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Anfitrião | Patas Pousada</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Parkinsans:wght@500;600;700&display=swap');
+
+    :root {
+      --cor-principal: #e2725b;
+      --cor-principal-escura: #d35e46;
+      --cor-fundo: #f7f7f7;
+      --cor-card: #ffffff;
+      --cor-texto: #333333;
+      --radius-card: 16px;
+      --shadow-card: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', Arial, sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    /* HEADER */
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-left img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-text {
+      font-family: 'Parkinsans', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--cor-principal);
+      text-decoration: none;
+    }
+
+    .topbar-center nav ul {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+    }
+
+    .topbar-center nav a {
+      text-decoration: none;
+      font-family: 'Parkinsans', sans-serif;
+      font-weight: 600;
+      color: #444;
+      font-size: 0.95rem;
+    }
+
+    .topbar-center nav a:hover {
+      color: var(--cor-principal-escura);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .perfil-bolinha {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #ffe2da;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--cor-principal-escura);
+      font-size: 0.9rem;
+    }
+
+    .perfil-nome {
+      font-family: 'Parkinsans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .container-main {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* CARDS SUPERIORES */
+    .top-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .top-card {
+      background-color: var(--cor-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .top-card-titulo {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .top-card-sub {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    /* GRID PRINCIPAL */
+    .grid-main {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr) 260px;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    /* SIDEBAR ESQUERDA */
+    .sidebar-esq {
+      background-color: var(--cor-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sidebar-esq h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .filtro-botoes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-filtro {
+      border-radius: 999px;
+      border: 1.5px solid var(--cor-principal);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-color: transparent;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .btn-filtro.ativo {
+      background-color: var(--cor-principal);
+      color: #fff;
+    }
+
+    .btn-filtro span.emoji {
+      font-size: 1rem;
+    }
+
+    .select-cidade {
+      width: 100%;
+      margin-top: 4px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    /* LISTA DE SERVIÇOS DO ANFITRIÃO */
+    .lista-hosts {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .host-card {
+      background-color: var(--cor-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .host-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
+      background-color: #ffe2da;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+    }
+
+    .host-info-principal {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .host-nome {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .host-bairro {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .host-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+
+    .tag {
+      background-color: #fff7f5;
+      border-radius: 999px;
+      padding: 4px 8px;
+      border: 1px solid #ffe2da;
+    }
+
+    .host-experiencia {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .host-preco {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .host-preco strong {
+      font-size: 1rem;
+    }
+
+    .btn-ver-perfil {
+      border-radius: 999px;
+      border: 1.5px solid var(--cor-principal-escura);
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-color: transparent;
+      color: var(--cor-principal-escura);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .btn-ver-perfil:hover {
+      background-color: #ffe2da;
+    }
+
+    /* SIDEBAR DIREITA */
+    .sidebar-dir {
+      background-color: var(--cor-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-dir h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .sidebar-dir p {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .sidebar-dir a {
+      color: var(--cor-principal-escura);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .sidebar-dir a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 992px) {
+      .grid-main {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-esq,
+      .sidebar-dir {
+        order: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .top-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .host-card {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+
+      .host-preco {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="topbar-left">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+        <a href="index.html" class="logo-text">Patas Pousada</a>
+      </div>
+
+      <div class="topbar-center">
+        <nav>
+          <ul>
+            <li><a href="#">Reservas</a></li>
+            <li><a href="#">Ajuda</a></li>
+            <li><a href="#">Lar Temporário</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="topbar-right">
+        <span class="perfil-nome">
+          Bem-vindo(a), Anfitrião!
+        </span>
+        <div class="perfil-bolinha">
+          A
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-main">
+    <!-- Cards de atalho -->
+    <section class="top-cards">
+      <div class="top-card">
+        <span class="top-card-titulo">Seu painel de anfitrião</span>
+        <span class="top-card-sub">Gerencie seus serviços, valores e disponibilidade.</span>
+      </div>
+      <div class="top-card">
+        <span class="top-card-titulo">Seus pets</span>
+        <span class="top-card-sub">Adicione ou edite os pets que vivem com você.</span>
+      </div>
+      <div class="top-card">
+        <span class="top-card-titulo">Configurações</span>
+        <span class="top-card-sub">Redefina senha, dados pessoais e preferências.</span>
+      </div>
+    </section>
+
+    <section class="grid-main">
+      <!-- Filtros à esquerda -->
+      <aside class="sidebar-esq">
+        <div>
+          <h3>Seus serviços</h3>
+          <div class="filtro-botoes">
+            <button class="btn-filtro ativo"><span class="emoji">🔎</span> Todos</button>
+            <button class="btn-filtro"><span class="emoji">🐶</span> Day Care</button>
+            <button class="btn-filtro"><span class="emoji">🏡</span> Hospedagem</button>
+            <button class="btn-filtro"><span class="emoji">📍</span> Lar Temporário</button>
+          </div>
+        </div>
+
+        <div>
+          <h3>Cidade</h3>
+          <select class="select-cidade">
+            <option value="">Todas</option>
+            <option value="Brasília">Brasília</option>
+            <option value="Taguatinga">Taguatinga</option>
+            <option value="Guará">Guará</option>
+            <option value="Águas Claras">Águas Claras</option>
+            <option value="Ceilândia">Ceilândia</option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- Lista central de cards (mock por enquanto) -->
+      <section class="lista-hosts">
+        <article class="host-card">
+          <div class="host-avatar">👩‍🦰</div>
+          <div class="host-info-principal">
+            <div class="host-nome">Você • Taguatinga</div>
+            <div class="host-tags">
+              <span class="tag">Hospedagem</span>
+              <span class="tag">Day Care</span>
+            </div>
+            <div class="host-experiencia">
+              Experiência com gatos e cães de pequeno porte.
+            </div>
+          </div>
+          <div class="host-preco">
+            <span>R$ <strong>45</strong> / noite</span>
+            <button class="btn-ver-perfil">Ver meu perfil</button>
+          </div>
+        </article>
+
+        <article class="host-card">
+          <div class="host-avatar">🧑‍🦳</div>
+          <div class="host-info-principal">
+            <div class="host-nome">Exemplo de outro serviço</div>
+            <div class="host-tags">
+              <span class="tag">Lar Temporário</span>
+              <span class="tag">Hospedagem</span>
+            </div>
+            <div class="host-experiencia">
+              Especialista em pets idosos e com necessidades especiais.
+            </div>
+          </div>
+          <div class="host-preco">
+            <span>R$ <strong>55</strong> / noite</span>
+            <button class="btn-ver-perfil">Ver perfil</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- Sidebar direita -->
+      <aside class="sidebar-dir">
+        <h3>Dica rápida</h3>
+        <p>
+          Mantenha seu perfil sempre atualizado com fotos, descrição clara do espaço
+          e das regras da casa. Isso ajuda a receber mais reservas e a evitar mal-entendidos.
+        </p>
+        <p>
+          Defina com cuidado os horários de check-in e check-out, envie fotos dos pets
+          durante a estadia e responda rápido às mensagens.
+        </p>
+        <a href="#">Ver Central de Ajuda →</a>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

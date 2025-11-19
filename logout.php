@@ -1,6 +1,9 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+session_start();
 $_SESSION = [];
 session_destroy();
-header('Location: login.html');
+
+// se quiser, também pode limpar cookie específico de sessão aqui
+
+header('Location: cadastrarouentrar.html');
 exit;

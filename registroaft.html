@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
     
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Nunito', Arial, sans-serif;
       line-height: 1.6;
       background-color: #f7f7f7;
       margin: 10px;
@@ -29,50 +29,120 @@
       max-width: 1200px; margin: 0 auto; padding: 0 20px;
     }
 
-    nav .logo { font-size: 1.5em; font-weight: bold; color: #e2725b; text-decoration: none; }
-
-    nav ul { list-style: none; display: flex; gap: 15px; }
-    nav ul li a { text-decoration: none; color: #333; font-weight: bold; }
-
-    .container {
-      margin: auto; background-color: #fff; padding: 20px; border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,.1); width: 300px; margin-top: 20px;
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e2725b;
+      text-decoration: none;
+      font-family: 'Parkinsans', sans-serif;
     }
 
-    /* >>> Alterado para salmão escuro */
-    h2 { text-align: center; margin-bottom: 20px; color: #d35e46; }
+    nav ul { list-style: none; display: flex; gap: 15px; }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-family: 'Parkinsans', sans-serif;
+    }
+
+    .container {
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,.1);
+      width: 300px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #d35e46;
+    }
 
     label { display: block; margin-bottom: 8px; }
 
-    input[type="text"], input[type="email"], input[type="password"],
-    input[type="number"], input[type="date"], select {
-      width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc;
-      border-radius: 4px; box-sizing: border-box;
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
     }
 
     .radio-group { margin-bottom: 20px; }
     .radio-group label { margin-right: 10px; }
 
     button {
-      width: 80%; border: 2px solid #e2725b; border-radius: 20px; display: flex;
-      justify-content: center; margin: auto; padding: 10px; background-color: #e2725b;
-      color: white; cursor: pointer; font-size: 16px; transition: background-color .3s;
+      width: 80%;
+      border: 2px solid #e2725b;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      margin: auto;
+      padding: 10px;
+      background-color: #e2725b;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color .3s;
     }
+
     button:hover { background-color: red; }
 
     .age-note {
-      color: #FF0000; margin-top: -10px; margin-bottom: 20px; font-size: .9em;
-      text-align: center; display: none;
+      color: #FF0000;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: .9em;
+      text-align: center;
+      display: none;
     }
-    #idade-calculada { text-align: center; font-size: .9em; color: #333; margin-top: -15px; margin-bottom: 15px; }
 
-    .criar { display: flex; justify-content: center; }
-    .criar a { text-align: center; width: 70%; color: black; padding: 5px; border-radius: 20px; text-decoration: none; }
+    #idade-calculada {
+      text-align: center;
+      font-size: .9em;
+      color: #333;
+      margin-top: -15px;
+      margin-bottom: 15px;
+    }
+
+    .criar {
+      display: flex;
+      justify-content: center;
+    }
+
+    .criar a {
+      text-align: center;
+      width: 70%;
+      color: black;
+      padding: 5px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+    }
+
     .criar a:hover { color: #FF0000; }
 
     .alerta-erro {
-      background-color: #ffe6e6; color: #cc0000; border: 1px solid #cc0000;
-      border-radius: 5px; padding: 10px; margin-bottom: 15px; text-align: center; font-weight: bold; display: none;
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #cc0000;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -81,16 +151,16 @@
   <header>
     <nav>
       <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
-      <a href="index.html" class="logo" style="font-family: parkinsans;">Patas Pousada</a>
+      <a href="index.html" class="logo">Patas Pousada</a>
       <ul>
-        <li><a href="home.html" style="font-family: parkinsans;">Início</a></li>
-        <li><a href="ajuda.html" style="font-family: parkinsans;">Ajuda</a></li>
+        <li><a href="home.html">Início</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
       </ul>
     </nav>
   </header>
 
   <div class="container">
-    <h2>Cadastro</h2>
+    <h2>Cadastro de Anfitriões</h2>
 
     <div id="erro-container" class="alerta-erro"></div>
 
@@ -140,9 +210,15 @@
 
       <div class="radio-group">
         <label>Você mora em:</label>
-        <label for="house"><input type="radio" id="house" name="residence" value="Casa" required> Casa</label>
-        <label for="apartment"><input type="radio" id="apartment" name="residence" value="Apartamento"> Apartamento</label>
-        <label for="farm"><input type="radio" id="farm" name="residence" value="Chácara"> Chácara</label>
+        <label for="house">
+          <input type="radio" id="house" name="residence" value="Casa" required> Casa
+        </label>
+        <label for="apartment">
+          <input type="radio" id="apartment" name="residence" value="Apartamento"> Apartamento
+        </label>
+        <label for="farm">
+          <input type="radio" id="farm" name="residence" value="Chácara"> Chácara
+        </label>
       </div>
 
       <button type="submit" id="btn-registrar">Registrar</button><br>
@@ -165,7 +241,9 @@
       let idade = hoje.getFullYear() - birthDate.getFullYear();
       const mes = hoje.getMonth() - birthDate.getMonth();
 
-      if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) { idade--; }
+      if (mes < 0 || (mes === 0 && hoje.getDate() < birthDate.getDate())) {
+        idade--;
+      }
 
       if (!birthInput.value) {
         idadeTexto.textContent = "";
@@ -192,7 +270,7 @@
       }
     });
 
-    // Validação de senha
+    // Validação de senha + idade no submit
     document.querySelector('form').addEventListener('submit', function(event) {
       const senha = document.getElementById('password').value;
       const confirmar = document.getElementById('confirm_password').value;
@@ -212,6 +290,15 @@
         event.preventDefault();
       }
     });
+
+    // Mostrar mensagem de erro vinda de ?erro= na URL
+    const params = new URLSearchParams(window.location.search);
+    const erroMsg = params.get('erro');
+    if (erroMsg) {
+      const erroDiv = document.getElementById('erro-container');
+      erroDiv.textContent = erroMsg;
+      erroDiv.style.display = 'block';
+    }
   </script>
 </body>
 </html>

@@ -92,13 +92,9 @@
   </main>
 
   <script>
-    if (!window.supabase) {
-      const el = document.getElementById('msg-login');
-      el.className = 'msg err'; el.style.display = 'block';
-      el.textContent = 'Falha ao carregar o SDK do Supabase.';
-      throw new Error('Supabase SDK not loaded');
-    }
-
+    /* ============================================
+       CONFIGURAÇÃO SUPABASE
+    ============================================= */
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -109,39 +105,68 @@
       el.style.display = text ? "block" : "none";
     }
 
-    // 🔹 Redireciona sempre pra home_tutor.html
-    function getNextUrl(){
-      const p = new URLSearchParams(location.search);
-      return p.get('next') || 'home_tutor.html';
-    }
-
     function setLoading(is){
       const btn = document.getElementById('btn-login');
       btn.disabled = is;
       btn.textContent = is ? "Entrando…" : "Entrar";
     }
 
+    /* ============================================
+       🚀 FUNÇÃO QUE DECIDE PRA QUAL HOME IR
+    ============================================= */
+    async function decideRedirect(email) {
+      const p = new URLSearchParams(location.search);
+      const forced = p.get('next');
+      if (forced) return forced;  // respeita ?next=
+
+      // Verifica se o e-mail está na tabela hosts
+      const { data, error } = await sb
+        .from('hosts')
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (!error && data) {
+        return "home_host.php";   // 👈 AGORA PHP
+      }
+
+      return "home_tutor.php";    // 👈 AGORA PHP
+    }
+
+    /* ============================================
+       LOGIN
+    ============================================= */
     document.getElementById('form-login').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim().toLowerCase();
       const pass  = document.getElementById('login-pass').value;
       const msgEl = document.getElementById('msg-login');
 
-      if(!email || !pass){ setMsg(msgEl, "Informe e-mail e senha."); return; }
+      if(!email || !pass){
+        setMsg(msgEl, "Informe e-mail e senha.");
+        return;
+      }
 
       try {
         setLoading(true);
         setMsg(msgEl, "Entrando…", true);
+
         const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
         if (error) {
           setMsg(msgEl, "Erro: " + error.message);
           setLoading(false);
           return;
         }
 
+        // Cria sessão PHP
         await bridgeSession(data.session?.access_token, data.session?.refresh_token);
-        setMsg(msgEl, "Login ok! Redirecionando…", true);
-        location.href = getNextUrl();
+
+        setMsg(msgEl, "Login ok! Carregando…", true);
+
+        // Decide pra onde ir
+        const next = await decideRedirect(email);
+        location.href = next;
 
       } catch (err) {
         console.error(err);
@@ -150,6 +175,9 @@
       }
     });
 
+    /* ============================================
+       SESSÃO PHP
+    ============================================= */
     async function bridgeSession(access_token, refresh_token){
       if (!access_token) return;
       await fetch('session_bridge.php', {

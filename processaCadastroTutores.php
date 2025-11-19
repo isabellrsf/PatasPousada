@@ -3,94 +3,124 @@
 session_start();
 require __DIR__ . '/supabase.php';
 
-// Só POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  http_response_code(405);
-  exit('Method Not Allowed');
+// Função de redirecionamento com erro
+function redirectWithError(string $msg): void {
+    // IMPORTANTE: Confirme se o nome do seu HTML é este mesmo
+    header('Location: registrotutores.html?erro=' . urlencode($msg));
+    exit;
 }
 
-// Coleta e saneamento básico
+// Apenas POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    redirectWithError('Método inválido.');
+}
+
+// --- 1. COLETA DE DADOS ---
 $nome  = trim($_POST['name'] ?? '');
-$cpf   = preg_replace('/\D+/', '', $_POST['cpf'] ?? ''); // só dígitos
-$data  = trim($_POST['birth_date'] ?? '');
+$cpf   = preg_replace('/\D+/', '', $_POST['cpf'] ?? ''); // Remove pontos e traços
+$data  = $_POST['birth_date'] ?? '';
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['password'] ?? '';
 $conf  = $_POST['confirm_password'] ?? '';
 
-// Normaliza data: aceita "dd/mm/yyyy" ou "yyyy-mm-dd"
-if ($data) {
-  if (preg_match('#^\d{2}/\d{2}/\d{4}$#', $data)) {
-    [$d, $m, $y] = explode('/', $data);
-    $data = sprintf('%04d-%02d-%02d', (int)$y, (int)$m, (int)$d);
-  } elseif (!preg_match('#^\d{4}-\d{2}-\d{2}$#', $data)) {
-    header("Location: registrotutores.html?erro=" . urlencode('Data de nascimento inválida'));
-    exit;
-  }
+// Lógica dos Pets (soma total para salvar no banco)
+$totalPets = 0;
+// Pega os tipos marcados
+$tipos = $_POST['pet_type'] ?? [];
+if (is_array($tipos)) {
+    foreach ($tipos as $tipo) {
+        $qtdName = ($tipo === 'outro') ? 'quantidade_outro' : "quantidade_{$tipo}";
+        $qtd = (int)($_POST[$qtdName] ?? 0);
+        if ($qtd > 0) {
+            $totalPets += $qtd;
+        }
+    }
 }
 
-// Validações
-if ($senha !== $conf) {
-  header("Location: registrotutores.html?erro=" . urlencode('Senhas não coincidem'));
-  exit;
-}
+// --- 2. VALIDAÇÕES ---
 if (!$nome || !$cpf || !$data || !$email || !$senha) {
-  header("Location: registrotutores.html?erro=" . urlencode('Preencha todos os campos obrigatórios'));
-  exit;
+    redirectWithError('Preencha todos os campos obrigatórios.');
 }
 
-// 1) CRIAR USUÁRIO VIA ADMIN API (SERVICE ROLE) — dispara o TRIGGER
-$payloadCreate = [
-  'email'    => $email,
-  'password' => $senha,
-  'user_metadata' => [
-    'full_name'  => $nome,
-    'role'       => 'tutor',
-    'cpf'        => $cpf,   // lido pelo trigger se necessário
-    'birth_date' => $data,  // lido pelo trigger se necessário
-  ],
+if ($senha !== $conf) {
+    redirectWithError('As senhas não coincidem.');
+}
+
+if (strlen($senha) < 6) {
+    redirectWithError('A senha deve ter pelo menos 6 caracteres.');
+}
+
+// Validação de Idade (PHP)
+try {
+    $dtNasc = new DateTime($data);
+    $hoje   = new DateTime();
+    $idade  = $hoje->diff($dtNasc)->y;
+    if ($idade < 18 || $idade > 100) {
+        redirectWithError('Idade inválida (18 a 100 anos).');
+    }
+} catch (Exception $e) {
+    redirectWithError('Data de nascimento inválida.');
+}
+
+// --- 3. ETAPA 1: CRIAR NO AUTH (SUPABASE) ---
+// Passamos metadados para que fiquem salvos no JSON do usuário também
+$metadata = [
+    'full_name' => $nome,
+    'role'      => 'tutor',
+    'cpf'       => $cpf
 ];
 
-[$stCreate, $resCreate] = sb_request('POST', '/auth/v1/admin/users', $payloadCreate);
+list($authStatus, $authBody) = sb_auth_admin_create_user($email, $senha, $metadata);
 
-if ($stCreate >= 300 || empty($resCreate['id'])) {
-  $msg = $resCreate['message'] ?? $resCreate['error_description'] ?? 'Falha ao criar usuário';
-  header("Location: registrotutores.html?erro=" . urlencode($msg));
-  exit;
+if ($authStatus >= 400) {
+    $msgErro = $authBody['msg'] ?? $authBody['message'] ?? 'Erro desconhecido.';
+    if (strpos($msgErro, 'already registered') !== false) {
+        redirectWithError('Este e-mail já está cadastrado.');
+    }
+    redirectWithError('Erro no cadastro: ' . $msgErro);
 }
 
-$user_id = $resCreate['id'];
+$user_id = $authBody['id'] ?? null;
+if (!$user_id) {
+    redirectWithError('Erro inesperado: Usuário criado sem ID.');
+}
 
-// 2) UPSERT EM profiles (idempotente, caso o trigger já tenha inserido)
+// --- 4. ETAPA 2: INSERIR NA TABELA PUBLIC.PROFILES ---
+// Como desligamos a trigger, precisamos inserir aqui manualmente
+
 $payloadProfile = [
-  'id'         => $user_id,
-  'email'      => $email,     // obrigatório na sua tabela (unique not null)
-  'full_name'  => $nome,
-  'role'       => 'tutor',
-  'cpf'        => $cpf,
-  'birth_date' => $data,
-  'created_at' => gmdate('c'),
+    'id'             => $user_id,    // Vincula com Auth
+    'full_name'      => $nome,
+    'cpf'            => $cpf,
+    'birth_date'     => $data,
+    'email'          => $email,
+    'role'           => 'tutor',     // Campo importante para diferenciar
+    'pets_count'     => $totalPets,  // Salvamos o total calculado
+    // Adicione outros campos se sua tabela tiver (ex: city, phone)
 ];
 
-// sobrescreve o Prefer padrão pra permitir merge-duplicates + representation
-[$stProf, $resProf] = sb_request(
-  'POST',
-  '/rest/v1/profiles',
-  $payloadProfile,
-  ['Prefer: resolution=merge-duplicates,return=representation']
+list($status, $resBody) = sb_request(
+    'POST',
+    '/rest/v1/profiles',
+    $payloadProfile
 );
 
-if ($stProf >= 300) {
-  $msg = (is_array($resProf) && isset($resProf['message']))
-    ? $resProf['message']
-    : 'Falha ao salvar perfil';
-  header("Location: registrotutores.html?erro=" . urlencode($msg));
-  exit;
+// Se falhar no banco de dados, desfazemos o Auth (Rollback)
+if ($status >= 300) {
+    sb_auth_admin_delete_user($user_id);
+    
+    $msgDb = $resBody['message'] ?? 'Erro ao salvar perfil.';
+    if (strpos($msgDb, 'duplicate key') !== false) {
+        redirectWithError('Dados duplicados (CPF ou E-mail já existem).');
+    }
+    redirectWithError('Erro ao salvar dados do perfil: ' . $msgDb);
 }
 
-// 3) Sessão local opcional
+// --- 5. SUCESSO ---
 $_SESSION['profile_id'] = $user_id;
 $_SESSION['full_name']  = $nome;
+$_SESSION['role']       = 'tutor';
 
-// 4) Redireciona para cadastro de pets
-header("Location: cadastroPets.html?sucesso=" . urlencode("Cadastro concluído! Agora cadastre seus pets."));
+// Redireciona para a Home do Tutor
+header("Location: home_tutor.php");
 exit;

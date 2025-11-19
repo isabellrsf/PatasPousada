@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seus Dados - Patas Pousada</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nunito', sans-serif; background-color: #f7f7f7; }
+
+    header { justify-content: center; display: flex; background-color: #fff; padding: 20px 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; }
+    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; width: 100%; padding: 0 20px; }
+    nav img { width: 30px; height: 30px; }
+    nav .logo { font-size: 1.5em; font-weight: bold; color: #e2725b; text-decoration: none; display: flex; align-items: center; }
+    nav .logo p { font-family: 'Parkinsans', sans-serif; margin-left: 10px; font-size: 20px; }
+    nav ul { list-style: none; display: flex; align-items: center; gap: 25px; }
+    nav ul > li > a { text-decoration: none; color: #333; font-weight: bold; font-family: 'Parkinsans', sans-serif; }
+    nav ul > li > a:hover { color: #d74f4f; }
+
+    /* user dropdown */
+    .user-menu { position: relative; margin-left: 30px; }
+    .user-menu-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px; }
+    .user-menu-trigger img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #eee; object-fit: cover; }
+    .user-menu-trigger span { font-weight: bold; font-size: 15px; color: #333; }
+    .user-menu-trigger svg { width: 16px; height: 16px; fill: #555; transition: transform .2s; }
+    .user-menu:hover .user-menu-trigger svg{ transform: rotate(180deg); }
+    .user-dropdown{ display:none; position:absolute; top:calc(100% + 0px); right:0; background:#fff; border:1px solid #e0e0e0; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,.1); min-width:180px; z-index:100; padding:8px 0; opacity:0; visibility:hidden; transform:translateY(5px); transition:.15s; }
+    .user-menu:hover .user-dropdown{ display:block; opacity:1; visibility:visible; transform:translateY(0); }
+    .user-dropdown li a{ display:flex; align-items:center; gap:12px; padding:10px 15px; font-size:14px; color:#333; text-decoration:none; }
+    .user-dropdown li a:hover{ background:#f5f5f5; }
+    .user-dropdown .icon{ width:16px; height:16px; opacity:.7; fill: currentColor; }
+
+    .submenu { display: flex; justify-content: center; gap: 30px; background-color: transparent; border-bottom: 1px solid #e0e0e0; padding-top: 10px; }
+    .submenu a { padding: 12px 0; text-decoration: none; font-family: 'Nunito', sans-serif; font-size: 16px; color: #888; border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+    .submenu a.active { color: #e2725b; border-bottom: 2px solid #e2725b; font-weight: bold; }
+
+    .container { max-width: 700px; margin: 40px auto; padding: 30px; background-color: #fff; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    .voltar { color: #e2725b; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+    h2 { font-size: 26px; color: #c65038; margin-bottom: 5px; }
+    .sub { color: #777; margin-bottom: 25px; }
+
+    .foto-perfil { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+    .foto-perfil img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; cursor: pointer; transition: 0.3s; }
+    .foto-perfil img:hover { opacity: 0.8; }
+    .foto-perfil span { font-size: 14px; color: #777; }
+
+    .form-group { display: flex; gap: 20px; margin-bottom: 20px; }
+    .form-group input, .form-group select { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9; }
+    .form-group input[disabled], input[readonly] { background-color: #eee; cursor: default; }
+
+    .label-above { display: block; margin-bottom: 5px; font-size: 14px; color: #555; font-weight: 600; }
+    button { background-color: #e2725b; color: white; padding: 12px 25px; border: none; font-size: 16px; border-radius: 8px; cursor: pointer; transition: background-color 0.3s; }
+    button:hover { background-color: #c65038; }
+
+    .aba { display: none; }
+    .aba.ativa { display: block; }
+
+    .hint { font-size:.9em; color:#666; margin-top:10px; }
+    .ok { color:#2e7d32; } 
+    .err{ color:#c62828; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+        <p>Patas Pousada</p>
+      </a>
+      <ul>
+        <li><a href="reservas.html">Reservas</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+        <li><a href="Lartemp.html" style="color: #d74f4f;">Lar Temporário</a></li>
+        <li class="user-menu">
+            <div class="user-menu-trigger">
+                <img id="avatarTop" src="https://images.icon-icons.com/1146/PNG/512/1486485564-add-character-include-more-person-user_81147.png" alt="Foto">
+                <span id="userTop">Usuário</span>
+                <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"></path></svg>
+            </div>
+            <ul class="user-dropdown">
+                <li><a href="menu_perfil.html"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg> Editar perfil </a></li>
+                <li><a href="meusPets.html"><svg class="icon" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.83-1.17c.38-.38.38-.99 0-1.37l-2.08-2.08c-.38-.38-.99-.38-1.37 0l-2.08 2.08c-.38.38-.38.99 0 1.37l2.08 2.08c.37.39.98.39 1.37 0l2.08-2.08zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></svg> Meus pets </a></li>
+                <li><a href="#" id="logout"><svg class="icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></svg> Sair </a></li>
+            </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="submenu">
+      <a href="#" class="active" onclick="mostrarAba(event, 'aba-dados')">Seus dados</a>
+      <a href="#" onclick="mostrarAba(event, 'aba-endereco')">Endereço</a>
+      <a href="#" onclick="mostrarAba(event, 'aba-documentos')">Documentos</a>
+      <a href="#" onclick="mostrarAba(event, 'aba-telefone')">Telefone</a>
+      <a href="#" onclick="mostrarAba(event, 'aba-contatos')">Contatos</a>
+  </div>
+
+  <!-- ABA DADOS -->
+  <div class="container aba ativa" id="aba-dados">
+     <a href="menu_perfil.html" class="voltar">&larr; Ir para o menu</a>
+     <h2>Seus dados</h2>
+     <p class="sub">Gostaríamos de saber um pouco sobre você.</p>
+
+     <div class="foto-perfil">
+       <label for="fotoInput">
+         <img id="preview" src="https://images.icon-icons.com/1146/PNG/512/1486485564-add-character-include-more-person-user_81147.png" alt="Foto de perfil" title="Clique para escolher uma foto">
+       </label>
+       <input type="file" id="fotoInput" accept="image/*" style="display:none">
+       <span>Este será seu cartão de visita. Escolha uma foto bem iluminada do seu rosto.</span>
+     </div>
+
+     <form id="form-dados">
+       <div class="form-group">
+         <input type="text" name="first_name" placeholder="Nome">
+         <input type="text" name="last_name" placeholder="Sobrenome">
+       </div>
+       <div class="form-group">
+         <input type="email" name="email" placeholder="E-mail" readonly>
+       </div>
+       <div class="form-group">
+         <input type="date" name="birthdate">
+         <select name="gender">
+           <option selected disabled value="">Gênero</option>
+           <option value="Feminino">Feminino</option>
+           <option value="Masculino">Masculino</option>
+           <option value="Outro">Outro</option>
+           <option value="Prefiro Nao Dizer">Prefiro não dizer</option>
+         </select>
+       </div>
+       <button type="submit">Salvar</button>
+       <div id="hint-dados" class="hint"></div>
+     </form>
+   </div>
+
+  <!-- ABA ENDEREÇO -->
+  <div class="container aba" id="aba-endereco">
+     <a href="menu_perfil.html" class="voltar">&larr; Ir para o menu</a>
+     <h2>Endereço</h2>
+     <p class="sub">Informe seu endereço completo abaixo.</p>
+     <form id="form-endereco">
+       <div class="form-group">
+         <input type="text" name="address_street" placeholder="Rua" />
+         <input type="text" name="address_number" placeholder="Número" />
+       </div>
+       <div class="form-group">
+         <input type="text" name="address_district" placeholder="Bairro" />
+         <input type="text" name="address_city" placeholder="Cidade" />
+       </div>
+       <div class="form-group">
+         <input type="text" name="address_state" placeholder="Estado" />
+         <input type="text" name="address_zip" placeholder="CEP" />
+       </div>
+       <button type="submit">Salvar</button>
+       <div id="hint-end" class="hint"></div>
+     </form>
+   </div>
+
+  <!-- ABA DOCUMENTOS -->
+  <div class="container aba" id="aba-documentos">
+     <a href="menu_perfil.html" class="voltar">&larr; Ir para o menu</a>
+     <h2>Informe seu CPF e RG</h2>
+     <p class="sub">Seus documentos nunca serão compartilhados.</p>
+     <form id="form-docs">
+       <div class="form-group" style="flex-direction:column;">
+         <label class="label-above">CPF</label>
+         <input type="text" name="cpf" placeholder="XXX.XXX.XXX-XX" maxlength="14" />
+       </div>
+       <div class="form-group" style="flex-direction:column;">
+         <label class="label-above">RG <small>(somente dígitos)</small></label>
+         <input type="text" name="rg" placeholder="Insira seu RG" maxlength="20" />
+       </div>
+       <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+       <button type="submit">Salvar</button>
+       <div id="hint-docs" class="hint"></div>
+     </form>
+   </div>
+
+  <!-- ABA TELEFONE -->
+  <div class="container aba" id="aba-telefone">
+     <a href="menu_perfil.html" class="voltar">&larr; Ir para o menu</a>
+     <h2>Número de celular</h2>
+     <p class="sub">Usamos para verificação e segurança.</p>
+     <form id="form-phone">
+       <div class="form-group" style="align-items:flex-end;">
+         <div style="flex:1;">
+           <label class="label-above">País</label>
+           <input type="text" name="phone_country" value="+55" readonly>
+         </div>
+         <div style="flex:3;">
+           <label class="label-above">Número de celular</label>
+           <input type="tel" name="phone_number" placeholder="(XX) XXXXX-XXXX">
+         </div>
+       </div>
+       <button type="submit">Cadastrar número</button>
+       <div id="hint-phone" class="hint"></div>
+     </form>
+   </div>
+
+  <!-- ABA CONTATOS -->
+  <div class="container aba" id="aba-contatos">
+    <a href="menu_perfil.html" class="voltar">&larr; Ir para o menu</a>
+    <h2>Contatos adicionais</h2>
+    <p class="sub">Quem podemos acionar em emergência?</p>
+    <form id="form-emergency">
+      <div class="form-group" style="align-items:flex-end;">
+        <div style="flex:1;">
+          <label class="label-above">Nome</label>
+          <input type="text" name="emergency_first_name">
+        </div>
+        <div style="flex:1;">
+          <label class="label-above">Sobrenome</label>
+          <input type="text" name="emergency_last_name">
+        </div>
+      </div>
+      <div class="form-group" style="align-items:flex-end;">
+        <div style="flex:1;">
+          <label class="label-above">País</label>
+          <input type="text" name="emergency_phone_country" value="+55" readonly>
+        </div>
+        <div style="flex:3;">
+          <label class="label-above">Número de celular</label>
+          <input type="tel" name="emergency_phone_number" placeholder="(XX) XXXXX-XXXX">
+        </div>
+      </div>
+      <button type="submit">Salvar</button>
+      <div id="hint-emg" class="hint"></div>
+    </form>
+  </div>
+
+  <script>
+    // ========= CONFIG SUPABASE =========
+    const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ========= HELPERS =========
+    function mostrarAba(event, idAba) {
+      event.preventDefault();
+      document.querySelectorAll('.aba').forEach(div => div.classList.remove('ativa'));
+      const abaSelecionada = document.getElementById(idAba);
+      if (abaSelecionada) abaSelecionada.classList.add('ativa');
+      document.querySelectorAll('.submenu a').forEach(link => link.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    function toast(el, ok, msg){
+      el.className = 'hint ' + (ok ? 'ok' : 'err');
+      el.textContent = msg;
+      setTimeout(()=>{ el.textContent=''; }, 3000);
+    }
+
+    // upload de avatar
+    async function uploadAvatar(file, userId){
+      const ext = file.name.split('.').pop();
+      const path = `${userId}/avatar.${ext}`;
+      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert:true, contentType:file.type });
+      if(error) throw error;
+      const { data:pub } = sb.storage.from('avatars').getPublicUrl(path);
+      return pub.publicUrl;
+    }
+
+    // ========= AUTH + LOAD =========
+    let currentUser = null;
+    let profile = {};
+
+    async function requireAuth(){
+      const { data:{ user } } = await sb.auth.getUser();
+      if(!user){
+        location.href = "cadastrarouentrar.html?next=editarperfil.html";
+        return null;
+      }
+      return user;
+    }
+
+    function fillTopBar(name, avatarUrl){
+      document.getElementById('userTop').textContent = name || 'Usuário';
+      if (avatarUrl) document.getElementById('avatarTop').src = avatarUrl;
+    }
+
+    function fillDados(p, user){
+      const f = document.querySelector('#form-dados');
+      f.first_name.value = p.first_name || '';
+      f.last_name.value  = p.last_name  || '';
+      f.email.value      = user.email   || '';
+      f.birthdate.value  = p.birthdate  || '';
+      f.gender.value     = p.gender     || '';
+      if (p.avatar_url){
+        document.getElementById('preview').src = p.avatar_url;
+        document.getElementById('avatarTop').src = p.avatar_url;
+      }
+    }
+
+    function fillEndereco(p){
+      const f = document.querySelector('#form-endereco');
+      f.address_street.value   = p.address_street   || '';
+      f.address_number.value   = p.address_number   || '';
+      f.address_district.value = p.address_district || '';
+      f.address_city.value     = p.address_city     || '';
+      f.address_state.value    = p.address_state    || '';
+      f.address_zip.value      = p.address_zip      || '';
+    }
+
+    function fillDocs(p){
+      const f = document.querySelector('#form-docs');
+      f.cpf.value = p.cpf || '';
+      f.rg.value  = p.rg  || '';
+    }
+
+    function fillPhone(p){
+      const f = document.querySelector('#form-phone');
+      f.phone_country.value = p.phone_country || '+55';
+      f.phone_number.value  = p.phone_number  || '';
+    }
+
+    function fillEmergency(p){
+      const f = document.querySelector('#form-emergency');
+      f.emergency_first_name.value   = p.emergency_first_name   || '';
+      f.emergency_last_name.value    = p.emergency_last_name    || '';
+      f.emergency_phone_country.value= p.emergency_phone_country|| '+55';
+      f.emergency_phone_number.value = p.emergency_phone_number || '';
+    }
+
+    async function loadProfile(user){
+      const { data, error } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+      if(error){ console.error('loadProfile error:', error); return; }
+      profile = data || {};
+      const display = profile.first_name
+        ? `${profile.first_name} ${profile.last_name||''}`.trim()
+        : (user.user_metadata?.full_name || user.email.split('@')[0]);
+
+      fillTopBar(display, profile.avatar_url);
+      fillDados(profile, user);
+      fillEndereco(profile);
+      fillDocs(profile);
+      fillPhone(profile);
+      fillEmergency(profile);
+    }
+
+    // ========= SAVE HANDLERS (UPSERT) =========
+    async function save(partial, hintEl){
+      const payload = { id: currentUser.id, ...partial, updated_at: new Date().toISOString() };
+      const { error } = await sb.from('profiles').upsert(payload, { onConflict: 'id' });
+      if(error){
+        console.error('Erro Supabase ao salvar:', error);
+        toast(hintEl,false,'Erro ao salvar.');
+        return false;
+      }
+      toast(hintEl,true,'Salvo com sucesso!');
+      return true;
+    }
+
+    // ========= BOOT =========
+    (async function init(){
+      currentUser = await requireAuth();
+      if(!currentUser) return;
+
+      document.getElementById('logout').addEventListener('click', async (e)=>{
+        e.preventDefault();
+        try{ await sb.auth.signOut(); }catch{}
+        location.href="cadastrarouentrar.html";
+      });
+
+      // carrega perfil
+      await loadProfile(currentUser);
+
+      // foto/avatar
+      const fotoInput = document.getElementById('fotoInput');
+      fotoInput.addEventListener('change', async (e)=>{
+        const file = e.target.files?.[0];
+        if(!file) return;
+        document.getElementById('preview').src = URL.createObjectURL(file);
+        try{
+          const url = await uploadAvatar(file, currentUser.id);
+          await save({ avatar_url:url }, document.getElementById('hint-dados'));
+          document.getElementById('avatarTop').src = url;
+        }catch(err){
+          console.error('uploadAvatar error:', err);
+          toast(document.getElementById('hint-dados'), false, 'Falha ao enviar foto.');
+        }
+      });
+
+      // form dados (ATENÇÃO: NÃO envia "email" para a tabela)
+      document.getElementById('form-dados').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const f = e.currentTarget;
+        await save({
+          first_name: f.first_name.value.trim(),
+          last_name : f.last_name.value.trim(),
+          birthdate : f.birthdate.value || null,
+          gender    : f.gender.value || null
+        }, document.getElementById('hint-dados'));
+      });
+
+      // endereço
+      document.getElementById('form-endereco').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const f = e.currentTarget;
+        await save({
+          address_street  : f.address_street.value.trim(),
+          address_number  : f.address_number.value.trim(),
+          address_district: f.address_district.value.trim(),
+          address_city    : f.address_city.value.trim(),
+          address_state   : f.address_state.value.trim(),
+          address_zip     : f.address_zip.value.trim()
+        }, document.getElementById('hint-end'));
+      });
+
+      // documentos
+      document.getElementById('form-docs').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const f = e.currentTarget;
+        await save({
+          cpf: f.cpf.value.trim(),
+          rg : f.rg.value.trim()
+        }, document.getElementById('hint-docs'));
+      });
+
+      // telefone
+      document.getElementById('form-phone').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const f = e.currentTarget;
+        await save({
+          phone_country: f.phone_country.value.trim(),
+          phone_number : f.phone_number.value.trim()
+        }, document.getElementById('hint-phone'));
+      });
+
+      // contato de emergência
+      document.getElementById('form-emergency').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const f = e.currentTarget;
+        await save({
+          emergency_first_name   : f.emergency_first_name.value.trim(),
+          emergency_last_name    : f.emergency_last_name.value.trim(),
+          emergency_phone_country: f.emergency_phone_country.value.trim(),
+          emergency_phone_number : f.emergency_phone_number.value.trim()
+        }, document.getElementById('hint-emg'));
+      });
+    })();
+  </script>
+</body>
+</html>
