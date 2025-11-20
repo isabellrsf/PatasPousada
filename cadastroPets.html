@@ -3,49 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro de Pets</title>
+  <title>Cadastro de Pets — Patas Pousada</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Parkinsans:wght@400;700&display=swap');
-    body{font-family:'Nunito',sans-serif;line-height:1.6;background:#f7f7f7;margin:0}
-    header{justify-content:center;display:flex;background:#fff;padding:20px 0;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-    header img{width:30px;height:30px}
-    nav{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 20px}
-    nav .logo{font-size:1.5em;font-weight:bold;color:#e2725b;text-decoration:none;font-family:'Parkinsans',sans-serif}
-    nav ul{list-style:none;display:flex;gap:15px}
-    nav ul li a{text-decoration:none;color:#333;font-weight:bold;font-family:'Parkinsans',sans-serif;transition:.3s}
-    nav ul li a:hover{color:red}
-    .container{margin:auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,.1);width:320px;margin-top:20px;position:relative}
-    h2{text-align:center;margin-bottom:20px;color:#e2725b;font-family:'Parkinsans',sans-serif}
-    label{display:block;margin-bottom:8px}
-    input[type="text"],input[type="number"],input[type="file"],select,textarea{width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
-    textarea{resize:none;height:70px}
-    .radio-group{margin-bottom:15px}
-    .radio-group label{margin-right:10px}
-    .preview{text-align:center;margin-bottom:15px}
-    .preview img{width:100px;height:100px;object-fit:cover;border-radius:50%;border:2px solid #e2725b;display:none}
-    .main-btn{width:80%;border:2px solid #e2725b;border-radius:20px;display:flex;justify-content:center;margin:auto;padding:10px;background:#e2725b;color:#fff;cursor:pointer;font-size:16px;margin-top:10px;transition:background .3s;font-family:'Parkinsans',sans-serif}
-    .main-btn:hover{background:red}
-    .add-pet{background:#fff;color:#e2725b;border:2px solid #e2725b}
-    .add-pet:hover{background:#ffe6e6}
-    .remove-pet-btn{background:none;border:none;color:#e2725b;font-size:18px;cursor:pointer;margin-left:5px;transition:transform .2s ease,color .2s ease;vertical-align:middle}
-    .remove-pet-btn:hover{color:red;transform:scale(1.2)}
-    .pet-card{position:relative;border:1px solid #eee;padding:15px;border-radius:8px;background:#fafafa;transition:all .3s ease;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:15px}
-    .pet-card:hover{transform:translateY(-4px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
-    .pet-card.fade-out{opacity:0;transform:translateY(-10px)}
-    .criar{display:flex;justify-content:center;margin-top:15px}
-    .criar a{text-align:center;width:70%;color:black;padding:5px;border-radius:20px;text-decoration:none}
-    .criar a:hover{color:#F00}
-    .pet-header{display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:10px}
-    .alerta-sucesso{display:none;background:#ffe6e6;color:#cc0000;border:1px solid #e2725b;border-radius:8px;padding:12px;margin:20px auto;text-align:center;font-weight:bold;width:320px;opacity:0;transition:opacity .8s ease}
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
+
+    :root{
+      --brand:#e2725b; --brand-strong:#d45f47; --ink:#1f2937; --muted:#6b7280; --bg:#f3f4f6; --white:#fff;
+      --radius:12px; --shadow:0 4px 12px rgba(0,0,0,.06); --line:#e5e7eb;
+      --chip:#fff0ec; --chip-border:#ffd8cf;
+      --transition: 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body{font-family:'Nunito',sans-serif;line-height:1.5;background:var(--bg);color:var(--ink);margin:0; -webkit-font-smoothing: antialiased;}
+    *{box-sizing: border-box;} /* Garante que padding não quebre o layout */
+    
+    /* Header Consistente */
+    header{display:flex;justify-content:center;background:rgba(255,255,255,0.95);box-shadow:0 1px 3px rgba(0,0,0,.05); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);}
+    nav{max-width:1100px;width:100%;padding:12px 24px;display:flex;align-items:center;justify-content: space-between;}
+    .logo{display:flex;align-items:center;gap:8px; color:var(--brand);font-family:Parkinsans,sans-serif;font-weight:800; font-size: 1.2rem; text-decoration: none;}
+    .logo img{width:28px;height:28px;}
+    nav ul{list-style:none;display:flex;gap:20px;margin:0;padding:0; align-items: center;}
+    nav ul a{font-family:Parkinsans,sans-serif;font-weight:600;color:#4b5563; font-size: 0.9rem; text-decoration: none; transition: color var(--transition);}
+    nav ul a:hover{color:var(--brand)}
+
+    /* Layout Principal */
+    .container{max-width:640px;margin:32px auto;padding:0 20px;}
+    
+    /* Barra de Topo (Botão Voltar) */
+    .top-bar { display: flex; margin-bottom: 10px; }
+    .btn-back {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: #fff; border: 1px solid var(--line);
+        padding: 8px 16px; border-radius: 30px;
+        color: var(--muted); font-weight: 700; font-size: 0.9rem;
+        text-decoration: none; transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .btn-back:hover { border-color: var(--brand); color: var(--brand); background: #fff; transform: translateX(-2px); }
+
+    h2{text-align:center;margin-bottom:24px;color:var(--brand);font-family:'Parkinsans',sans-serif; font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
+    
+    /* Pet Card Wrapper */
+    .pet-card{
+      position:relative;
+      background:#fff;
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:28px; /* Aumentei um pouco para dar respiro */
+      margin-bottom:24px;
+      transition:transform 0.3s ease, opacity 0.3s ease;
+      border: 1px solid transparent;
+    }
+    .pet-card:hover{ border-color: var(--chip-border); }
+    .pet-card.fade-out{ opacity:0; transform:translateY(-10px); }
+
+    .pet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px; padding-bottom: 12px; border-bottom: 1px solid var(--line);}
+    .pet-header h4{font-family: 'Parkinsans', sans-serif; font-size: 1.2rem; color: var(--ink); margin: 0;}
+    
+    .remove-pet-btn{
+      background:#fee2e2; color:#b91c1c; border:none; width: 32px; height: 32px; border-radius: 8px;
+      cursor:pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .remove-pet-btn:hover{background:#ef4444; color: #fff;}
+
+    /* Formulários - Alinhamento Melhorado */
+    label{
+        display:block;
+        margin: 0 0 6px 0; /* Reduzi a margem inferior para colar no input */
+        font-weight:700; color: #374151; font-size: 0.9rem;
+    }
+    
+    /* Wrapper para inputs para garantir espaçamento vertical consistente */
+    .form-group { margin-bottom: 16px; width: 100%; }
+
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%; padding:12px; margin:0; /* Remove margem padrão */
+      border:1px solid #d1d5db;border-radius:10px;
+      font-family: inherit; font-size: 0.95rem; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+      height: 48px; /* Altura fixa para alinhar selects e inputs */
+    }
+    textarea { height: auto; min-height: 100px; resize: vertical; }
+
+    input:focus, select:focus, textarea:focus{ border-color: var(--brand); box-shadow: 0 0 0 3px var(--chip); }
+
+    /* Grid de Inputs (para layout lado a lado) */
+    .input-row { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 20px; /* Espaço horizontal entre colunas */
+        width: 100%;
+    }
+    @media (max-width: 500px) { .input-row { grid-template-columns: 1fr; gap: 0; } }
+
+    /* Radio Group */
+    .radio-group{
+        display: flex; gap: 20px; background: #f9fafb; 
+        padding: 0 14px; border-radius: 10px; border: 1px solid #e5e7eb;
+        height: 48px; align-items: center; /* Alinha com os inputs de texto */
+    }
+    .radio-group label{margin:0; font-weight: 600; color: #4b5563; cursor: pointer; display: flex; align-items: center; gap: 8px;}
+    input[type="radio"] { accent-color: var(--brand); transform: scale(1.1); cursor: pointer; height: auto; margin: 0;}
+
+    /* Upload e Preview */
+    .upload-area { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px; border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
+    .preview img{width:120px;height:120px;object-fit:cover;border-radius:50%;border:4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display:none}
+    input[type="file"] { width: auto; border: none; background: transparent; font-size: 0.9rem; height: auto; }
+
+    /* Botões */
+    .actions-area { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+    
+    .main-btn{
+      width:100%; padding:14px; border-radius:30px; font-weight: 800; font-family: 'Parkinsans', sans-serif;
+      cursor:pointer; font-size:1rem; transition:all 0.2s; border: 2px solid transparent; text-align: center;
+    }
+    
+    #salvar { background:var(--brand); color:#fff; box-shadow: 0 4px 15px rgba(226, 114, 91, 0.4); }
+    #salvar:hover { background:var(--brand-strong); transform: translateY(-2px); }
+    #salvar:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .add-pet { background:#fff; color:var(--brand); border-color: var(--brand); }
+    .add-pet:hover { background: var(--chip); }
+
+    /* Toast */
+    .alerta-sucesso{
+      display:none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background:#1f2937; color:#fff; padding:12px 24px; border-radius:30px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2); font-weight:bold; font-size: 0.95rem; z-index: 200;
+      opacity:0; transition:opacity 0.5s ease; width: auto; border: none;
+    }
   </style>
 </head>
 <body>
   <header>
     <nav>
-      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
-      <a href="index.html" class="logo">Patas Pousada</a>
+      <a href="index.html" class="logo">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone">
+        Patas Pousada
+      </a>
       <ul>
-        <li><a href="index.html">Início</a></li>
+        <li><a href="home_tutor.html">Início</a></li>
         <li><a href="ajuda.html">Ajuda</a></li>
       </ul>
     </nav>
@@ -54,17 +154,21 @@
   <div id="mensagem-sucesso" class="alerta-sucesso"></div>
 
   <div class="container">
-    <h2>Cadastro de Pets 🐾</h2>
+    
+    <div class="top-bar">
+        <a href="meusPets.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    </div>
+
+    <h2>Cadastro de Pets <i class="fa-solid fa-paw"></i></h2>
 
     <form id="formPets">
       <div id="form-container"></div>
-      <button type="button" class="main-btn add-pet" id="btnAdd">+ Adicionar outro pet</button>
-      <button type="submit" class="main-btn" id="salvar">Salvar Pets</button>
+      
+      <div class="actions-area">
+        <button type="button" class="main-btn add-pet" id="btnAdd"><i class="fa-solid fa-plus"></i> Adicionar outro pet</button>
+        <button type="submit" class="main-btn" id="salvar"><i class="fa-solid fa-check"></i> Salvar Pets</button>
+      </div>
     </form>
-
-    <div class="criar">
-      <a href="home_tutor.html">Voltar</a>
-    </div>
   </div>
 
   <script>
@@ -79,6 +183,7 @@
     }
 
     let contadorPets = 0;
+    
     function adicionarPet(){
       contadorPets++;
       const container = document.getElementById("form-container");
@@ -87,57 +192,75 @@
       petDiv.id = `pet_${contadorPets}`;
 
       const temBotaoRemover = contadorPets > 1
-        ? `<button type="button" class="remove-pet-btn" onclick="removerPet(${contadorPets})" title="Remover este pet">✕</button>`
+        ? `<button type="button" class="remove-pet-btn" onclick="removerPet(${contadorPets})" title="Remover este pet"><i class="fa-solid fa-trash"></i></button>`
         : "";
 
+      // HTML Estruturado com Form Groups e Grid
       petDiv.innerHTML = `
         <div class="pet-header">
-          <h4 style="text-align:center;color:#e2725b;margin:0;">🐶 Pet ${contadorPets}</h4>
+          <h4>🐶 Dados do Pet ${contadorPets}</h4>
           ${temBotaoRemover}
         </div>
 
-        <label>Nome do Pet:</label>
-        <input type="text" name="nome_pet_${contadorPets}" required placeholder="Ex: Thor">
-
-        <label>Espécie:</label>
-        <select name="especie_pet_${contadorPets}" required onchange="mostrarOutro(this, ${contadorPets})">
-          <option value="">Selecione</option>
-          <option value="Cachorro">Cachorro</option>
-          <option value="Gato">Gato</option>
-          <option value="Pássaro">Pássaro</option>
-          <option value="Roedor">Roedor</option>
-          <option value="Réptil">Réptil</option>
-          <option value="Outro">Outro</option>
-        </select>
-
-        <input type="text" id="outro_${contadorPets}" name="outro_especie_${contadorPets}" placeholder="Especifique a espécie" style="display:none;">
-
-        <label>Raça:</label>
-        <input type="text" name="raca_pet_${contadorPets}" placeholder="Ex: Poodle, Siamês...">
-
-        <div class="radio-group">
-          <label>Sexo:</label>
-          <label><input type="radio" name="sexo_pet_${contadorPets}" value="Macho" required> Macho</label>
-          <label><input type="radio" name="sexo_pet_${contadorPets}" value="Fêmea"> Fêmea</label>
+        <div class="form-group">
+            <label>Nome do Pet:</label>
+            <input type="text" name="nome_pet_${contadorPets}" required placeholder="Ex: Thor, Mel, Bob...">
         </div>
 
-        <label>Idade (anos):</label>
-        <input type="number" name="idade_pet_${contadorPets}" min="0" max="40" required placeholder="Ex: 3">
+        <div class="input-row">
+            <div class="form-group">
+                <label>Espécie:</label>
+                <select name="especie_pet_${contadorPets}" required onchange="mostrarOutro(this, ${contadorPets})">
+                  <option value="">Selecione</option>
+                  <option value="Cachorro">Cachorro</option>
+                  <option value="Gato">Gato</option>
+                  <option value="Pássaro">Pássaro</option>
+                  <option value="Roedor">Roedor</option>
+                  <option value="Réptil">Réptil</option>
+                  <option value="Outro">Outro</option>
+                </select>
+                <input type="text" id="outro_${contadorPets}" name="outro_especie_${contadorPets}" placeholder="Qual espécie?" style="display:none; margin-top:10px;">
+            </div>
+            <div class="form-group">
+                <label>Raça:</label>
+                <input type="text" name="raca_pet_${contadorPets}" placeholder="Ex: Poodle, SRD...">
+            </div>
+        </div>
 
-        <label>Porte:</label>
-        <select name="porte_pet_${contadorPets}" required>
-          <option value="">Selecione</option>
-          <option value="Pequeno">Pequeno</option>
-          <option value="Médio">Médio</option>
-          <option value="Grande">Grande</option>
-        </select>
+        <div class="input-row">
+            <div class="form-group">
+                <label>Sexo:</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="sexo_pet_${contadorPets}" value="Macho" required> Macho</label>
+                  <label><input type="radio" name="sexo_pet_${contadorPets}" value="Fêmea"> Fêmea</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Idade (anos):</label>
+                <input type="number" name="idade_pet_${contadorPets}" min="0" max="40" required placeholder="Ex: 3">
+            </div>
+        </div>
 
-        <label>Observações:</label>
-        <textarea name="obs_pet_${contadorPets}" placeholder="Ex: Toma remédio, é sociável, etc."></textarea>
+        <div class="form-group">
+            <label>Porte:</label>
+            <select name="porte_pet_${contadorPets}" required>
+            <option value="">Selecione o porte</option>
+            <option value="Pequeno">Pequeno (até 10kg)</option>
+            <option value="Médio">Médio (10kg a 25kg)</option>
+            <option value="Grande">Grande (mais de 25kg)</option>
+            </select>
+        </div>
 
-        <label>Foto do Pet:</label>
-        <input type="file" name="foto_pet_${contadorPets}" accept="image/*" onchange="previewImagem(event, ${contadorPets})">
-        <div class="preview"><img id="preview_${contadorPets}" alt="Preview do pet"></div>
+        <div class="form-group">
+            <label>Observações / Cuidados Especiais:</label>
+            <textarea name="obs_pet_${contadorPets}" placeholder="Ex: Toma remédio controlado, tem alergia a frango, é muito sociável..."></textarea>
+        </div>
+
+        <div class="upload-area">
+            <label style="margin:0; color:var(--brand);">Foto do Pet (Opcional)</label>
+            <div class="preview"><img id="preview_${contadorPets}" alt="Preview do pet"></div>
+            <input type="file" name="foto_pet_${contadorPets}" accept="image/*" onchange="previewImagem(event, ${contadorPets})">
+        </div>
       `;
       container.appendChild(petDiv);
     }
@@ -145,6 +268,7 @@
     function mostrarOutro(select, id){
       const outro = document.getElementById(`outro_${id}`);
       outro.style.display = select.value === "Outro" ? "block" : "none";
+      if(select.value === "Outro") outro.focus();
     }
 
     function previewImagem(event, id){
@@ -173,13 +297,12 @@
     });
   </script>
 
-  <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
-    // ====== CONFIG ======
+    // ====== CONFIG (Lógica Original Mantida) ======
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
-    const BUCKET = "pet-photos"; // use o bucket correto
+    const BUCKET = "pet-photos";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function requireAuth(){
@@ -193,7 +316,7 @@
 
     async function uploadFoto(userId, idx, file){
       if(!file) return null;
-      const ext  = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const ext  = (file.name.split(".").pop() || "jpg").toLowerCase();
       const path = `${userId}/${Date.now()}_pet${idx}.${ext}`;
       const { error: upErr } = await sb.storage.from(BUCKET).upload(path, file, { upsert:false });
       if(upErr) throw upErr;
@@ -202,15 +325,15 @@
     }
 
     function lerPetDoCard(card, idx){
-      const nome   = card.querySelector(`[name="nome_pet_${idx}"]`)?.value?.trim();
+      const nome   = card.querySelector(`[name="nome_pet_${idx}"]`)?.value?.trim();
       const especieSel = card.querySelector(`[name="especie_pet_${idx}"]`)?.value;
       const especieOut = card.querySelector(`[name="outro_especie_${idx}"]`)?.value?.trim();
-      const raca   = card.querySelector(`[name="raca_pet_${idx}"]`)?.value?.trim() || null;
-      const sexo   = card.querySelector(`[name="sexo_pet_${idx}"]:checked`)?.value || null;
-      const idade  = card.querySelector(`[name="idade_pet_${idx}"]`)?.value || null;
-      const porte  = card.querySelector(`[name="porte_pet_${idx}"]`)?.value || null;
-      const obs    = card.querySelector(`[name="obs_pet_${idx}"]`)?.value?.trim() || null;
-      const file   = card.querySelector(`[name="foto_pet_${idx}"]`)?.files?.[0] || null;
+      const raca   = card.querySelector(`[name="raca_pet_${idx}"]`)?.value?.trim() || null;
+      const sexo   = card.querySelector(`[name="sexo_pet_${idx}"]:checked`)?.value || null;
+      const idade  = card.querySelector(`[name="idade_pet_${idx}"]`)?.value || null;
+      const porte  = card.querySelector(`[name="porte_pet_${idx}"]`)?.value || null;
+      const obs    = card.querySelector(`[name="obs_pet_${idx}"]`)?.value?.trim() || null;
+      const file   = card.querySelector(`[name="foto_pet_${idx}"]`)?.files?.[0] || null;
       const especie = (especieSel === "Outro" && especieOut) ? especieOut : especieSel;
       return { nome, especie, raca, sexo, idade: idade?Number(idade):null, porte, obs, file };
     }
@@ -229,19 +352,20 @@
         if(cards.length === 0){ alert("Adicione pelo menos 1 pet."); return; }
 
         const btn = document.getElementById("salvar");
-        btn.disabled = true; btn.textContent = "Salvando…";
+        btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
 
         try{
           let total = 0;
           for(let i=0;i<cards.length;i++){
-            const idx = i+1;
-            const pet = lerPetDoCard(cards[i], idx);
+            const idx = i+1; 
+            const realId = cards[i].id.split('_')[1]; 
+            const pet = lerPetDoCard(cards[i], realId);
 
             if(!pet.nome || !pet.especie || !pet.sexo || !pet.idade || !pet.porte){
-              throw new Error(`Preencha todos os campos obrigatórios do Pet ${idx}.`);
+              throw new Error(`Preencha todos os campos obrigatórios do Pet.`);
             }
 
-            const photo_url = await uploadFoto(user.id, idx, pet.file);
+            const photo_url = await uploadFoto(user.id, realId, pet.file);
 
             const payload = {
               owner_id: user.id,
@@ -264,15 +388,13 @@
             total++;
           }
 
-          // ✅ Redireciona para a home do tutor (HTML)
           const msg = encodeURIComponent("Pets cadastrados com sucesso!");
-          window.location.href = `home_tutor.html?sucesso=${msg}`;
+          window.location.href = `meusPets.html?sucesso=${msg}`;
 
         }catch(err){
           console.error(err);
           alert("Falha ao salvar pets: " + (err?.message || err));
-        }finally{
-          btn.disabled = false; btn.textContent = "Salvar Pets";
+          btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Pets';
         }
       });
     });

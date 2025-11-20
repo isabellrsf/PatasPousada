@@ -13,307 +13,332 @@
         @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
 
         :root {
-            --cor-principal: #e2725b;
-            --cor-secundaria: #c65038;
-            --cor-texto: #333;
-            --cor-fundo: #f7f7f7;
-            --cor-branco: #fff;
-            --cor-cinza-claro: #ccc;
-            --cor-cinza-medio: #ddd;
-            --cor-cinza-escuro: #333;
-            --font-principal: 'Nunito', Arial, sans-serif;
-            --font-destaque: 'Parkinsans', sans-serif;
-            --border-radius-padrao: 8px;
+            --primary: #e2725b; /* Laranja Principal */
+            --primary-dark: #c65038;
+            --primary-light: #fff0ec; /* Fundo suave */
+            --text-main: #2c3e50;
+            --text-light: #64748b;
+            --bg-body: #f8f9fa;
+            --white: #ffffff;
+            --radius: 24px;
+            --shadow-card: 0 10px 25px rgba(0,0,0,0.06);
+            --shadow-hover: 0 20px 40px rgba(226, 114, 91, 0.15);
+            --font-body: 'Nunito', sans-serif;
+            --font-heading: 'Parkinsans', sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--font-principal);
-            line-height: 1.6;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
-            margin: 0;
+            font-family: var(--font-body);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding-bottom: 60px;
         }
 
-        .container-geral {
-            max-width: 1200px;
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        main {
-            padding: 20px 0;
-        }
-
-        h2, h3 {
-            font-family: var(--font-destaque);
-            color: var(--cor-secundaria);
-            margin-bottom: 15px;
-        }
-        h2 { font-size: 1.8em; }
-        h3 { font-size: 1.3em; }
-
+        /* --- HEADER --- */
         header {
-            background-color: var(--cor-branco);
+            background: var(--white);
             padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
 
         nav {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            gap: 60px;
         }
 
-        nav .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--cor-principal);
-            text-decoration: none;
+        .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: var(--font-destaque);
-        }
-        nav .logo img {
-             width: 30px;
-             height: 30px;
-        }
-         nav .logo p {
-             font-size: 1.1em;
-             margin: 0;
-         }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 35px;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav ul li a {
             text-decoration: none;
-            color: var(--cor-texto);
-            font-weight: bold;
-            font-family: var(--font-destaque);
-            font-size: 1.1em;
-            transition: color 0.2s ease;
+            color: var(--primary);
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.4rem;
         }
-        nav ul li a:hover {
-            color: var(--cor-principal);
-        }
-         nav ul li a[href="Lartemp.html"] {
-            color: #d74f4f;
-         }
-         nav ul li a[href="reservas.html"] {
-             color: var(--cor-principal);
-         }
+        .logo img { height: 32px; }
 
-        .filters-container {
-            background-color: var(--cor-branco);
-            padding: 20px 25px;
-            border-radius: var(--border-radius-padrao);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        .nav-links a.active { position: relative; }
+        .nav-links a.active::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 2px;
+        }
+
+        /* --- HERO / SEARCH SECTION --- */
+        .hero-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, #ff9f85 100%);
+            height: 180px; 
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 30px;
+        }
+        
+        .hero-title {
+            color: white;
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            text-align: center;
+            opacity: 0.95;
+        }
+
+        .search-bar-container {
+            margin-top: -80px; 
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-bar {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            align-items: flex-end;
+            align-items: center;
+            gap: 10px;
         }
 
-        .filter-group {
+        .search-group {
+            flex: 1;
+            min-width: 180px;
+            padding: 5px 15px;
+            border-right: 1px solid #eee;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            flex-grow: 1;
         }
-        .filter-group label {
-            font-weight: bold;
-            font-size: 0.9em;
-            color: var(--cor-secundaria);
-        }
-        .filter-group input[type="text"],
-        .filter-group select
-         {
-            padding: 10px;
-            border: 1px solid var(--cor-cinza-medio);
-            border-radius: 4px;
-            font-family: var(--font-principal);
-            font-size: 1em;
-            height: 40px;
+        .search-group:last-of-type { border-right: none; flex: 0 0 auto; }
+
+        .search-group label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 2px;
         }
 
-        .filter-group .select2-container {
-             width: 100% !important;
-        }
-
-        .filter-group .select2-container .select2-selection--single {
-            border: 1px solid var(--cor-cinza-medio);
-            border-radius: 4px;
-            height: 40px;
-            display: flex;
-            align-items: center;
+        .search-group input, .search-group select {
+            border: none;
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            background: transparent;
+            outline: none;
             padding: 0;
         }
 
-         .filter-group .select2-container .select2-selection--single .select2-selection__rendered {
-             padding-left: 10px;
-             padding-right: 20px;
-             color: #555;
-         }
-
-         .filter-group .select2-container[dir="ltr"] .select2-selection--single .select2-selection__rendered {
-            text-align: left;
-         }
-
-         .filter-group .select2-container--default .select2-selection--single .select2-selection__arrow,
-         .filter-group .select2-container--classic .select2-selection--single .select2-selection__arrow {
-             position: absolute;
-             top: 1px;
-             right: 1px;
-             width: 20px;
-             height: 38px;
-         }
-
-          .filter-group .select2-container--default .select2-selection--single .select2-selection__arrow b,
-          .filter-group .select2-container--classic .select2-selection--single .select2-selection__arrow b {
-              margin-top: 0;
-              top: 50%;
-              transform: translateY(-50%);
-          }
-
-        .filter-group button {
-            padding: 10px 15px;
-            background-color: var(--cor-secundaria);
-            color: var(--cor-branco);
+        .btn-search {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
             border: none;
-            border-radius: 4px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-            height: 40px;
-            display: inline-flex;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
         }
-        .filter-group button:hover {
-            background-color: var(--cor-principal);
-        }
-        .filter-group button i {
-            font-size: 1.1em;
+        .btn-search:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
         }
 
-        .reservations-section h2 {
-            margin-bottom: 20px;
-            text-align: center;
+        /* Ajustes Select2 */
+        .select2-container--default .select2-selection--single { border: none !important; }
+        .select2-container .select2-selection--single .select2-selection__rendered { padding-left: 0 !important; color: var(--text-main) !important; font-weight: 600; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { display: none; }
+
+        /* --- GRID DE PERFIS --- */
+        .section-header {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-header h2 {
+            font-family: var(--font-heading);
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        .section-line {
+            flex: 1;
+            height: 2px;
+            background: #eee;
+            border-radius: 2px;
         }
 
-        .reservations {
+        .grid-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
         }
 
         .card {
-            background-color: var(--cor-branco);
-            border-radius: var(--border-radius-padrao);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            background: var(--white);
+            border-radius: var(--radius);
             overflow: hidden;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.02);
             display: flex;
             flex-direction: column;
+            cursor: default;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
         }
 
-        .card .card-image-container {
-            width: 100%;
+        /* Fundo colorido para a imagem */
+        .card-img-wrapper {
+            background-color: var(--primary-light);
             height: 200px;
-            overflow: hidden;
             display: flex;
+            align-items: flex-end;
             justify-content: center;
-            align-items: center;
-            background-color: #eee;
+            position: relative;
+            overflow: hidden;
         }
-        .card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        
+        /* Círculo decorativo atrás do avatar */
+        .card-img-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            bottom: -20px;
         }
 
-        .card-body {
+        .card-img-wrapper img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            z-index: 2;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); /* Sombra no boneco */
+            transition: transform 0.3s;
+        }
+        
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.1) rotate(-2deg);
+        }
+
+        .card-content {
             padding: 20px;
-            flex-grow: 1;
+            flex: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .card-title {
-            font-size: 1.3em;
+        .card-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 8px;
-            color: var(--cor-secundaria);
+        }
+
+        .card-name {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
         .card-rating {
-            font-size: 0.95em;
-            margin-bottom: 12px;
-            color: #f0ad4e;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-        .card-rating .review-count {
-            color: #777;
-            font-size: 0.9em;
-            margin-left: 5px;
+        .card-rating i { color: #FFC107; }
+        .card-rating span { color: var(--text-light); font-weight: 400; font-size: 0.8rem; }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex: 1;
+            /* Limitar a 2 linhas */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            border-top: 1px dashed #eee;
+            padding-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .card-price {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--cor-texto);
-            margin-bottom: 15px;
-            margin-top: auto;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
         }
-        .card-price span {
-            font-weight: normal;
-            font-size: 0.85em;
-            color: #666;
+        .card-price small {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
         }
 
-        .reserve-button {
-            display: block;
-            width: 100%;
-            padding: 10px 15px;
-            background-color: var(--cor-branco);
-            color: var(--cor-secundaria);
-            border: 2px solid var(--cor-principal);
+        .btn-profile {
+            padding: 8px 18px;
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            color: var(--primary);
             text-decoration: none;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            transition: all 0.2s ease-in-out;
-            margin-top: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .btn-profile:hover {
+            background: var(--primary);
+            color: white;
         }
 
-        .reserve-button:hover {
-            background-color: var(--cor-principal);
-            color: var(--cor-branco);
-            border-color: var(--cor-principal);
-        }
-
+        /* --- MODAL --- */
         .modal {
             display: none;
             position: fixed;
@@ -321,443 +346,427 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
             padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
-        .modal.show {
-             display: flex;
-             opacity: 1;
-        }
+        .modal.active { display: flex; opacity: 1; }
 
-        .modal-content {
-            background-color: var(--cor-branco);
-            padding: 30px;
-            border-radius: var(--border-radius-padrao);
-            width: 90%;
-            max-width: 550px;
-            text-align: center;
+        .modal-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 30px;
+            overflow: hidden;
+            transform: translateY(30px);
+            transition: transform 0.3s;
             position: relative;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
         }
-        .modal.show .modal-content {
-             transform: scale(1);
-        }
+        .modal.active .modal-card { transform: translateY(0); }
 
-        .close-button {
+        .modal-header-img {
+            background: var(--primary-light);
+            height: 120px;
+            position: relative;
+        }
+        
+        .modal-avatar-box {
+            width: 110px;
+            height: 110px;
+            background: white;
+            border-radius: 50%;
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 2em;
+            bottom: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .modal-avatar-box img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover; 
+            object-fit: contain; 
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
             cursor: pointer;
-            color: var(--cor-cinza-claro);
-            transition: color 0.2s ease;
-            line-height: 1;
+            color: var(--text-light);
+            transition: color 0.2s;
         }
-        .close-button:hover {
-             color: var(--cor-principal);
-        }
+        .close-modal:hover { color: var(--primary); }
 
-        .modal-content h2 {
-             margin-top: 0;
-             margin-bottom: 20px;
-        }
-
-        #modal-description {
-             font-style: italic;
-             color: #555;
-             margin-bottom: 25px;
-        }
-
-        .modal-details {
-            text-align: left;
-            margin-top: 15px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-        .modal-details p {
-             font-size: 0.95em;
-             display: flex;
-             align-items: baseline;
-             gap: 10px;
-             border-bottom: 1px solid #eee;
-             padding-bottom: 10px;
-             margin-bottom: 10px;
-        }
-        .modal-details p:last-child {
-             border-bottom: none;
-             margin-bottom: 0;
-             padding-bottom: 0;
-        }
-        .modal-details p strong {
-             color: var(--cor-secundaria);
-             flex-shrink: 0;
-             white-space: nowrap;
-             font-weight: bold;
-             padding-right: 5px;
-        }
-
-        footer {
-            background-color: var(--cor-cinza-escuro);
-            color: var(--cor-branco);
-            padding: 30px 0;
+        .modal-body {
+            padding: 65px 30px 30px;
             text-align: center;
-            margin-top: 40px;
-        }
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
         }
 
-        .footer-section {
-            margin-bottom: 20px;
-            flex: 1;
-            min-width: 200px;
+        .modal-name { font-family: var(--font-heading); font-size: 1.8rem; color: var(--text-main); margin-bottom: 2px; }
+        .modal-prof { color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block;}
+
+        .modal-bio { color: var(--text-light); margin-bottom: 25px; font-size: 0.95rem; }
+
+        .modal-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: left;
         }
 
-        .footer-section h4 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            color: var(--cor-principal);
-            font-family: var(--font-destaque);
+        .spec-item {
+            background: #f4f4f4;
+            padding: 10px 15px;
+            border-radius: 12px;
+        }
+        .spec-item small { display: block; font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 700; }
+        .spec-item strong { color: var(--text-main); font-size: 0.95rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid #eee;
+            padding-top: 40px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-section ul li a {
-            color: #aaa;
-            text-decoration: none;
-            font-weight: normal;
-            transition: color 0.2s ease;
-        }
-
-        .footer-section ul li a:hover {
-            color: var(--cor-branco);
-            text-decoration: underline;
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .search-bar { border-radius: 20px; flex-direction: column; padding: 20px; gap: 0; }
+            .search-group { width: 100%; border-right: none; border-bottom: 1px solid #eee; padding: 10px 0; }
+            .search-group:last-of-type { border-bottom: none; padding-top: 20px; }
+            .btn-search { width: 100%; border-radius: 12px; }
+            
+            .nav-links { display: none; } 
+            .hero-bg { height: 150px; } /* Mais compacto ainda no mobile */
+            .hero-title { font-size: 1.5rem; }
         }
 
     </style>
 </head>
 <body>
 
-<header>
-    <nav>
-        <a href="index.html" class="logo">
-            <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Icone Pata Pousada">
-            <p>Patas Pousada</p>
-        </a>
-        <ul>
-            <li><a href="reservas.html">Reservas</a></li>
-            <li><a href="ajuda.html">Ajuda</a></li>
-            <li><a href="Lartemp.html">Lar Temporário</a></li>
-        </ul>
-    </nav>
-</header> <br>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Logo">
+                    Patas Pousada
+                </a>
+                <ul class="nav-links">
+                    <li><a href="reservas.html" class="active">Reservas</a></li>
+                    <li><a href="ajuda.html">Ajuda</a></li>
+                    <li><a href="Lartemp.html">Lar Temporário</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<main class="container-geral">
+    <div class="hero-bg">
+        <h1 class="hero-title">Encontre o cuidador perfeito</h1>
+    </div>
 
-    <section class="filters-container">
-        <div class="filter-group">
-            <label for="checkin">Check-in:</label>
-            <input type="text" id="checkin" placeholder="Selecione a data">
-        </div>
-        <div class="filter-group">
-            <label for="checkout">Check-out:</label>
-            <input type="text" id="checkout" placeholder="Selecione a data">
-        </div>
-        <div class="filter-group">
-            <label for="city-select">Cidade:</label>
-            <select id="city-select" name="cidades">
-                <option value="" disabled selected>Todas as cidades</option>
-                 <option value="AQ">ÁGUA QUENTE</option>
-                 <option value="AC">ÁGUAS CLARAS</option>
-                 <option value="ARNIQ">ARNIQUEIRA</option>
-                 <option value="ARPANGA">ARAPOANGA</option>
-                 <option value="BZ">BRAZLÂNDIA</option>
-                 <option value="CANDA">CANDANGOLÂNDIA</option>
-                 <option value="CEI">CEILÂNDIA</option>
-                 <option value="CR">CRUZEIRO</option>
-                 <option value="SCIA">ESTRUTURAL (SCIA)</option>
-                 <option value="FERCAL">FERCAL</option>
-                 <option value="GA">GAMA</option>
-                 <option value="GUARA">GUARÁ</option>
-                 <option value="ITP">ITAPOÃ</option>
-                 <option value="JB">JARDIM BOTÂNICO</option>
-                 <option value="LN">LAGO NORTE</option>
-                 <option value="LS">LAGO SUL</option>
-                 <option value="NB">NÚCLEO BANDEIRANTE</option>
-                 <option value="PW">PARK WAY</option>
-                 <option value="PRN">PARANOÁ</option>
-                 <option value="PN">PLANALTINA</option>
-                 <option value="PP">PLANO PILOTO</option>
-                 <option value="RDE">RECANTO DAS EMAS</option>
-                 <option value="RF">RIACHO FUNDO</option>
-                 <option value="RF2">RIACHO FUNDO 2</option>
-                 <option value="SAM">SAMAMBAIA</option>
-                 <option value="SEBAS">SÃO SEBASTIÃO</option>
-                 <option value="SIA">SIA</option>
-                 <option value="SB">SOBRADINHO</option>
-                 <option value="SB2">SOBRADINHO II</option>
-                 <option value="SNPDS">SOL NASCENTE E PÔR DO SOL</option>
-                 <option value="SO">SUDOESTE/OCTOGONAL</option>
-                 <option value="ST">SANTA MARIA</option>
-                 <option value="TG">TAGUATINGA</option>
-                 <option value="VJ">VARJÃO</option>
-                 <option value="VP">VICENTE PIRES</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>&nbsp;</label>
-            <button type="button"><i class="fas fa-search"></i>Filtrar</button>
-        </div>
-    </section>
-
-    <section class="reservations-section">
-        <h2>Perfis Disponíveis</h2>
-        <div class="reservations">
-            <div class="card">
-                <div class="card-image-container">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1373/1373255.png" alt="Foto Arthur">
+    <div class="container">
+        <div class="search-bar-container">
+            <div class="search-bar">
+                <div class="search-group">
+                    <label>Cidade</label>
+                    <select id="city-select">
+                        <option value="" disabled selected>Onde seu pet vai ficar?</option>
+                        <option value="AC">Águas Claras</option>
+                        <option value="PP">Plano Piloto</option>
+                        <option value="LN">Lago Norte</option>
+                        <option value="LS">Lago Sul</option>
+                        <option value="GUARA">Guará</option>
+                        <option value="TG">Taguatinga</option>
+                        <option value="BZ">Brazlândia</option>
+                        <option value="CEI">Ceilândia</option>
+                        <option value="GA">Gama</option>
+                        <option value="AQ">ÁGUA QUENTE</option>
+                         <option value="ARNIQ">ARNIQUEIRA</option>
+                         <option value="ARPANGA">ARAPOANGA</option>
+                         <option value="CANDA">CANDANGOLÂNDIA</option>
+                         <option value="CR">CRUZEIRO</option>
+                         <option value="SCIA">ESTRUTURAL (SCIA)</option>
+                         <option value="FERCAL">FERCAL</option>
+                         <option value="ITP">ITAPOÃ</option>
+                         <option value="JB">JARDIM BOTÂNICO</option>
+                         <option value="NB">NÚCLEO BANDEIRANTE</option>
+                         <option value="PW">PARK WAY</option>
+                         <option value="PRN">PARANOÁ</option>
+                         <option value="PN">PLANALTINA</option>
+                         <option value="RDE">RECANTO DAS EMAS</option>
+                         <option value="RF">RIACHO FUNDO</option>
+                         <option value="RF2">RIACHO FUNDO 2</option>
+                         <option value="SAM">SAMAMBAIA</option>
+                         <option value="SEBAS">SÃO SEBASTIÃO</option>
+                         <option value="SIA">SIA</option>
+                         <option value="SB">SOBRADINHO</option>
+                         <option value="SB2">SOBRADINHO II</option>
+                         <option value="SNPDS">SOL NASCENTE E PÔR DO SOL</option>
+                         <option value="SO">SUDOESTE/OCTOGONAL</option>
+                         <option value="ST">SANTA MARIA</option>
+                         <option value="VJ">VARJÃO</option>
+                         <option value="VP">VICENTE PIRES</option>
+                    </select>
                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">Arthur</h3>
-                    <p class="card-rating">
-                        <i class="fas fa-star"></i> 5.0 <span class="review-count">(47 avaliações)</span>
-                    </p>
-                    <p class="card-price">R$ 55 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, 'Arthur', 'Experiente em cuidar de pets de pequeno porte.', '26 anos', 'Cuidador experiente com amor por animais.', 'Veterinário', 'Casado', 'Não')">Ver perfil</a>
+                <div class="search-group">
+                    <label>Check-in</label>
+                    <input type="text" id="checkin" placeholder="Data de entrada">
+                </div>
+                <div class="search-group">
+                    <label>Check-out</label>
+                    <input type="text" id="checkout" placeholder="Data de saída">
+                </div>
+                <div class="search-group">
+                    <button class="btn-search" id="btnFiltrar"><i class="fas fa-search"></i></button>
                 </div>
             </div>
+        </div>
+
+        <div class="section-header">
+            <h2>Perfis Disponíveis</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="grid-cards">
 
             <div class="card">
-                 <div class="card-image-container">
-                     <img src="https://cdn-icons-png.flaticon.com/512/1373/1373254.png" alt="Foto Jessye">
-                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">Jessye</h3>
-                     <p class="card-rating">
-                        <i class="fas fa-star"></i> 5.0 <span class="review-count">(33 avaliações)</span>
-                    </p>
-                    <p class="card-price">R$ 45 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, 'Jessye', 'Especializada em cuidados de pets idosos.', '23 anos', 'Cuidadora de pets com grande carinho.', 'Zootecnista', 'Casada', 'Não')">Ver perfil</a>
+                <div class="card-img-wrapper" style="background-color: #e6f7ff;"> <img src="https://cdn-icons-png.flaticon.com/512/1198/1198344.png" alt="Sérgio">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Sérgio C.</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 5.0 <span>(85)</span></div>
+                    </div>
+                    <p class="card-desc">Professor paciente, casa com quintal amplo e muita diversão.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 65 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Sérgio Cozzeti', 'Professor universitário e pai dedicado. Nossa casa é um ambiente calmo, seguro e cheio de alegria. Seu pet será tratado como parte da família!', '45 anos', 'Pai de família e amante dos animais.', 'Professor', 'Casado', 'Sim', 'https://cdn-icons-png.flaticon.com/512/1198/1198344.png')">Ver perfil</a>
+                    </div>
                 </div>
             </div>
-
-             <div class="card">
-                 <div class="card-image-container">
-                    <img src="https://cdn-icons-png.flaticon.com/512/4842/4842664.png" alt="Foto Isabella">
-                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">Isabella</h3>
-                     <p class="card-rating">
-                        <i class="fas fa-star"></i> 4.9 <span class="review-count">(27 avaliações)</span>
-                     </p>
-                    <p class="card-price">R$ 45 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, 'Isabella', 'Cuidadora com experiência em gatos e cães.', '23 anos', 'Adoro animais e tenho um coração enorme.', 'Psicologa', 'Casada', 'Não')">Ver perfil</a>
+            
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1373/1373255.png" alt="Arthur">
                 </div>
-            </div>
-
-             <div class="card">
-                 <div class="card-image-container">
-                     <img src="https://cdn-icons-png.flaticon.com/512/4427/4427372.png" alt="Foto João Victor">
-                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">João Victor</h3>
-                     <p class="card-rating">
-                         <i class="fas fa-star"></i> 4.5 <span class="review-count">(13 avaliações)</span>
-                    </p>
-                    <p class="card-price">R$ 50 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, 'João Victor', 'Cuidando de pets com muito carinho.', '21 anos', 'Adoro fazer companhia para pets idosos.', 'Veterinário', 'Casado', 'Sim')">Ver perfil</a>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Arthur</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 5.0 <span>(47)</span></div>
+                    </div>
+                    <p class="card-desc">Experiente em cuidar de pets de pequeno porte.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 55 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Arthur', 'Experiente em cuidar de pets de pequeno porte.', '26 anos', 'Cuidador experiente com amor por animais.', 'Veterinário', 'Casado', 'Não', 'https://cdn-icons-png.flaticon.com/512/1373/1373255.png')">Ver perfil</a>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                 <div class="card-image-container">
-                     <img src="https://cdn-icons-png.flaticon.com/512/4440/4440876.png" alt="Foto Maria Luiza">
-                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">Maria Luiza</h3>
-                     <p class="card-rating">
-                         <i class="fas fa-star"></i> 4.4 <span class="review-count">(17 avaliações)</span>
-                     </p>
-                    <p class="card-price">R$ 45 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, 'Maria Luiza', 'Cuidando de pets com muito amor e cuidado.', '19 anos', 'Adoro brincar com cães e gatos.', 'Pedagoga', 'Casada', 'Sim')">Ver perfil</a>
+                <div class="card-img-wrapper" style="background-color: #fffbf0;"> <img src="https://cdn-icons-png.flaticon.com/512/1373/1373254.png" alt="Jessye">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Jessye</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 5.0 <span>(33)</span></div>
+                    </div>
+                    <p class="card-desc">Especializada em cuidados de pets idosos.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 45 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Jessye', 'Especializada em cuidados de pets idosos.', '23 anos', 'Cuidadora de pets com grande carinho.', 'Zootecnista', 'Casada', 'Não', 'https://cdn-icons-png.flaticon.com/512/1373/1373254.png')">Ver perfil</a>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                 <div class="card-image-container">
-                    <img src="https://cdn-icons-png.flaticon.com/256/3577/3577429.png" alt="Foto Juliana">
-                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">Juliana</h3>
-                     <p class="card-rating">
-                         <i class="fas fa-star"></i> 4.3 <span class="review-count">(11 avaliações)</span>
-                     </p>
-                    <p class="card-price">R$ 40 <span>/ noite</span></p>
-                    <a href="#" class="reserve-button" onclick="openModal(event, ' Juliana', 'Treinando e Cuidando de cachorros com muito amor.', '19 anos', 'Adoro treinar cães e ensina-los', 'Veterinário', 'Solteira', 'Nao')">Ver perfil</a>
+                <div class="card-img-wrapper" style="background-color: #f0f4ff;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4842/4842664.png" alt="Isabella">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Isabella</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 4.9 <span>(27)</span></div>
+                    </div>
+                    <p class="card-desc">Cuidadora com experiência em gatos e cães.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 45 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Isabella', 'Cuidadora com experiência em gatos e cães.', '23 anos', 'Adoro animais e tenho um coração enorme.', 'Psicologa', 'Casada', 'Não', 'https://cdn-icons-png.flaticon.com/512/4842/4842664.png')">Ver perfil</a>
+                    </div>
                 </div>
             </div>
 
-           <div class="card">
-                <div class="card-image-container">
-                   <img src="https://cdn-icons-png.flaticon.com/512/921/921018.png" alt="Foto Kadidja">
+            <div class="card">
+                <div class="card-img-wrapper" style="background-color: #fff0ec;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4427/4427372.png" alt="João Victor">
                 </div>
-               <div class="card-body">
-                   <h3 class="card-title">Kadidja Valéria</h3>
-                    <p class="card-rating">
-                        <i class="fas fa-star"></i> 4.9 <span class="review-count">(60 avaliações)</span>
-                    </p>
-                   <p class="card-price">R$ 70 <span>/ noite</span></p>
-                   <a href="#" class="reserve-button" onclick="openModal(event, ' Kadidja Valéria', 'Treinando e Cuidando de cachorros com muito amor.', '29 anos', 'Sou professora, e nas horas vagas uma excelente acolhedora de pets!', 'Professora e Pesquisadora em Ciência da Informação, Arquivologia e Tecnologias da Informação', 'Solteira', 'Nao')">Ver perfil</a>
-               </div>
-           </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">João V.</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 4.5 <span>(13)</span></div>
+                    </div>
+                    <p class="card-desc">Cuidando de pets com muito carinho.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 50 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'João Victor', 'Cuidando de pets com muito carinho.', '21 anos', 'Adoro fazer companhia para pets idosos.', 'Veterinário', 'Casado', 'Sim', 'https://cdn-icons-png.flaticon.com/512/4427/4427372.png')">Ver perfil</a>
+                    </div>
+                </div>
+            </div>
 
-        </div>
-    </section>
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4440/4440876.png" alt="Maria Luiza">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Maria L.</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 4.4 <span>(17)</span></div>
+                    </div>
+                    <p class="card-desc">Cuidando de pets com muito amor e cuidado.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 45 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Maria Luiza', 'Cuidando de pets com muito amor e cuidado.', '19 anos', 'Adoro brincar com cães e gatos.', 'Pedagoga', 'Casada', 'Sim', 'https://cdn-icons-png.flaticon.com/512/4440/4440876.png')">Ver perfil</a>
+                    </div>
+                </div>
+            </div>
 
-</main>
+            <div class="card">
+                <div class="card-img-wrapper" style="background-color: #fffbf0;">
+                    <img src="https://cdn-icons-png.flaticon.com/256/3577/3577429.png" alt="Juliana">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Juliana</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 4.3 <span>(11)</span></div>
+                    </div>
+                    <p class="card-desc">Treinando e cuidando de cachorros com amor.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 40 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Juliana', 'Treinando e Cuidando de cachorros com muito amor.', '19 anos', 'Adoro treinar cães e ensina-los', 'Veterinário', 'Solteira', 'Nao', 'https://cdn-icons-png.flaticon.com/256/3577/3577429.png')">Ver perfil</a>
+                    </div>
+                </div>
+            </div>
 
-<div id="profileModal" class="modal" onclick="closeModalOutside(event)">
-    <div class="modal-content">
-        <span class="close-button" onclick="closeModal()">&times;</span>
-        <h2 id="modal-title">Nome do Perfil</h2>
-        <p id="modal-description">Descrição do perfil...</p>
-        <div class="modal-details">
-            <p><strong>Idade:</strong> <span id="modal-age"></span></p>
-            <p><strong>Sobre mim:</strong> <span id="modal-about"></span></p>
-            <p><strong>Profissão:</strong> <span id="modal-profession"></span></p>
-            <p><strong>Status de Relacionamento:</strong> <span id="modal-relationship-status"></span></p>
-            <p><strong>Tem filhos:</strong> <span id="modal-has-kids"></span></p>
+            <div class="card">
+                <div class="card-img-wrapper" style="background-color: #f0f4ff;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/921/921018.png" alt="Kadidja">
+                </div>
+                <div class="card-content">
+                    <div class="card-header-info">
+                        <h3 class="card-name">Kadidja V.</h3>
+                        <div class="card-rating"><i class="fas fa-star"></i> 4.9 <span>(60)</span></div>
+                    </div>
+                    <p class="card-desc">Treinando e cuidando de cachorros com amor.</p>
+                    <div class="card-footer">
+                        <div class="card-price">R$ 70 <small>/ noite</small></div>
+                        <a href="#" class="btn-profile" onclick="openModal(event, 'Kadidja Valéria', 'Treinando e Cuidando de cachorros com muito amor.', '29 anos', 'Sou professora, e nas horas vagas uma excelente acolhedora de pets!', 'Professora e Pesquisadora', 'Solteira', 'Nao', 'https://cdn-icons-png.flaticon.com/512/921/921018.png')">Ver perfil</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
 
-<footer>
-    <div class="footer-container container-geral">
-         <div class="footer-section">
-             <h4>Navegação</h4>
-             <ul>
-                 <li><a href="home.html">Início</a></li>
-                 <li><a href="reservas.html">Reservas</a></li>
-                 <li><a href="#">Seja um Anfitrião</a></li>
-                 <li><a href="Lartemp.html">Lar Temporário</a></li>
-             </ul>
+    <div id="profileModal" class="modal" onclick="closeModalOutside(event)">
+        <div class="modal-card">
+            <div class="modal-header-img">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <div class="modal-avatar-box">
+                    <img id="modal-img" src="" alt="Avatar">
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-name" id="modal-title">Nome</h2>
+                <span class="modal-prof" id="modal-profession">Profissão</span>
+                
+                <p class="modal-bio" id="modal-about">Descrição...</p>
+                
+                <div class="modal-specs">
+                    <div class="spec-item">
+                        <small>Idade</small>
+                        <strong id="modal-age">-</strong>
+                    </div>
+                    <div class="spec-item">
+                        <small>Estado Civil</small>
+                        <strong id="modal-relationship-status">-</strong>
+                    </div>
+                    <div class="spec-item">
+                        <small>Filhos</small>
+                        <strong id="modal-has-kids">-</strong>
+                    </div>
+                    <div class="spec-item">
+                        <small>Detalhe</small>
+                        <strong id="modal-description">-</strong>
+                    </div>
+                </div>
+            </div>
         </div>
-         <div class="footer-section">
-             <h4>Legal</h4>
-             <ul>
-                 <li><a href="#">Termos de Serviço</a></li>
-                 <li><a href="#">Política de Privacidade</a></li>
-                 <li><a href="#">Política de Cookies</a></li>
-             </ul>
-        </div>
-        <div class="footer-section">
-             <h4>Ajuda</h4>
-             <ul>
-                 <li><a href="ajuda.html">Central de Ajuda</a></li>
-                 <li><a href="#">Opções de cancelamento</a></li>
-                 <li><a href="#">Fale Conosco</a></li>
-             </ul>
-         </div>
-     </div>
-     <div class="container-geral" style="text-align: center; margin-top: 20px; font-size: 0.85em; color: #aaa;">
-         &copy; 2025 Patas Pousada. Todos os direitos reservados.
-     </div>
-</footer>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <footer>
+        <p>© 2025 Patas Pousada. Todos os direitos reservados.</p>
+    </footer>
 
-<script>
-    function openModal(event, name, description, age, about, profession, relationshipStatus, hasKids) {
-        event.preventDefault();
-        const modal = document.getElementById('profileModal');
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 
-        document.getElementById('modal-title').textContent = name;
-        document.getElementById('modal-description').textContent = description;
-        document.getElementById('modal-age').textContent = age;
-        document.getElementById('modal-about').textContent = about;
-        document.getElementById('modal-profession').textContent = profession;
-        document.getElementById('modal-relationship-status').textContent = relationshipStatus;
-        document.getElementById('modal-has-kids').textContent = hasKids;
+    <script>
+        $(document).ready(function() {
+            $('#city-select').select2({ placeholder: "Selecione a cidade", allowClear: true });
+            
+            $('#btnFiltrar').click(function() {
+                const originalIcon = $(this).html();
+                $(this).html('<i class="fas fa-spinner fa-spin"></i>');
+                setTimeout(() => {
+                    $(this).html(originalIcon);
+                    alert("Filtros aplicados!");
+                }, 500);
+            });
+        });
 
-        modal.classList.add('show');
-    }
+        flatpickr("#checkin", { locale: "pt", dateFormat: "d/m/Y", minDate: "today", disableMobile: "true",
+            onChange: function(selectedDates) {
+                const checkout = document.getElementById("checkout")._flatpickr;
+                if(selectedDates.length > 0) {
+                    let nextDay = new Date(selectedDates[0]);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    checkout.set("minDate", nextDay);
+                }
+            }
+        });
 
-    function closeModal() {
-        const modal = document.getElementById('profileModal');
-        modal.classList.remove('show');
-    }
+        flatpickr("#checkout", { locale: "pt", dateFormat: "d/m/Y", minDate: "today", disableMobile: "true" });
 
-    function closeModalOutside(event) {
-         if (event.target === document.getElementById('profileModal')) {
-             closeModal();
-         }
-     }
-
-    flatpickr("#checkin", {
-        locale: "pt",
-        dateFormat: "d/m/Y",
-        minDate: "today",
-        altInput: true,
-        altFormat: "d/m/Y",
-        onChange: function(selectedDates, dateStr, instance) {
-            const checkoutPicker = document.getElementById("checkout")._flatpickr;
-            if (selectedDates.length > 0) {
-                 let minCheckoutDate = new Date(selectedDates[0]);
-                 minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
-                 checkoutPicker.set("minDate", minCheckoutDate);
-             } else {
-                 checkoutPicker.set("minDate", "today");
-             }
+        function openModal(e, name, desc, age, about, prof, rel, kids, img) {
+            e.preventDefault();
+            $('#modal-title').text(name);
+            $('#modal-profession').text(prof);
+            $('#modal-about').text(about);
+            $('#modal-age').text(age);
+            $('#modal-relationship-status').text(rel);
+            $('#modal-has-kids').text(kids);
+            $('#modal-description').text(desc); // Usando campo de detalhe
+            $('#modal-img').attr('src', img);
+            $('#profileModal').addClass('active');
         }
-    });
 
-    flatpickr("#checkout", {
-        locale: "pt",
-        dateFormat: "d/m/Y",
-        minDate: "today",
-         altInput: true,
-         altFormat: "d/m/Y",
-    });
-
-    $(document).ready(function() {
-        $('#city-select').select2({
-            placeholder: "Selecione a cidade",
-            allowClear: true,
-        });
-
-        $('.filters-container button').on('click', function() {
-            const checkin = $('#checkin').val();
-            const checkout = $('#checkout').val();
-            const city = $('#city-select').val();
-
-            console.log("Filtrando por:", { checkin, checkout, city });
-            alert(`Filtro aplicado!\nData Entrada: ${checkin}\nData Saída: ${checkout}\nCidade: ${city || 'Qualquer uma'}`);
-        });
-    });
-
-</script>
+        function closeModal() { $('#profileModal').removeClass('active'); }
+        function closeModalOutside(e) { if(e.target.id === 'profileModal') closeModal(); }
+    </script>
 
 </body>
 </html>
