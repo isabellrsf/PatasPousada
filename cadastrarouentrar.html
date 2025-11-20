@@ -120,6 +120,31 @@
       background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.1));
     }
 
+    /* Botão Voltar Personalizado */
+    .btn-back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      color: var(--white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .btn-back:hover {
+      background: rgba(255,255,255,0.4);
+      transform: translateX(-2px);
+    }
+
     .visual-content {
       position: relative;
       z-index: 2;
@@ -332,6 +357,10 @@
     <div class="login-container">
       
       <div class="login-visual">
+        <a href="index.html" class="btn-back">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+
         <div class="visual-content">
           <p class="visual-quote">"O melhor cuidado para quem você mais ama."</p>
         </div>
