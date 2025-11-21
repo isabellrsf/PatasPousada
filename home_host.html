@@ -711,7 +711,7 @@
         </div>
       </aside>
     </section>
-  </main>
+  </main -->
 
   <div class="pp-chat-fab" id="ppChatFab">
     <i class="fa-solid fa-comments"></i>
@@ -793,6 +793,8 @@
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentUser = null;
+    let currentUserId = null;
+    let currentUserEmail = null;
     let currentProfile = {};
     let myListingsData = []; 
     let editingListingId = null; 
@@ -809,6 +811,8 @@
       const { data: { user } } = await sb.auth.getUser();
       if(!user) { window.location.href = "cadastrarouentrar.html"; return; }
       currentUser = user;
+      currentUserId = user.id;
+      currentUserEmail = user.email;
       
       // Busca dados do anfitrião
       let { data: hostData } = await sb.from('hosts').select('*').eq('id', user.id).maybeSingle();
@@ -1158,12 +1162,16 @@
         setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
     });
 
-    // --- EXCLUSÃO DE CONTA ---
+    // --- EXCLUSÃO DE CONTA (usa processaExclusao.php com SERVICE KEY) ---
     const ppDeleteAccount = document.getElementById('ppDeleteAccount');
     const linkExcluirConta = document.getElementById('linkExcluirConta');
 
     linkExcluirConta.addEventListener('click', (e) => {
       e.preventDefault();
+      if (!currentUserId) {
+        toastHost("Erro: sessão expirada. Faça login novamente.");
+        return;
+      }
       ppDeleteAccount.style.display = 'flex';
       requestAnimationFrame(() => {
         ppDeleteAccount.querySelector('.pp-card').classList.add('show');
@@ -1176,29 +1184,54 @@
       setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
     });
 
-    document.getElementById('delAccountOk').addEventListener('click', async () => {
+    async function handleDeleteAccountHost() {
+      if (!currentUserId) {
+        toastHost("Erro: usuário não identificado. Faça login novamente.");
+        return;
+      }
+
       try {
-        if(!currentUser) return;
+        const resp = await fetch('processaExclusao.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: currentUserId,
+            email: currentUserEmail
+          })
+        });
 
-        // remove todos os anúncios do host
-        await sb.from('listings').delete().eq('host_id', currentUser.id);
+        let result = {};
+        try {
+          result = await resp.json();
+        } catch (e) {
+          result = { ok: false, message: 'Resposta inválida do servidor.' };
+        }
 
-        // remove dado de host e profile
-        await sb.from('hosts').delete().eq('id', currentUser.id);
-        await sb.from('profiles').delete().eq('id', currentUser.id);
+        if (!resp.ok || !result.ok) {
+          toastHost(result.message || 'Dados apagados, mas falhou ao excluir usuário de autenticação.');
+        } else {
+          toastHost('Conta excluída com sucesso.');
+        }
 
-        toastHost("Conta excluída. Encerrando sessão...");
+        // encerra sessão no front
+        try { await sb.auth.signOut(); } catch(e) {}
 
-        await sb.auth.signOut();
-        window.location.href = 'cadastrarouentrar.html';
+        setTimeout(() => {
+          window.location.href = 'cadastrarouentrar.html';
+        }, 1500);
+
       } catch (err) {
-        console.error(err);
-        toastHost("Erro ao excluir conta.");
+        console.error('Erro ao excluir conta:', err);
+        toastHost('Erro ao excluir conta.');
       } finally {
         const card = ppDeleteAccount.querySelector('.pp-card');
         card.classList.remove('show');
         setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
       }
+    }
+
+    document.getElementById('delAccountOk').addEventListener('click', async () => {
+      await handleDeleteAccountHost();
     });
 
     document.getElementById('formNovaHospedagem').addEventListener('submit', async (e) => {
