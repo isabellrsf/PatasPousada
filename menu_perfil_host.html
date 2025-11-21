@@ -43,7 +43,15 @@
     .topbar-center nav a{text-decoration:none;font-family:'Parkinsans',sans-serif;font-weight:600;color:#444;font-size:.95rem}
     .topbar-center nav a:hover{color:var(--cor-principal-escura)}
     .topbar-right{display:flex;align-items:center;gap:12px}
-    .perfil-bolinha{width:32px;height:32px;border-radius:50%;background:#ffe2da;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--cor-principal-escura);font-size:.9rem}
+    .perfil-bolinha{
+      width:32px;height:32px;border-radius:50%;
+      background:#ffe2da;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:var(--cor-principal-escura);font-size:.9rem;
+      background-size:cover;
+      background-position:center;
+      overflow:hidden;
+    }
     .perfil-nome{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:.95rem}
 
     .user-menu{position:relative;display:flex;align-items:center}
@@ -160,6 +168,64 @@
     }
     .alert.ok{background:#e6ffea;color:#166534;border:1px solid #22c55e}
     .alert.err{background:#fee2e2;color:#b91c1c;border:1px solid #ef4444}
+
+    /* AVATAR / FOTO DE PERFIL */
+    .avatar-section{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .avatar-preview{
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      background:#ffe2da;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:1.6rem;
+      color:var(--cor-principal-escura);
+      position:relative;
+      overflow:hidden;
+    }
+    .avatar-preview span{
+      z-index:1;
+    }
+    .avatar-preview img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none;
+    }
+    .avatar-preview.has-img span{
+      display:none;
+    }
+    .avatar-preview.has-img img{
+      display:block;
+    }
+    .avatar-actions{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .avatar-actions .avatar-upload-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+    .avatar-actions .avatar-upload-btn i{
+      font-size:.9rem;
+    }
+    .avatar-actions small{
+      font-size:.8rem;
+      color:#777;
+    }
 
     /* ==== Modal EXCLUIR conta (mesmo estilo do tutor) ==== */
     .pp-wrap{
@@ -334,6 +400,23 @@
     <div id="alertOk"  class="alert ok"></div>
     <div id="alertErr" class="alert err"></div>
 
+    <!-- FOTO DE PERFIL -->
+    <div class="avatar-section">
+      <div class="avatar-preview" id="avatarPreview">
+        <span id="avatarPreviewInitials">A</span>
+        <img id="avatarPreviewImg" alt="Foto de perfil">
+      </div>
+      <div class="avatar-actions">
+        <label class="btn-outline avatar-upload-btn">
+          <i class="fa-solid fa-camera"></i>
+          <span>Escolher foto de perfil</span>
+          <input type="file" id="avatarFile" accept="image/*" hidden>
+        </label>
+        <button type="button" class="btn-outline" id="btnRemoverAvatar">Remover foto</button>
+        <small>Formatos JPG ou PNG, até ~2MB.</small>
+      </div>
+    </div>
+
     <form id="formHost">
       <div class="row">
         <div>
@@ -423,6 +506,10 @@
 
   let currentUserEmail = null;
   let currentUserId = null;
+  let currentDisplayName = "";
+  let avatarUrlAtual = null;       // o que está salvo no banco
+  let avatarTempFile = null;       // arquivo escolhido mas ainda não salvo
+  let avatarMarkedForRemoval = false;
 
   function initials(name){
     if(!name) return "A";
@@ -442,6 +529,7 @@
   function showAlertErr(msg){
     const ok  = document.getElementById("alertOk");
     const err = document.getElementById("alertErr");
+    ok.textContent = " ";
     ok.style.display = "none";
     err.textContent = msg;
     err.style.display = "block";
@@ -465,6 +553,42 @@
     return user;
   }
 
+  function updateAvatarUI(displayName, url){
+    const bolinha  = document.getElementById("perfilBolinha");
+    const preview  = document.getElementById("avatarPreview");
+    const prevInit = document.getElementById("avatarPreviewInitials");
+    const prevImg  = document.getElementById("avatarPreviewImg");
+
+    const iniciais = initials(displayName);
+
+    if(url){
+      // header
+      if(bolinha){
+        bolinha.style.backgroundImage = `url('${url}')`;
+        bolinha.textContent = "";
+      }
+      // preview
+      if(preview && prevInit && prevImg){
+        preview.classList.add("has-img");
+        prevImg.src = url;
+        prevImg.alt = displayName || "Foto de perfil";
+        prevInit.textContent = iniciais;
+      }
+    }else{
+      // header volta pro modo letra
+      if(bolinha){
+        bolinha.style.backgroundImage = "";
+        bolinha.textContent = iniciais;
+      }
+      // preview volta pra letra
+      if(preview && prevInit && prevImg){
+        preview.classList.remove("has-img");
+        prevImg.removeAttribute("src");
+        prevInit.textContent = iniciais;
+      }
+    }
+  }
+
   async function loadUserAndHost(user){
     const spanNome = document.getElementById("perfilNome");
     const bolinha  = document.getElementById("perfilBolinha");
@@ -472,10 +596,12 @@
     let displayName = user.user_metadata?.full_name ||
                       (user.email ? user.email.split("@")[0] : "Anfitrião");
 
+    let avatarFromDb = null;
+
     try{
       const { data: hostRow, error } = await sb
         .from("hosts")
-        .select("full_name, city, pets_count, residence_type, bio")
+        .select("full_name, city, pets_count, residence_type, bio, avatar_url")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -495,14 +621,20 @@
           const radio = document.querySelector(`input[name="residence_type"][value="${hostRow.residence_type}"]`);
           if(radio) radio.checked = true;
         }
+
+        avatarFromDb = hostRow.avatar_url || null;
       }
     }catch(e){
       console.error("Exceção ao carregar host:", e);
     }
 
+    currentDisplayName = displayName;
+    avatarUrlAtual = avatarFromDb;
+
     document.getElementById("email").value = user.email || "";
     spanNome.textContent = displayName;
-    bolinha.textContent  = initials(displayName);
+    // header e preview
+    updateAvatarUI(currentDisplayName, avatarUrlAtual);
   }
 
   async function handleLogout(e){
@@ -583,6 +715,35 @@
     await handleDeleteAccountReal();
   });
 
+  // ====== AVATAR: upload / remover / preview ======
+  const avatarFileInput   = document.getElementById("avatarFile");
+  const btnRemoverAvatar  = document.getElementById("btnRemoverAvatar");
+
+  avatarFileInput.addEventListener("change", (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+
+    if(file.size > 2 * 1024 * 1024){
+      showAlertErr("A foto deve ter no máximo 2MB.");
+      avatarFileInput.value = "";
+      return;
+    }
+
+    avatarTempFile = file;
+    avatarMarkedForRemoval = false;
+
+    const tempUrl = URL.createObjectURL(file);
+    updateAvatarUI(currentDisplayName || document.getElementById("full_name").value || "", tempUrl);
+  });
+
+  btnRemoverAvatar.addEventListener("click", ()=>{
+    avatarTempFile = null;
+    avatarMarkedForRemoval = true;
+    avatarFileInput.value = "";
+    updateAvatarUI(currentDisplayName || document.getElementById("full_name").value || "", null);
+  });
+
+  // ====== SUBMIT DO FORM ======
   document.getElementById("formHost").addEventListener("submit", async (e)=>{
     e.preventDefault();
     if(!currentUserId){
@@ -601,6 +762,57 @@
     const residenceRadio = document.querySelector('input[name="residence_type"]:checked');
     const residence_type = residenceRadio ? residenceRadio.value : null;
 
+    let avatarUrlToSave = avatarUrlAtual;
+
+    // 1) Se escolheu nova foto, faz upload no Storage
+    if(avatarTempFile){
+      try{
+        const ext = avatarTempFile.name.includes(".")
+          ? avatarTempFile.name.split(".").pop()
+          : "jpg";
+        const path = `${currentUserId}/avatar-${Date.now()}.${ext}`;
+
+        const { error: uploadError } = await sb
+          .storage
+          .from("host-avatars")   // bucket (crie ele no Supabase)
+          .upload(path, avatarTempFile, {
+            upsert: true,
+            cacheControl: "3600",
+            contentType: avatarTempFile.type || "image/jpeg"
+          });
+
+        if(uploadError){
+          console.error("Erro upload avatar:", uploadError);
+          showAlertErr("Erro ao enviar a foto de perfil. Tente novamente.");
+          btn.disabled = false;
+          btn.textContent = "Salvar alterações";
+          return;
+        }
+
+        const { data: publicData } = sb
+          .storage
+          .from("host-avatars")
+          .getPublicUrl(path);
+
+        if(!publicData || !publicData.publicUrl){
+          showAlertErr("Não foi possível gerar o link público da foto.");
+          btn.disabled = false;
+          btn.textContent = "Salvar alterações";
+          return;
+        }
+
+        avatarUrlToSave = publicData.publicUrl;
+      }catch(err){
+        console.error("Exceção upload avatar:", err);
+        showAlertErr("Erro inesperado ao enviar a foto. Tente novamente.");
+        btn.disabled = false;
+        btn.textContent = "Salvar alterações";
+        return;
+      }
+    } else if(avatarMarkedForRemoval){
+      avatarUrlToSave = null;
+    }
+
     try{
       const { error } = await sb
         .from("hosts")
@@ -609,7 +821,8 @@
           city,
           pets_count: petsCount,
           residence_type,
-          bio
+          bio,
+          avatar_url: avatarUrlToSave
         })
         .eq("id", currentUserId);
 
@@ -621,15 +834,25 @@
         return;
       }
 
+      // Atualiza user_metadata (nome)
       try{
         await sb.auth.updateUser({ data:{ full_name } });
       }catch(e){
         console.warn("Não foi possível atualizar user_metadata:", e);
       }
 
+      // Atualiza variáveis e UI local
+      currentDisplayName = full_name || currentDisplayName;
+      avatarUrlAtual     = avatarUrlToSave;
+      avatarTempFile     = null;
+      avatarMarkedForRemoval = false;
+
+      document.getElementById("perfilNome").textContent = currentDisplayName;
+      updateAvatarUI(currentDisplayName, avatarUrlAtual);
+
       showAlertOk("Perfil atualizado com sucesso!");
-    }catch(e){
-      console.error("Exceção no salvar:", e);
+    }catch(e2){
+      console.error("Exceção no salvar:", e2);
       showAlertErr("Erro inesperado ao salvar. Tente novamente.");
     }finally{
       btn.disabled = false;

@@ -34,11 +34,19 @@
     /* CONTAINER */
     .container { 
       max-width: 600px; margin: 40px auto; background: #fff; padding: 40px; 
-      border-radius: 20px; box-shadow: var(--shadow); 
+      border-radius: 20px; box-shadow: var(--shadow); position: relative;
     }
 
+    /* BOTÃO VOLTAR (NOVO) */
+    .btn-voltar {
+        display: inline-flex; align-items: center; gap: 8px;
+        color: var(--muted); font-weight: 700; font-size: 0.9rem;
+        margin-bottom: 16px; transition: color 0.2s; cursor: pointer;
+    }
+    .btn-voltar:hover { color: var(--brand); }
+
     h2 { 
-      text-align:center; margin-bottom:10px; color:var(--brand); /* COR ROSA PADRÃO */
+      text-align:center; margin-bottom:10px; color:var(--brand); 
       font-family: 'Parkinsans', sans-serif; font-size: 1.8rem; font-weight: 800;
     }
     .subtitle { text-align: center; color: var(--muted); margin-bottom: 30px; font-size: 0.95rem; }
@@ -54,7 +62,7 @@
     }
     input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--chip); }
 
-    /* GRID DE PETS (Checkboxes customizados) */
+    /* GRID DE PETS */
     .pet-grid {
         display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;
     }
@@ -199,6 +207,10 @@
   </header>
 
   <div class="container">
+    <a href="cadastrarouentrar.html" class="btn-voltar">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+    </a>
+
     <h2>Crie sua conta de tutor</h2>
     <p class="subtitle">Junte-se à nossa comunidade de amantes de pets!</p>
 

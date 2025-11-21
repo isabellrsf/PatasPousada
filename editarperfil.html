@@ -21,23 +21,30 @@
     body { font-family: 'Nunito', sans-serif; background-color: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; line-height: 1.5; }
     a { text-decoration: none; color: inherit; }
 
-    /* HEADER */
+    /* HEADER - AUMENTADO PADDING */
     header{display:flex;justify-content:center;background:rgba(255,255,255,0.95);box-shadow:0 1px 3px rgba(0,0,0,.05); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);}
-    nav{max-width:1100px;width:100%;padding:12px 24px;display:flex;align-items:center;justify-content: space-between;}
+    nav{max-width:1100px;width:100%;padding:16px 24px;display:flex;align-items:center;justify-content: space-between;}
     
-    .logo{display:flex;align-items:center;gap:8px; color:var(--brand);font-family:Parkinsans,sans-serif;font-weight:800; font-size: 1.2rem;}
-    .logo img{width:28px;height:28px;}
+    /* LOGO MAIOR */
+    .logo{display:flex;align-items:center;gap:10px; color:var(--brand);font-family:Parkinsans,sans-serif;font-weight:800; font-size: 1.35rem;}
+    .logo img{width:34px;height:34px;}
     
-    nav ul{list-style:none;display:flex;gap:20px;margin:0;padding:0; align-items: center;}
-    nav ul a{font-family:Parkinsans,sans-serif;font-weight:600;color:#4b5563; font-size: 0.9rem; transition: color var(--transition);}
+    /* LINKS MAIORES */
+    nav ul{list-style:none;display:flex;gap:24px;margin:0;padding:0; align-items: center;}
+    nav ul a{font-family:Parkinsans,sans-serif;font-weight:600;color:#4b5563; font-size: 1rem; transition: color var(--transition);}
     nav ul a:hover{color:var(--brand)}
 
-    /* USER MENU */
+    /* USER MENU - AJUSTADO TAMANHO */
     .user-menu{position:relative; display:flex; align-items:center;}
-    .user-menu-trigger{display:flex;align-items:center;gap:8px;cursor:pointer; padding: 4px 8px 4px 4px; border-radius: 30px; transition: background var(--transition); border: 1px solid transparent;}
+    
+    .user-menu-trigger{display:flex;align-items:center;gap:10px;cursor:pointer; padding: 6px 12px 6px 6px; border-radius: 40px; transition: background var(--transition); border: 1px solid transparent;}
     .user-menu-trigger:hover { background: #fff; border-color: var(--line); box-shadow: var(--shadow); }
-    .user-menu-trigger img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; background: #eee; }
-    .user-menu-trigger span { font-weight: 700; font-size: 0.85rem; color: var(--ink); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* AVATAR MAIOR (40px) */
+    .user-menu-trigger img { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; background: #eee; }
+    
+    /* NOME MAIOR */
+    .user-menu-trigger span { font-weight: 700; font-size: 1rem; color: var(--ink); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .user-menu-trigger svg { width: 12px; fill: #9ca3af; transition: transform .2s; }
     .user-menu:hover .user-menu-trigger svg{ transform: rotate(180deg); }
 
@@ -346,13 +353,17 @@
       setTimeout(()=>{ el.textContent=''; }, 3000);
     }
 
-    // upload de avatar
+    // ======== UPLOAD DE AVATAR (BUCKET tutor-avatars) =========
     async function uploadAvatar(file, userId){
       const ext = file.name.split('.').pop();
       const path = `${userId}/avatar.${ext}`;
-      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert:true, contentType:file.type });
+      const { error } = await sb
+        .storage
+        .from('tutor-avatars')
+        .upload(path, file, { upsert:true, contentType:file.type });
       if(error) throw error;
-      const { data:pub } = sb.storage.from('avatars').getPublicUrl(path);
+
+      const { data:pub } = sb.storage.from('tutor-avatars').getPublicUrl(path);
       return pub.publicUrl;
     }
 
@@ -363,13 +374,12 @@
     async function requireAuth(){
       const { data:{ user } } = await sb.auth.getUser();
       if(!user){
-        location.href = "cadastrarouentrar.html?next=editarperfil.html";
+        location.href = "cadastrarouentrar.html?next=menu_perfil.html";
         return null;
       }
       return user;
     }
 
-    // mesma lógica de nome do menu_perfil
     function resolveDisplayName(user, prof){
       const emailPrefix = user.email.split('@')[0];
       let display = emailPrefix;
@@ -392,7 +402,11 @@
 
     function fillTopBar(name, avatarUrl){
       document.getElementById('userTop').textContent = name || 'Usuário';
-      if (avatarUrl) document.getElementById('avatarTop').src = avatarUrl;
+      if (avatarUrl) {
+        // AQUI ESTÁ O FIX: Adiciona o timestamp para forçar o navegador a recarregar a imagem do topo
+        const urlComCache = avatarUrl + '?t=' + new Date().getTime();
+        document.getElementById('avatarTop').src = urlComCache;
+      }
     }
 
     function fillDados(p, user){
@@ -403,8 +417,9 @@
       f.birthdate.value  = p.birthdate  || '';
       f.gender.value     = p.gender     || '';
       if (p.avatar_url){
-        document.getElementById('preview').src = p.avatar_url;
-        document.getElementById('avatarTop').src = p.avatar_url;
+        // Mesma coisa para o preview principal da página
+        const urlComCache = p.avatar_url + '?t=' + new Date().getTime();
+        document.getElementById('preview').src = urlComCache;
       }
     }
 
@@ -432,8 +447,8 @@
 
     function fillEmergency(p){
       const f = document.querySelector('#form-emergency');
-      f.emergency_first_name.value    = p.emergency_first_name    || '';
-      f.emergency_last_name.value     = p.emergency_last_name     || '';
+      f.emergency_first_name.value     = p.emergency_first_name     || '';
+      f.emergency_last_name.value      = p.emergency_last_name      || '';
       f.emergency_phone_country.value= p.emergency_phone_country|| '+55';
       f.emergency_phone_number.value = p.emergency_phone_number || '';
     }
@@ -471,56 +486,85 @@
       currentUser = await requireAuth();
       if(!currentUser) return;
 
+      let avatarFile = null;
+
       document.getElementById('logout').addEventListener('click', async (e)=>{
         e.preventDefault();
         try{ await sb.auth.signOut(); }catch{}
         location.href="cadastrarouentrar.html";
       });
 
-      // carrega perfil
       await loadProfile(currentUser);
 
-      // foto/avatar
+      // foto/avatar - Apenas preview
       const fotoInput = document.getElementById('fotoInput');
-      fotoInput.addEventListener('change', async (e)=>{
+      fotoInput.addEventListener('change', (e)=>{
         const file = e.target.files?.[0];
         if(!file) return;
+        
+        avatarFile = file; 
         document.getElementById('preview').src = URL.createObjectURL(file);
-        try{
-          const url = await uploadAvatar(file, currentUser.id);
-          await save({ avatar_url:url }, document.getElementById('hint-dados'));
-          document.getElementById('avatarTop').src = url;
-          profile.avatar_url = url;
-        }catch(err){
-          console.error('uploadAvatar error:', err);
-          toast(document.getElementById('hint-dados'), false, 'Falha ao enviar foto.');
-        }
       });
 
-      // form dados (NÃO envia "email" para a tabela)
+      // form dados - Upload acontece aqui
       document.getElementById('form-dados').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const f = e.currentTarget;
+        const hint = document.getElementById('hint-dados');
+
+        let currentAvatarUrl = profile.avatar_url;
+
+        // Se houver uma nova foto
+        if(avatarFile) {
+          try {
+            hint.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+            
+            currentAvatarUrl = await uploadAvatar(avatarFile, currentUser.id);
+            
+            // === AQUI TAMBÉM: Cache Buster para atualização imediata ===
+            const cacheBuster = '?t=' + new Date().getTime();
+            const urlComCache = currentAvatarUrl + cacheBuster;
+
+            document.getElementById('avatarTop').src = urlComCache;
+            document.getElementById('preview').src = urlComCache;
+            
+            profile.avatar_url = currentAvatarUrl; // Salva URL limpa no objeto
+          } catch(err) {
+            console.error('uploadAvatar error:', err);
+            toast(hint, false, 'Falha ao enviar foto.');
+            return;
+          }
+        }
+
+        // Salva no banco (URL limpa sem o ?t=...)
         const ok = await save({
           first_name: f.first_name.value.trim(),
           last_name : f.last_name.value.trim(),
           birthdate : f.birthdate.value || null,
-          gender    : f.gender.value || null
-        }, document.getElementById('hint-dados'));
+          gender    : f.gender.value || null,
+          avatar_url: currentAvatarUrl
+        }, hint);
 
         if(ok){
-          // atualiza objeto em memória
           profile.first_name = f.first_name.value.trim();
           profile.last_name  = f.last_name.value.trim();
           profile.birthdate  = f.birthdate.value || null;
           profile.gender     = f.gender.value || null;
+          
+          avatarFile = null;
 
           const display = resolveDisplayName(currentUser, profile);
-          fillTopBar(display, profile.avatar_url);
+          // Se não houve upload de foto agora, usa a que já tinha (com cache buster se carregar de novo)
+          // Se houve upload, o bloco 'if(avatarFile)' acima já atualizou o DOM.
+          if(!avatarFile) {
+             fillTopBar(display, profile.avatar_url);
+          } else {
+             // Apenas atualiza o nome se mudou
+             document.getElementById('userTop').textContent = display;
+          }
         }
       });
 
-      // endereço
       document.getElementById('form-endereco').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const f = e.currentTarget;
@@ -534,7 +578,6 @@
         }, document.getElementById('hint-end'));
       });
 
-      // documentos
       document.getElementById('form-docs').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const f = e.currentTarget;
@@ -544,7 +587,6 @@
         }, document.getElementById('hint-docs'));
       });
 
-      // telefone
       document.getElementById('form-phone').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const f = e.currentTarget;
@@ -554,7 +596,6 @@
         }, document.getElementById('hint-phone'));
       });
 
-      // contato de emergência
       document.getElementById('form-emergency').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const f = e.currentTarget;

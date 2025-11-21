@@ -4,704 +4,164 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Anfitrião | Patas Pousada</title>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Parkinsans:wght@500;600;700&display=swap');
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <style>
-    :root {
-      --cor-principal: #e2725b;
-      --cor-principal-escura: #d35e46;
-      --cor-fundo: #f8f9fa;
-      --cor-card: #ffffff;
-      --cor-texto: #333333;
-      --cor-texto-secundario: #666666;
-      --radius-card: 12px;
-      --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
-      --transition-speed: 0.2s;
+    /* --- CSS GERAL --- */
+    :root { 
+      --cor-principal:#e2725b; 
+      --cor-principal-escura:#d35e46; 
+      --cor-fundo:#f8f9fa; 
+      --cor-card:#ffffff; 
+      --cor-texto:#333333; 
+      --cor-texto-secundario:#666666; 
+      --radius-card:12px; 
+      --shadow-card:0 2px 8px rgba(0,0,0,0.06); 
+      --shadow-hover:0 8px 24px rgba(0,0,0,0.12); 
+      --transition-speed:0.2s; 
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Nunito', Arial, sans-serif;
-      background-color: var(--cor-fundo);
-      color: var(--cor-texto);
-      line-height: 1.5;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', Arial, sans-serif; background-color: var(--cor-fundo); color: var(--cor-texto); line-height: 1.5; }
+    
     /* HEADER */
-    header {
-      background-color: #fff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      padding: 0 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: 70px;
-      display: flex;
-      align-items: center;
-    }
+    header { background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 0 20px; position: sticky; top: 0; z-index: 100; height: 80px; display: flex; align-items: center; }
+    .topbar { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .topbar-left img { width: 38px; height: 38px; }
+    .logo-text { font-family: 'Parkinsans', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--cor-principal); }
+    .topbar-center nav ul { list-style: none; display: flex; gap: 30px; }
+    .topbar-center nav a { text-decoration: none; font-family: 'Parkinsans', sans-serif; font-weight: 600; color: var(--cor-texto-secundario); font-size: 1rem; transition: color var(--transition-speed); }
+    .topbar-center nav a:hover { color: var(--cor-principal); }
+    .topbar-right { display: flex; align-items: center; gap: 15px; }
+    
+    /* MENU USUÁRIO */
+    .user-menu { position: relative; }
+    .user-trigger { border: none; background: transparent; display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 8px 12px; border-radius: 40px; transition: background-color var(--transition-speed); }
+    .user-trigger:hover { background-color: #f0f0f0; }
+    .perfil-bolinha { width: 42px; height: 42px; border-radius: 50%; background-color: #ffe2da; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--cor-principal-escura); font-size: 1.2rem; overflow: hidden; position: relative; border: 1px solid var(--cor-principal); }
+    .perfil-bolinha img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
+    .perfil-nome { font-family: 'Parkinsans', sans-serif; font-weight: 600; font-size: 1rem; color: var(--cor-texto); }
+    
+    .user-dropdown { position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); min-width: 200px; padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s ease; z-index: 101; border: 1px solid #eee; }
+    .user-menu:hover .user-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .user-dropdown a { display: flex; align-items: center; gap: 12px; padding: 10px 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem; color: var(--cor-texto); transition: background-color var(--transition-speed); }
+    .user-dropdown a:hover { background-color: #f8f9fa; color: var(--cor-principal); }
 
-    .topbar {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* LAYOUT */
+    .container-main { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
+    .top-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .top-card { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 20px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform var(--transition-speed), box-shadow var(--transition-speed); border: 1px solid transparent; }
+    .top-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #ffe2da; }
+    .top-card-titulo { font-weight: 700; font-size: 1.1rem; color: var(--cor-texto); }
+    .top-card-sub { font-size: 0.9rem; color: var(--cor-texto-secundario); line-height: 1.4; }
+    
+    .grid-main { display: grid; grid-template-columns: 280px 1fr 300px; gap: 24px; align-items: flex-start; }
+    .sidebar-esq { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .sidebar-section h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--cor-texto); }
+    .filtro-botoes { display: flex; flex-direction: column; gap: 10px; }
+    .btn-filtro { border-radius: 8px; border: 1px solid #ddd; padding: 10px 14px; font-size: 0.9rem; cursor: pointer; background-color: #fff; text-align: left; display: flex; align-items: center; gap: 10px; font-family: 'Nunito', sans-serif; color: var(--cor-texto); transition: all var(--transition-speed); }
+    .btn-filtro:hover { background-color: #f8f9fa; }
+    .btn-filtro.ativo { background-color: #fff0ec; color: var(--cor-principal-escura); border-color: var(--cor-principal); font-weight: 600; }
+    
+    .lista-hosts { display: flex; flex-direction: column; gap: 20px; }
+    .lista-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .lista-header h2 { font-size: 1.4rem; font-weight: 700; font-family: 'Parkinsans', sans-serif; color: var(--cor-texto); }
+    
+    .btn-criar-anuncio { border: none; border-radius: 30px; padding: 10px 20px; background: var(--cor-principal); color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(226, 114, 91, 0.2); transition: background var(--transition-speed); }
+    .btn-criar-anuncio:hover { background: var(--cor-principal-escura); transform: translateY(-2px); }
+    
+    /* CARD ANÚNCIO */
+    .host-card { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 20px; display: grid; grid-template-columns: 160px 1fr auto; gap: 20px; align-items: start; transition: transform var(--transition-speed); position: relative; }
+    .host-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .listing-main-photo { width: 160px; height: 140px; border-radius: 12px; overflow: hidden; background-color: #eee; flex-shrink: 0; }
+    .listing-main-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .host-info-principal { display: flex; flex-direction: column; gap: 10px; }
+    .host-header-row { display: flex; align-items: center; gap: 10px; }
+    .small-host-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .host-nome { font-weight: 700; font-size: 1.1rem; color: var(--cor-texto); line-height: 1.3; }
+    .host-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { background-color: #f0f0f0; color: #555; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; }
+    .host-experiencia { font-size: 0.9rem; color: var(--cor-texto-secundario); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .host-dates { font-size: 0.85rem; color: var(--cor-texto-secundario); font-weight: 600; margin-top: 4px; }
+    .host-preco { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; text-align: right; min-width: 120px;}
+    .host-preco strong { font-size: 1.2rem; color: var(--cor-texto); font-weight: 800; }
+    .card-actions { display: flex; gap: 8px; margin-top: 5px; }
+    .btn-ver-perfil { border-radius: 20px; border: 1px solid var(--cor-principal); padding: 8px 16px; font-size: 0.9rem; cursor: pointer; background-color: transparent; color: var(--cor-principal); font-weight: 600; transition: all var(--transition-speed); }
+    .btn-ver-perfil:hover { background-color: var(--cor-principal); color: #fff; }
+    .btn-delete { border-radius: 20px; border: 1px solid #dc2626; padding: 8px 12px; font-size: 0.9rem; cursor: pointer; background-color: #fff; color: #dc2626; font-weight: 600; transition: all var(--transition-speed); }
+    .btn-delete:hover { background-color: #dc2626; color: #fff; }
 
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
+    /* FORMULÁRIO */
+    .card-form-anuncio { background: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 30px; display: none; flex-direction: column; gap: 20px; border: 1px solid #e0e0e0; }
+    .row-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 15px; }
+    label { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--cor-texto); }
+    input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Nunito', sans-serif; font-size: 0.95rem; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--cor-principal); box-shadow: 0 0 0 3px rgba(226, 114, 91, 0.1); }
+    .photo-upload-area { border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; transition: border-color 0.2s; background: #f9fafb; }
+    .photo-upload-area:hover { border-color: var(--cor-principal); background: #fff5f5; }
+    .photo-preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
 
-    .topbar-left img {
-      width: 32px;
-      height: 32px;
-    }
-
-    .logo-text {
-      font-family: 'Parkinsans', sans-serif;
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: var(--cor-principal);
-    }
-
-    .topbar-center nav ul {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-
-    .topbar-center nav a {
-      text-decoration: none;
-      font-family: 'Parkinsans', sans-serif;
-      font-weight: 600;
-      color: var(--cor-texto-secundario);
-      font-size: 0.95rem;
-      transition: color var(--transition-speed);
-    }
-
-    .topbar-center nav a:hover {
-      color: var(--cor-principal);
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .perfil-bolinha {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: #ffe2da;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: var(--cor-principal-escura);
-      font-size: 1rem;
-    }
-
-    .perfil-nome {
-      font-family: 'Parkinsans', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--cor-texto);
-    }
-
-    /* ===== USER MENU (dropdown) ===== */
-    .user-menu {
+    /* PRÉ-VISUALIZAÇÃO COM CAPA E EXCLUIR FOTO */
+    .photo-preview-box{
       position: relative;
-    }
-
-    .user-trigger {
-      border: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 30px;
-      transition: background-color var(--transition-speed);
-    }
-
-    .user-trigger:hover {
-      background-color: #f0f0f0;
-    }
-
-    .user-trigger .caret {
-      font-size: 0.7rem;
-      color: var(--cor-texto-secundario);
-    }
-
-    .user-dropdown {
-      position: absolute;
-      right: 0;
-      top: calc(100% + 10px);
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      min-width: 200px;
-      padding: 8px 0;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: all 0.2s ease;
-      z-index: 101;
-      border: 1px solid #eee;
-    }
-
-    .user-menu:hover .user-dropdown {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .user-dropdown a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--cor-texto);
-      transition: background-color var(--transition-speed);
-    }
-
-    .user-dropdown a:hover {
-      background-color: #f8f9fa;
-      color: var(--cor-principal);
-    }
-
-    .user-dropdown .separator {
-      height: 1px;
-      background-color: #eee;
-      margin: 6px 0;
-    }
-
-    .user-dropdown a.delete-link {
-      color: #e74c3c;
-    }
-
-    .user-dropdown a.delete-link:hover {
-      background-color: #fff5f5;
-    }
-
-    /* CONTAINER PRINCIPAL */
-    .container-main {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-
-    /* CARDS SUPERIORES */
-    .top-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .top-card {
-      background-color: var(--cor-card);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      cursor: pointer;
-      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-      border: 1px solid transparent;
-    }
-
-    .top-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-hover);
-      border-color: #ffe2da;
-    }
-
-    .top-card-titulo {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--cor-texto);
-    }
-
-    .top-card-sub {
-      font-size: 0.9rem;
-      color: var(--cor-texto-secundario);
-      line-height: 1.4;
-    }
-
-    /* GRID PRINCIPAL */
-    .grid-main {
-      display: grid;
-      grid-template-columns: 280px 1fr 300px;
-      gap: 24px;
-      align-items: flex-start;
-    }
-
-    /* SIDEBAR ESQUERDA */
-    .sidebar-esq {
-      background-color: var(--cor-card);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .sidebar-section h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--cor-texto);
-    }
-
-    .sidebar-section p {
-      font-size: 0.85rem;
-      color: var(--cor-texto-secundario);
-      margin-bottom: 12px;
-    }
-
-    .filtro-botoes {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .btn-filtro {
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      background-color: #fff;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Nunito', sans-serif;
-      color: var(--cor-texto);
-      transition: all var(--transition-speed);
-    }
-
-    .btn-filtro:hover {
-      background-color: #f8f9fa;
-      border-color: #ccc;
-    }
-
-    .btn-filtro.ativo {
-      background-color: #fff0ec;
-      color: var(--cor-principal-escura);
-      border-color: var(--cor-principal);
-      font-weight: 600;
-    }
-
-    .btn-filtro span.emoji {
-      font-size: 1.1rem;
-    }
-
-    .select-cidade {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      font-size: 0.9rem;
-      font-family: 'Nunito', sans-serif;
-      color: var(--cor-texto);
-      background-color: #fff;
-      outline: none;
-    }
-    
-    .select-cidade:focus {
-        border-color: var(--cor-principal);
-    }
-
-    /* LISTA DE HOSPEDAGENS DO ANFITRIÃO */
-    .lista-hosts {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .lista-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .lista-header h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      font-family: 'Parkinsans', sans-serif;
-      color: var(--cor-texto);
-    }
-
-    .btn-criar-anuncio {
-      border: none;
-      border-radius: 30px;
-      padding: 10px 20px;
-      background: var(--cor-principal);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 10px rgba(226, 114, 91, 0.2);
-      transition: background var(--transition-speed), transform var(--transition-speed);
-    }
-
-    .btn-criar-anuncio:hover {
-      background: var(--cor-principal-escura);
-      transform: translateY(-2px);
-    }
-
-    .host-card {
-      background-color: var(--cor-card);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      padding: 24px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 20px;
-      align-items: start;
-      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-    }
-    
-    .host-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
-    }
-
-    .host-avatar {
       width: 80px;
       height: 80px;
-      border-radius: 12px;
-      background-color: #ffe2da;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #eee;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
+      background:#f3f4f6;
     }
-    
-    .host-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 12px;
-    }
-
-    .host-info-principal {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .host-nome {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--cor-texto);
-    }
-
-    .host-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tag {
-      background-color: #f0f0f0;
-      color: #555;
-      border-radius: 20px;
-      padding: 4px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-    
-    .tag.hospedagem { background-color: #e3f2fd; color: #1565c0; }
-    .tag.daycare { background-color: #fff3e0; color: #e65100; }
-    .tag.lar { background-color: #e8f5e9; color: #2e7d32; }
-
-    .host-experiencia {
-      font-size: 0.9rem;
-      color: var(--cor-texto-secundario);
-      line-height: 1.4;
-    }
-
-    .host-preco {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      text-align: right;
-    }
-
-    .host-preco span {
-        font-size: 0.9rem;
-        color: var(--cor-texto-secundario);
-    }
-
-    .host-preco strong {
-      font-size: 1.2rem;
-      color: var(--cor-texto);
-      font-weight: 800;
-    }
-
-    .btn-ver-perfil {
-      border-radius: 20px;
-      border: 1px solid var(--cor-principal);
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      background-color: transparent;
-      color: var(--cor-principal);
-      font-weight: 600;
-      font-family: 'Nunito', sans-serif;
-      transition: all var(--transition-speed);
-    }
-
-    .btn-ver-perfil:hover {
-      background-color: var(--cor-principal);
-      color: #fff;
-    }
-
-    /* CARD FORMULÁRIO "NOVA HOSPEDAGEM" */
-    .card-form-anuncio {
-      background: var(--cor-card);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      padding: 30px;
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      border: 1px solid #e0e0e0;
-    }
-
-    .card-form-anuncio h3 {
-      font-family: 'Parkinsans', sans-serif;
-      font-size: 1.3rem;
-      margin-bottom: 5px;
-    }
-
-    .card-form-anuncio p.sub {
-      font-size: 0.9rem;
-      color: var(--cor-texto-secundario);
-      margin-bottom: 15px;
-    }
-
-    .row-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-bottom: 15px;
-    }
-
-    label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: block;
-      color: var(--cor-texto);
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
+    .photo-preview-img{
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
-      transition: border-color var(--transition-speed);
-      outline: none;
+      height: 100%;
+      object-fit: cover;
     }
-    
-    input:focus, select:focus, textarea:focus {
-        border-color: var(--cor-principal);
-        box-shadow: 0 0 0 3px rgba(226, 114, 91, 0.1);
+    .photo-remove-btn{
+      position:absolute;
+      top:4px;
+      right:4px;
+      background:rgba(0,0,0,0.7);
+      color:#fff;
+      border:none;
+      border-radius:50%;
+      width:18px;
+      height:18px;
+      font-size:12px;
+      line-height:18px;
+      text-align:center;
+      cursor:pointer;
     }
-
-    textarea {
-      min-height: 80px;
-      resize: vertical;
+    .photo-cover-btn{
+      position:absolute;
+      bottom:4px;
+      left:4px;
+      background:rgba(0,0,0,0.7);
+      color:#fff;
+      border:none;
+      border-radius:12px;
+      padding:2px 6px;
+      font-size:10px;
+      cursor:pointer;
     }
-
-    .help {
-      font-size: 0.8rem;
-      color: var(--cor-texto-secundario);
-      margin-top: 4px;
-    }
-
-    .check-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 0.9rem;
-      margin-top: 8px;
-    }
-
-    .check-group label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 500;
-      margin: 0;
-      cursor: pointer;
+    .photo-preview-box.is-cover{
+      border:2px solid var(--cor-principal);
     }
 
-    .actions-inline {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
-
-    .btn-primary {
-      border: none;
-      border-radius: 25px;
-      padding: 10px 20px;
-      background: var(--cor-principal);
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: background-color var(--transition-speed);
-    }
-
-    .btn-primary:hover {
-      background: var(--cor-principal-escura);
-    }
-
-    .btn-outline {
-      border-radius: 25px;
-      padding: 10px 20px;
-      border: 1px solid #ccc;
-      background: #fff;
-      color: var(--cor-texto);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: background-color var(--transition-speed);
-    }
-
-    .btn-outline:hover {
-      background: #f0f0f0;
-    }
-    
-    .alert {
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-      display: none;
-    }
+    .check-group { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9rem; margin-top: 8px; }
+    .actions-inline { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+    .btn-primary { border: none; border-radius: 25px; padding: 10px 20px; background: var(--cor-principal); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+    .btn-outline { border-radius: 25px; padding: 10px 20px; border: 1px solid #ccc; background: #fff; color: var(--cor-texto); cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+    .alert { padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 15px; display: none; }
     .alert.ok { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
     .alert.err { background: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
-
-    /* SIDEBAR DIREITA */
-    .sidebar-dir {
-      background-color: var(--cor-card);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .checklist-perfil {
-      list-style: none;
-      padding-left: 0;
-      font-size: 0.9rem;
-      color: var(--cor-texto-secundario);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .checklist-perfil li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .checklist-perfil span.ico {
-      font-size: 1rem;
-    }
-
-    .reservas-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 0.9rem;
-    }
-
-    .reserva-item {
-      padding: 12px;
-      border-radius: 10px;
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: background-color var(--transition-speed);
-    }
+    .sidebar-dir { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 24px; display: flex; flex-direction: column; gap: 24px; }
     
-    .reserva-item:hover {
-        background-color: #fff0ec;
-        border-color: #ffe2da;
-    }
-
-    .reserva-item strong {
-      font-size: 0.95rem;
-      color: var(--cor-texto);
-    }
-
-    .reserva-item span {
-      color: var(--cor-texto-secundario);
-      font-size: 0.85rem;
-    }
-    
-    .link-ver-todas {
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--cor-principal);
-        display: inline-block;
-        margin-top: 10px;
-    }
-    
-    .link-ver-todas:hover {
-        text-decoration: underline;
-    }
-
-    /* Modal Exclusão e Toast */
+    /* MODALS */
     .pp-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
     .pp-card { background: #fff; width: 100%; max-width: 450px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: all 0.2s ease; }
     .pp-card.show { transform: scale(1); opacity: 1; }
@@ -717,280 +177,372 @@
     
     .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: none; z-index: 1100; }
 
-    /* === CHAT WIDGET PATAS POUSADA === */
-    .pp-chat-fab {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      background: #e2725b;
-      color: #fff;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0,0,0,.2);
-      z-index: 120;
-      transition: transform .2s, box-shadow .2s, background .2s;
+    @media (max-width: 1024px) { 
+      .grid-main { grid-template-columns: 1fr 300px; } 
+      .sidebar-esq { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; } 
+      .sidebar-esq > div { flex: 1; min-width: 250px; } 
     }
-    .pp-chat-fab:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0,0,0,.25);
-      background: #d45f47;
-    }
-    .pp-chat-fab i {
-      font-size: 1.3rem;
+    @media (max-width: 768px) { 
+        .grid-main { grid-template-columns: 1fr; } 
+        .topbar-center { display: none; } 
+        .sidebar-esq { flex-direction: column; } 
+        .host-card { grid-template-columns: 1fr; gap: 15px; } 
+        .listing-main-photo { width: 100%; height: 200px; } 
+        .host-header-row { flex-direction: column; align-items: flex-start; } 
+        .host-preco { align-items: flex-start; text-align: left; flex-direction: row; justify-content: space-between; width: 100%; margin-top: 10px; } 
     }
 
-    .pp-chat-widget {
-      position: fixed;
-      right: 20px;
-      bottom: 82px;
-      width: 380px;
-      max-height: 520px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.25);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 130;
-      font-family: 'Nunito', sans-serif;
+    /* =====================================================
+       CHAT WIDGET - MESMO VISUAL DO TUTOR (TAMANHO/COR)
+       ===================================================== */
+    .pp-chat-fab { 
+      position: fixed; 
+      right: 25px; 
+      bottom: 25px; 
+      width: 60px; 
+      height: 60px; 
+      border-radius: 50%; 
+      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
+      color: #fff; 
+      display: grid; 
+      place-items: center; 
+      cursor: pointer; 
+      box-shadow: 0 8px 24px rgba(226,114,91,0.4); 
+      z-index: 120; 
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .pp-chat-fab:hover { 
+      transform: scale(1.1) rotate(-5deg); 
+      box-shadow: 0 12px 28px rgba(226,114,91,0.6); 
+    }
+    .pp-chat-fab i { font-size: 1.6rem; }
+
+    .pp-badge { 
+      position: absolute; 
+      top: 0; 
+      right: 0; 
+      width: 20px; 
+      height: 20px; 
+      background: #dc2626; 
+      color: #fff; 
+      border-radius: 50%; 
+      font-size: 0.7rem; 
+      display: none; 
+      place-items: center; 
+      justify-content: center; 
+      border: 2px solid #fff; 
+      font-weight: 800; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+      animation: pulseBadge 2s infinite; 
+    }
+    .pp-badge.show { display: flex; }
+
+    @keyframes pulseBadge { 
+      0% { transform: scale(1); } 
+      50% { transform: scale(1.1); } 
+      100% { transform: scale(1); } 
     }
 
-    .pp-chat-header {
-      padding: 10px 14px;
-      border-bottom: 1px solid #e5e7eb;
-      background: #f9fafb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .pp-chat-header strong {
-      font-family: 'Parkinsans', sans-serif;
-      color: #111827;
-      font-size: 0.98rem;
-    }
-    #ppChatSubtitle {
-      display: block;
-      font-size: 0.75rem;
-      color: #6b7280;
-    }
-    .pp-chat-close {
-      border: none;
-      background: transparent;
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: #9ca3af;
-      padding: 0 4px;
-    }
-    .pp-chat-close:hover { color: #4b5563; }
-
-    .pp-chat-body {
-      display: grid;
-      grid-template-columns: 130px 1fr;
-      height: 440px;
-    }
-    .pp-chat-conversations {
-      border-right: 1px solid #e5e7eb;
-      background: #f9fafb;
-      overflow-y: auto;
-    }
-    .pp-chat-conv-list {
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .pp-chat-conv-item {
-      border-radius: 10px;
-      padding: 6px 8px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      transition: background .15s, transform .15s;
-    }
-    .pp-chat-conv-item:hover {
-      background: #f3f4f6;
-      transform: translateY(-1px);
-    }
-    .pp-chat-conv-item.active {
-      background: #ffe7e0;
-    }
-    .pp-chat-conv-name {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #111827;
-    }
-    .pp-chat-conv-meta {
-      font-size: 0.7rem;
-      color: #6b7280;
+    .pp-chat-widget { 
+      position: fixed; 
+      right: 25px; 
+      bottom: 100px; 
+      width: 420px; 
+      max-height: 600px; 
+      background: #fff; 
+      border-radius: 20px; 
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.03); 
+      display: none; 
+      flex-direction: column; 
+      overflow: hidden; 
+      z-index: 130; 
+      font-family: 'Nunito', sans-serif; 
+      animation: chatSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .pp-chat-thread {
-      display: flex;
-      flex-direction: column;
-      background: #f3f4f6;
-    }
-    .pp-chat-messages {
-      flex: 1;
-      padding: 10px 10px 6px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    @keyframes chatSlideUp { 
+      from { opacity: 0; transform: translateY(20px) scale(0.95); } 
+      to { opacity: 1; transform: translateY(0) scale(1); } 
     }
 
-    .pp-chat-msg-row {
-      display: flex;
+    .pp-chat-header { 
+      padding: 16px 20px; 
+      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
+      color: #fff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-shrink: 0; 
+      box-shadow: 0 4px 12px rgba(212, 95, 71, 0.2); 
+      z-index: 2; 
     }
-    .pp-chat-msg-row.me {
-      justify-content: flex-end;
+    .pp-chat-header strong { 
+      font-family: 'Parkinsans', sans-serif; 
+      font-size: 1.1rem; 
+      line-height: 1.2; 
+      letter-spacing: -0.5px; 
+      color: #fff; 
     }
-    .pp-chat-bubble {
-      max-width: 80%;
-      border-radius: 16px;
-      padding: 7px 10px;
-      font-size: 0.83rem;
-      line-height: 1.4;
-      position: relative;
+    #ppChatSubtitle { 
+      display: block; 
+      font-size: 0.8rem; 
+      color: rgba(255,255,255,0.85); 
+      margin-top: 2px; 
+      font-weight: 400; 
     }
-    .pp-chat-bubble.me {
-      background: #e2725b;
-      color: #fff;
-      border-bottom-right-radius: 4px;
+    .pp-chat-close { 
+      border: none; 
+      background: rgba(255,255,255,0.2); 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 50%; 
+      font-size: 0.9rem; 
+      cursor: pointer; 
+      color: #fff; 
+      display: grid; 
+      place-items: center; 
+      transition: background 0.2s; 
     }
-    .pp-chat-bubble.other {
-      background: #fff;
-      color: #111827;
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    }
-    .pp-chat-time {
-      font-size: 0.65rem;
-      color: #9ca3af;
-      margin-top: 2px;
-      text-align: right;
+    .pp-chat-close:hover { background: rgba(255,255,255,0.35); }
+
+    .pp-chat-body { 
+      display: grid; 
+      grid-template-columns: 140px 1fr; 
+      height: 450px; 
+      overflow: hidden; 
+      background: #fff; 
     }
 
-    .pp-chat-input-area {
-      display: flex;
-      padding: 8px;
-      gap: 8px;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
+    .pp-chat-conversations { 
+      background: #f8f9fa; 
+      border-right: 1px solid #e5e7eb; 
+      overflow-y: auto; 
+      padding: 8px; 
+      scrollbar-width: thin; 
     }
-    .pp-chat-input-area input {
-      flex: 1;
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .pp-chat-input-area input:focus {
-      border-color: #e2725b;
-      box-shadow: 0 0 0 2px rgba(226,114,91,0.2);
-    }
-    .pp-chat-input-area button {
-      width: 36px;
-      border-radius: 999px;
-      border: none;
-      background: #e2725b;
-      color: #fff;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: background .2s, transform .1s;
-    }
-    .pp-chat-input-area button:hover {
-      background: #d45f47;
-      transform: translateY(-1px);
-    }
-    .pp-chat-input-area button i {
-      font-size: 0.9rem;
+    .pp-chat-conversations::-webkit-scrollbar, 
+    .pp-chat-messages::-webkit-scrollbar { width: 8px; }
+    .pp-chat-conversations::-webkit-scrollbar-track, 
+    .pp-chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .pp-chat-conversations::-webkit-scrollbar-thumb, 
+    .pp-chat-messages::-webkit-scrollbar-thumb { 
+      background-color: #ccc; 
+      border-radius: 10px; 
+      border: 2px solid #fff; 
     }
 
-    @media (max-width: 1024px) {
-      .grid-main {
-        grid-template-columns: 1fr 300px;
-      }
-      .sidebar-esq {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      .sidebar-esq > div {
-          flex: 1;
-          min-width: 250px;
-      }
+    .pp-chat-conv-item { 
+      border-radius: 10px; 
+      padding: 12px 10px; 
+      cursor: pointer; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 4px; 
+      transition: all 0.2s; 
+      border-left: 3px solid transparent; 
+      margin-bottom: 4px; 
+      position: relative; 
+      padding-right: 32px; 
+      min-height: 50px; 
+      justify-content: center;
+    }
+    .pp-chat-conv-item:hover { 
+      background: #fff; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    }
+    .pp-chat-conv-item.active { 
+      background: #fff; 
+      border-left-color: var(--cor-principal); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
     }
 
-    @media (max-width: 768px) {
-      .grid-main {
-        grid-template-columns: 1fr;
-      }
-      
-      .topbar-center { display: none; }
-      
-      .sidebar-esq {
-          flex-direction: column;
-      }
-      
-      .host-card {
-          grid-template-columns: 1fr;
-          text-align: center;
-      }
-      
-      .host-avatar {
-          margin: 0 auto;
-      }
-      
-      .host-info-principal {
-          align-items: center;
-      }
-      
-      .host-tags {
-          justify-content: center;
-      }
-      
-      .host-preco {
-          align-items: center;
-          text-align: center;
-          margin-top: 15px;
-          width: 100%;
-          flex-direction: row;
-          justify-content: space-between;
-      }
-      
-      .lista-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
-      }
-      
-      .btn-criar-anuncio {
-          width: 100%;
-          justify-content: center;
-      }
+    .pp-chat-conv-name { 
+      font-size: 0.85rem; 
+      font-weight: 700; 
+      color: #374151; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+    .pp-chat-conv-role { 
+      font-size: 0.65rem; 
+      color: var(--cor-principal); 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+    }
+    .pp-chat-conv-meta { 
+      font-size: 0.7rem; 
+      color: #9ca3af; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      width: 100%; 
+    }
 
-      .pp-chat-widget {
-        right: 10px;
-        left: 10px;
-        width: auto;
-        bottom: 80px;
-      }
-      .pp-chat-body {
-        grid-template-columns: 1fr;
-      }
-      .pp-chat-conversations {
-        display: none;
-      }
+    /* botão excluir conversa – mesmo visual do tutor */
+    .pp-chat-conv-delete {
+      position:absolute;
+      top:6px;
+      right:6px;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      border:none;
+      background:transparent;
+      color:#9ca3af;
+      display:grid;
+      place-items:center;
+      font-size:0.6rem;
+      cursor:pointer;
+      transition:background .15s,color .15s;
+      z-index:10;
+    }
+    .pp-chat-conv-item:hover .pp-chat-conv-delete{ color:#6b7280; }
+    .pp-chat-conv-delete:hover{
+      background:#fee2e2;
+      color:#b91c1c;
+    }
+
+    .pp-chat-thread { 
+      display: flex; 
+      flex-direction: column; 
+      height: 100%; 
+      position: relative; 
+      background-color: #fff9f8; 
+      background-image: radial-gradient(rgba(226, 114, 91, 0.15) 1px, transparent 1px); 
+      background-size: 20px 20px; 
+      overflow: hidden; 
+    }
+    .pp-chat-messages { 
+      flex: 1; 
+      padding: 16px; 
+      overflow-y: auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      min-height: 0; 
+    }
+    .pp-chat-messages::-webkit-scrollbar-thumb { 
+      border: 2px solid #fff9f8; 
+    }
+    .pp-chat-messages:empty::before { 
+      content: "👋 Selecione ou inicie uma conversa"; 
+      display: flex; 
+      height: 100%; 
+      align-items: center; 
+      justify-content: center; 
+      color: #9ca3af; 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      text-align: center; 
+    }
+
+    .pp-chat-msg-row { 
+      display: flex; 
+      width: 100%; 
+      animation: fadeInMsg 0.2s ease-out; 
+    }
+    .pp-chat-msg-row.me { justify-content: flex-end; }
+
+    @keyframes fadeInMsg { 
+      from{opacity:0; transform:translateY(5px);} 
+      to{opacity:1; transform:translateY(0);} 
+    }
+
+    .pp-chat-bubble { 
+      max-width: 80%; 
+      padding: 10px 14px; 
+      font-size: 0.9rem; 
+      line-height: 1.45; 
+      position: relative; 
+      word-wrap: break-word; 
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08); 
+    }
+    .pp-chat-bubble.me { 
+      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
+      color: #fff; 
+      border-radius: 16px 16px 2px 16px; 
+    }
+    .pp-chat-bubble.other { 
+      background: #fff; 
+      color: #1f2937; 
+      border: 1px solid #eee; 
+      border-radius: 16px 16px 16px 2px; 
+    }
+
+    .pp-chat-time { 
+      font-size: 0.65rem; 
+      margin-top: 4px; 
+      text-align: right; 
+      opacity: 0.8; 
+      font-weight: 500; 
+    }
+    .pp-chat-bubble.other .pp-chat-time { color: #9ca3af; }
+
+    .pp-chat-input-area { 
+      display: flex; 
+      padding: 12px; 
+      gap: 10px; 
+      border-top: 1px solid #e5e7eb; 
+      background: #fff; 
+      flex-shrink: 0; 
+    }
+    .pp-chat-input-area input { 
+      flex: 1; 
+      border-radius: 24px; 
+      border: 1px solid #e5e7eb; 
+      padding: 10px 16px; 
+      font-size: 0.9rem; 
+      outline: none; 
+      font-family: 'Nunito', sans-serif; 
+      background: #f9fafb; 
+      transition: all 0.2s; 
+    }
+    .pp-chat-input-area input:focus { 
+      background: #fff; 
+      border-color: var(--cor-principal); 
+      box-shadow: 0 0 0 4px rgba(226,114,91,0.1); 
+    }
+    .pp-chat-input-area button { 
+      width: 42px; 
+      height: 42px; 
+      border-radius: 50%; 
+      border: none; 
+      background: var(--cor-principal); 
+      color: #fff; 
+      cursor: pointer; 
+      display: grid; 
+      place-items: center; 
+      transition: all 0.2s; 
+      flex-shrink: 0; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+    }
+    .pp-chat-input-area button:hover { 
+      background: var(--cor-principal-escura); 
+      transform: scale(1.05); 
+      box-shadow: 0 4px 10px rgba(226,114,91,0.3); 
+    }
+
+    @media (max-width: 600px) { 
+      .pp-chat-widget { 
+        right: 0; 
+        left: 0; 
+        bottom: 0; 
+        width: 100%; 
+        height: 100dvh; 
+        max-height: none; 
+        border-radius: 0; 
+      } 
+      .pp-chat-body { 
+        grid-template-columns: 1fr; 
+        height: calc(100% - 65px); 
+      } 
+      .pp-chat-conversations { display: none; } 
+      .pp-chat-fab { bottom: 20px; right: 20px; } 
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
@@ -999,39 +551,29 @@
         <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
         <span class="logo-text">Patas Pousada</span>
       </a>
-
       <div class="topbar-center">
         <nav>
           <ul>
-            <li><a href="home_host.html">Reservas</a></li>
+            <li><a href="#">Reservas</a></li>
             <li><a href="ajuda.html">Ajuda</a></li>
-            <li><a href="home_host.html">Lar Temporário</a></li>
+            <li><a href="#">Lar Temporário</a></li>
           </ul>
         </nav>
       </div>
-
       <div class="topbar-right">
         <div class="user-menu">
           <button type="button" class="user-trigger">
-            <div class="perfil-bolinha" id="perfilBolinha">A</div>
+            <div class="perfil-bolinha" id="perfilBolinha">
+              <img id="perfilFoto" src="" alt="Foto">
+              <span id="perfilInicial">U</span>
+            </div>
             <span class="perfil-nome" id="perfilNome">Carregando...</span>
-            <span class="caret"><i class="fas fa-chevron-down"></i></span>
+            <i class="fas fa-chevron-down" style="font-size:0.8rem; color:#666"></i>
           </button>
-
           <div class="user-dropdown">
-            <a href="menu_perfil_host.html">
-              <i class="fa-solid fa-user-pen"></i>
-              <span>Editar perfil</span>
-            </a>
-            <a href="#" id="linkSair">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Sair</span>
-            </a>
-            <div class="separator"></div>
-            <a href="#" id="linkExcluir" class="delete-link">
-              <i class="fa-solid fa-user-xmark"></i>
-              <span>Excluir conta</span>
-            </a>
+            <a href="menu_perfil_host.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+            <a href="#" id="linkExcluirConta" style="color:#dc2626;"><i class="fa-solid fa-user-xmark"></i> Excluir conta</a>
+            <a href="#" id="linkSair"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
           </div>
         </div>
       </div>
@@ -1040,7 +582,7 @@
 
   <main class="container-main">
     <section class="top-cards">
-      <div class="top-card" onclick="window.location.href='home_host.html'">
+      <div class="top-card" onclick="window.location.reload()">
         <span class="top-card-titulo">🏠 Seu painel</span>
         <span class="top-card-sub">Visão geral de reservas e ganhos.</span>
       </div>
@@ -1057,35 +599,12 @@
     <section class="grid-main">
       <aside class="sidebar-esq">
         <div class="sidebar-section">
-          <h3>Serviços oferecidos</h3>
-          <p>Filtre pelo tipo de serviço que você disponibiliza.</p>
+          <h3>Filtrar seus anúncios</h3>
           <div class="filtro-botoes">
-            <button class="btn-filtro ativo" data-service="all">
-              <span class="emoji">🔎</span> Todos
-            </button>
-            <button class="btn-filtro" data-service="daycare">
-              <span class="emoji">🐶</span> Day Care
-            </button>
-            <button class="btn-filtro" data-service="hospedagem">
-              <span class="emoji">🏡</span> Hospedagem
-            </button>
-            <button class="btn-filtro" data-service="lar">
-              <span class="emoji">📍</span> Lar Temporário
-            </button>
+            <button class="btn-filtro ativo" onclick="filtrarLista('all')">🔎 Todos</button>
+            <button class="btn-filtro" onclick="filtrarLista('Day Care')">🐶 Day Care</button>
+            <button class="btn-filtro" onclick="filtrarLista('Hospedagem')">🏡 Hospedagem</button>
           </div>
-        </div>
-
-        <div class="sidebar-section">
-          <h3>Localização</h3>
-          <p>Filtre por cidade do imóvel.</p>
-          <select class="select-cidade">
-            <option value="">Todas as cidades</option>
-            <option value="Brasília">Brasília</option>
-            <option value="Taguatinga">Taguatinga</option>
-            <option value="Guará">Guará</option>
-            <option value="Águas Claras">Águas Claras</option>
-            <option value="Ceilândia">Ceilândia</option>
-          </select>
         </div>
       </aside>
 
@@ -1093,38 +612,58 @@
         <div class="lista-header">
           <h2>Minhas hospedagens</h2>
           <button type="button" class="btn-criar-anuncio" id="btnToggleForm">
-            <i class="fa-solid fa-plus"></i>
-            <span>Criar anúncio</span>
+            <i class="fa-solid fa-plus"></i> <span>Criar anúncio</span>
           </button>
         </div>
 
         <article class="card-form-anuncio" id="cardNovaHospedagem">
           <div>
-              <h3>Novo anúncio</h3>
-              <p class="sub">Preencha os dados para disponibilizar seu espaço.</p>
+              <h3><span id="formModeText">Novo</span> anúncio</h3>
+              <p class="sub">Preencha os dados do seu espaço.</p>
           </div>
-
           <div id="alertOk" class="alert ok"></div>
           <div id="alertErr" class="alert err"></div>
 
           <form id="formNovaHospedagem">
+            <input type="hidden" id="existingPhotos" value="">
+
             <div class="row-form">
               <div>
                 <label for="titulo">Título do anúncio</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Ex: Casa com quintal amplo">
+                <input type="text" id="titulo" required placeholder="Ex: Casa com quintal amplo">
               </div>
               <div>
                 <label for="cidade">Cidade</label>
-                <select id="cidade" name="cidade">
+                <select id="cidade" required>
                   <option value="">Selecione...</option>
                   <option value="Brasília">Brasília</option>
                   <option value="Taguatinga">Taguatinga</option>
                   <option value="Guará">Guará</option>
                   <option value="Águas Claras">Águas Claras</option>
-                  <option value="Ceilândia">Ceilândia</option>
                   <option value="Sobradinho">Sobradinho</option>
                 </select>
               </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Fotos do local</label>
+                <label for="listingPhotosInput" class="photo-upload-area">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: var(--cor-principal); margin-bottom: 8px;"></i>
+                    <div>Clique para selecionar fotos (máx 5)</div>
+                </label>
+                <input type="file" id="listingPhotosInput" multiple accept="image/*" style="display: none;">
+                <div id="photoPreview" class="photo-preview-container"></div>
+            </div>
+
+            <div class="row-form">
+                <div>
+                    <label for="data_inicio">Disponível de:</label>
+                    <input type="date" id="data_inicio">
+                </div>
+                <div>
+                    <label for="data_fim">Até:</label>
+                    <input type="date" id="data_fim">
+                </div>
             </div>
 
             <div>
@@ -1140,37 +679,17 @@
             <div class="row-form">
               <div>
                 <label for="preco_noite">Valor Diária (R$)</label>
-                <input type="number" id="preco_noite" name="preco_noite" min="0" step="0.01" placeholder="0,00">
-              </div>
-              <div>
-                <label for="preco_daycare">Valor Day Care (R$)</label>
-                <input type="number" id="preco_daycare" name="preco_daycare" min="0" step="0.01" placeholder="0,00">
+                <input type="number" id="preco_noite" min="0" step="0.01" placeholder="0,00">
               </div>
               <div>
                 <label for="capacidade">Capacidade (Pets)</label>
-                <input type="number" id="capacidade" name="capacidade" min="1" placeholder="Ex: 2">
+                <input type="number" id="capacidade" min="1" placeholder="Ex: 2">
               </div>
             </div>
-
-            <div>
-              <label>Porte Aceito</label>
-              <div class="check-group">
-                <label><input type="checkbox" name="portes" value="Pequeno"> Pequeno</label>
-                <label><input type="checkbox" name="portes" value="Médio"> Médio</label>
-                <label><input type="checkbox" name="portes" value="Grande"> Grande</label>
-              </div>
-            </div>
-            <br>
 
             <div>
               <label for="descricao">Descrição</label>
-              <textarea id="descricao" name="descricao" placeholder="Descreva seu espaço, ambiente e diferenciais..."></textarea>
-            </div>
-            <br>
-
-            <div>
-              <label for="regras">Regras da Casa</label>
-              <textarea id="regras" name="regras" placeholder="Ex: Trazer ração, carteira de vacinação em dia..."></textarea>
+              <textarea id="descricao" required placeholder="Descreva seu espaço..."></textarea>
             </div>
 
             <div class="actions-inline">
@@ -1180,122 +699,23 @@
           </form>
         </article>
 
-        <article class="host-card" data-service="hospedagem,daycare">
-          <div class="host-avatar" id="avatarEmoji">
-              <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Avatar">
-          </div>
-          <div class="host-info-principal">
-            <div class="host-nome" id="hostTituloPrincipal">Espaço Aconchego • Taguatinga</div>
-            <div class="host-tags">
-              <span class="tag hospedagem">Hospedagem</span>
-              <span class="tag daycare">Day Care</span>
-            </div>
-            <div class="host-experiencia">
-              Apartamento pet friendly com sacada telada. Passeios diários inclusos e muito carinho.
-            </div>
-          </div>
-          <div class="host-preco">
-            <span>A partir de</span>
-            <strong>R$ 45,00 <small>/ dia</small></strong>
-            <button class="btn-ver-perfil">Editar</button>
-          </div>
-        </article>
-
-        <article class="host-card" data-service="lar,hospedagem">
-          <div class="host-avatar">
-              <img src="https://cdn-icons-png.flaticon.com/512/2317/2317963.png" alt="Avatar">
-          </div>
-          <div class="host-info-principal">
-            <div class="host-nome">Casa com Quintal • Guará</div>
-            <div class="host-tags">
-              <span class="tag lar">Lar Temporário</span>
-              <span class="tag hospedagem">Hospedagem</span>
-            </div>
-            <div class="host-experiencia">
-              Ampla área verde para cães de grande porte. Monitoramento 24h e brincadeiras.
-            </div>
-          </div>
-          <div class="host-preco">
-            <span>A partir de</span>
-            <strong>R$ 55,00 <small>/ dia</small></strong>
-            <button class="btn-ver-perfil">Editar</button>
-          </div>
-        </article>
+        <div id="listaAnunciosContainer">
+           <p style="padding:20px; color:#666;">Carregando seus anúncios...</p>
+        </div>
       </section>
 
       <aside class="sidebar-dir">
         <div class="sidebar-section">
             <h3>Perfil do Anfitrião</h3>
             <p>Complete as informações para atrair mais tutores.</p>
-            <ul class="checklist-perfil">
-              <li><span class="ico">✅</span> Foto de perfil</li>
-              <li><span class="ico">✅</span> Telefone verificado</li>
-              <li><span class="ico">⬜</span> Fotos do ambiente</li>
-              <li><span class="ico">⬜</span> Descrição detalhada</li>
-            </ul>
-        </div>
-        
-        <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
-
-        <div class="sidebar-section">
-            <h3>Próximas Reservas</h3>
-            <div class="reservas-list">
-              <!-- Exemplo com IDs fictícios. Depois você troca por dados reais do Supabase -->
-              <div class="reserva-item" data-booking-id="booking-thor" data-tutor-id="tutor-1">
-                <strong>Thor (Golden)</strong>
-                <span>12/12 a 15/12 • Hospedagem</span>
-                <button
-                  type="button"
-                  class="btn-ver-perfil btn-chat-tutor"
-                  data-tutor-id="tutor-1"
-                  data-booking-id="booking-thor"
-                >
-                  Conversar com tutor
-                </button>
-              </div>
-              <div class="reserva-item" data-booking-id="booking-luna" data-tutor-id="tutor-2">
-                <strong>Luna (Gata)</strong>
-                <span>18/12 • Day Care</span>
-                <button
-                  type="button"
-                  class="btn-ver-perfil btn-chat-tutor"
-                  data-tutor-id="tutor-2"
-                  data-booking-id="booking-luna"
-                >
-                  Conversar com tutor
-                </button>
-              </div>
-            </div>
-            <a href="#" class="link-ver-todas">Ver agenda completa →</a>
         </div>
       </aside>
     </section>
   </main>
 
-  <!-- MODAL EXCLUIR CONTA -->
-  <div class="pp-wrap" id="ppDelete">
-    <div class="pp-card" role="dialog" aria-modal="true">
-      <header>
-        <span class="ic">!</span>
-        <h4>Excluir Conta</h4>
-      </header>
-      <div class="pp-body">
-        <p>Tem certeza? Esta ação é <strong>irreversível</strong> e apagará todos os seus anúncios e dados.</p>
-        <p>Digite <strong>EXCLUIR</strong> abaixo para confirmar:</p>
-        <input id="delConfirmTextHost" type="text" placeholder="EXCLUIR">
-      </div>
-      <div class="pp-ft">
-        <button class="pp-btn" id="delCancelHost">Cancelar</button>
-        <button class="pp-btn pp-ok" id="delOkHost">Confirmar Exclusão</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toastHost"></div>
-
-  <!-- CHAT WIDGET -->
   <div class="pp-chat-fab" id="ppChatFab">
     <i class="fa-solid fa-comments"></i>
+    <span class="pp-badge" id="ppBadge">!</span>
   </div>
 
   <div class="pp-chat-widget" id="ppChatWidget">
@@ -1304,25 +724,24 @@
         <strong>Mensagens</strong>
         <span id="ppChatSubtitle">Selecione uma conversa</span>
       </div>
-      <button class="pp-chat-close" id="ppChatClose">&times;</button>
+      <button class="pp-chat-close" id="ppChatClose">
+        <i class="fa-solid fa-minus"></i>
+      </button>
     </div>
 
     <div class="pp-chat-body">
       <aside class="pp-chat-conversations">
-        <div class="pp-chat-conv-list" id="ppChatConvList">
-          <!-- lista de conversas -->
-        </div>
+        <div class="pp-chat-conv-list" id="ppChatConvList"></div>
       </aside>
 
       <section class="pp-chat-thread">
-        <div class="pp-chat-messages" id="ppChatMessages">
-          <!-- mensagens -->
-        </div>
+        <div class="pp-chat-messages" id="ppChatMessages"></div>
+        
         <form class="pp-chat-input-area" id="ppChatForm">
           <input
             type="text"
             id="ppChatInput"
-            placeholder="Digite uma mensagem..."
+            placeholder="Digite sua mensagem..."
             autocomplete="off"
           />
           <button type="submit">
@@ -1333,22 +752,92 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div class="pp-wrap" id="ppDeleteListing">
+    <div class="pp-card" role="dialog" aria-modal="true">
+      <header>
+        <span class="ic">!</span>
+        <h4>Excluir Anúncio</h4>
+      </header>
+      <div class="pp-body">
+        <p>Tem certeza que deseja excluir este anúncio? Essa ação não pode ser desfeita.</p>
+      </div>
+      <div class="pp-ft">
+        <button class="pp-btn" id="delListingCancel">Cancelar</button>
+        <button class="pp-btn pp-ok" id="delListingOk">Sim, Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-wrap" id="ppDeleteAccount">
+    <div class="pp-card" role="dialog" aria-modal="true">
+      <header>
+        <span class="ic">!</span>
+        <h4>Excluir conta</h4>
+      </header>
+      <div class="pp-body">
+        <p>Tem certeza que deseja excluir sua conta de anfitrião?</p>
+        <p>Isso irá remover seus anúncios e dados de perfil. Essa ação não pode ser desfeita.</p>
+      </div>
+      <div class="pp-ft">
+        <button class="pp-btn" id="delAccountCancel">Cancelar</button>
+        <button class="pp-btn pp-ok" id="delAccountOk">Sim, excluir conta</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastHost"></div>
+
   <script>
-    // ===== CONFIG SUPABASE =====
     const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentUserEmail = null;
-    let currentUserId    = null;
+    let currentUser = null;
+    let currentProfile = {};
+    let myListingsData = []; 
+    let editingListingId = null; 
+    let deletingListingId = null;
 
-    function initials(name){
-      if(!name) return "A";
-      const p = name.trim().split(/\s+/);
-      const i1 = (p[0]?.[0] || "").toUpperCase();
-      const i2 = (p[1]?.[0] || "").toUpperCase();
-      return (i1 + i2).trim() || "A";
+    // controle de fotos
+    let currentPhotos = [];      // URLs já salvas no anúncio
+    let selectedFiles = [];      // Files novos selecionados
+    let coverSource = null;      // 'existing' | 'new' | null
+    let coverIndex = 0;
+
+    // --- 1. INICIALIZAÇÃO ---
+    async function init(){
+      const { data: { user } } = await sb.auth.getUser();
+      if(!user) { window.location.href = "cadastrarouentrar.html"; return; }
+      currentUser = user;
+      
+      // Busca dados do anfitrião
+      let { data: hostData } = await sb.from('hosts').select('*').eq('id', user.id).maybeSingle();
+      
+      if (!hostData) {
+         const { data: profileData } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+         currentProfile = profileData || {};
+      } else {
+         currentProfile = hostData;
+      }
+      
+      updateHeader();
+      loadMyListings();
+      ppInitChat(); // Inicia o chat
+    }
+
+    function updateHeader(){
+      let name = currentProfile.full_name || currentProfile.first_name;
+      if(!name) name = "Anfitrião";
+
+      document.getElementById('perfilNome').textContent = name;
+      document.getElementById('perfilInicial').textContent = name[0].toUpperCase();
+      
+      if(currentProfile.avatar_url){
+        const img = document.getElementById('perfilFoto');
+        img.src = currentProfile.avatar_url + '?t=' + new Date().getTime();
+        img.style.display = 'block';
+        document.getElementById('perfilInicial').style.display = 'none';
+      }
     }
 
     function toastHost(msg){
@@ -1358,259 +847,448 @@
       setTimeout(()=>{ t.style.display = "none"; }, 3000);
     }
 
-    function showAlertOk(msg){
-      const ok  = document.getElementById("alertOk");
-      const err = document.getElementById("alertErr");
-      if(!ok || !err) return;
-      err.style.display = "none";
-      ok.textContent = msg;
-      ok.style.display = msg ? "block" : "none";
-    }
-    function showAlertErr(msg){
-      const ok  = document.getElementById("alertOk");
-      const err = document.getElementById("alertErr");
-      if(!ok || !err) return;
-      ok.style.display = "none";
-      err.textContent = msg;
-      err.style.display = msg ? "block" : "none";
-    }
+    // --- 2. CARREGAR ANÚNCIOS ---
+    async function loadMyListings(){
+      const container = document.getElementById('listaAnunciosContainer');
+      
+      const { data, error } = await sb
+        .from('listings')
+        .select('*')
+        .eq('host_id', currentUser.id)
+        .order('created_at', { ascending: false });
 
-    async function requireAuth(){
-      const { data:{ user } } = await sb.auth.getUser();
-      if(!user){
-        location.href = "cadastrarouentrar.html?next=home_host.html";
-        return null;
+      if(error){ 
+          console.error("Erro ao carregar:", error);
+          container.innerHTML = '<p>Erro ao carregar anúncios.</p>'; 
+          return; 
       }
-      currentUserEmail = user.email;
-      currentUserId    = user.id;
-      return user;
-    }
 
-    async function loadHostName(user){
-      const spanNome   = document.getElementById("perfilNome");
-      const bolinha    = document.getElementById("perfilBolinha");
-      const hostTitulo = document.getElementById("hostTituloPrincipal");
+      myListingsData = data || []; 
 
-      let displayName = null;
-      let cidade = "";
+      if(myListingsData.length === 0){
+        container.innerHTML = `<div style="padding:40px; text-align:center; background:#fff; border-radius:12px; border:1px solid #eee;"><h3>Você ainda não tem anúncios!</h3><p>Clique em 'Criar anúncio' acima.</p></div>`;
+        return;
+      }
 
-      try{
-        const { data: hostRow, error } = await sb
-          .from("hosts")
-          .select("full_name, city")
-          .eq("id", user.id)
-          .maybeSingle();
+      container.innerHTML = '';
+      myListingsData.forEach(ad => {
+        const div = document.createElement('div');
+        div.className = 'host-card';
+        
+        let tagsHtml = '';
+        if(ad.services){ ad.services.forEach(s => { const cls = s.replace(/\s+/g, '.'); tagsHtml += `<span class="tag ${cls}">${s}</span>`; }); }
 
-        if(!error && hostRow){
-          displayName = hostRow.full_name || null;
-          cidade = hostRow.city || "";
+        const preco = ad.price_night || ad.price_daycare || 0;
+
+        const hostName = currentProfile.full_name || currentProfile.first_name || "Anfitrião";
+        const hostAvatarSrc = currentProfile.avatar_url || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
+
+        let mainPhotoSrc = "https://placehold.co/400x300/eee/999?text=Sem+foto";
+        if(ad.photos_url && ad.photos_url.length > 0){
+            mainPhotoSrc = ad.photos_url[0];
         }
-      }catch(e){
-        console.error("Erro ao buscar host:", e);
-      }
 
-      if(!displayName){
-        displayName =
-          user.user_metadata?.full_name ||
-          (user.email ? user.email.split("@")[0] : "Anfitrião");
-      }
+        let dateHtml = '';
+        if(ad.available_start && ad.available_end) {
+            const d1 = new Date(ad.available_start).toLocaleDateString('pt-BR');
+            const d2 = new Date(ad.available_end).toLocaleDateString('pt-BR');
+            dateHtml = `<div class="host-dates"><i class="fa-regular fa-calendar"></i> ${d1} até ${d2}</div>`;
+        }
 
-      spanNome.textContent = displayName;
-      bolinha.textContent  = initials(displayName);
+        let createdHtml = '';
+        if(ad.created_at){
+          const created = new Date(ad.created_at).toLocaleDateString('pt-BR');
+          createdHtml = `<div class="host-dates"><i class="fa-regular fa-clock"></i> Anúncio criado em ${created}</div>`;
+        }
 
-      if(hostTitulo){
-        const cidadeTexto = cidade ? " • " + cidade : "";
-        // se quiser usar o nome do anfitrião no título:
-        // hostTitulo.textContent = displayName + cidadeTexto;
-      }
+        div.innerHTML = `
+          <div class="listing-main-photo">
+              <img src="${mainPhotoSrc}" alt="Foto do local">
+          </div>
+          <div class="host-info-principal">
+            <div class="host-header-row">
+                <img src="${hostAvatarSrc}" alt="Host" class="small-host-avatar">
+                <div class="host-nome">${hostName} • ${ad.title}</div>
+            </div>
+            <div class="host-tags">${tagsHtml}</div>
+            <div class="host-experiencia">${ad.description || 'Sem descrição.'}</div>
+            ${dateHtml}
+            ${createdHtml}
+          </div>
+          <div class="host-preco">
+            <span>A partir de</span>
+            <strong>R$ ${preco},00 <small>/ dia</small></strong>
+            <div class="card-actions">
+                <button class="btn-ver-perfil" onclick="startEditListing(${ad.id})">Editar</button>
+                <button class="btn-delete" onclick="confirmDeleteListing(${ad.id})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
     }
 
-    async function handleLogout(event){
-      event.preventDefault();
-      try{
+    // --- UPLOAD / PRÉ-VISUALIZAÇÃO DE FOTOS ---
+    const photosInput = document.getElementById('listingPhotosInput');
+    const photoPreview = document.getElementById('photoPreview');
+
+    function resetCoverSelection(){
+      coverSource = null;
+      coverIndex = 0;
+    }
+
+    function renderPhotoPreview(){
+      photoPreview.innerHTML = '';
+      document.getElementById('existingPhotos').value = JSON.stringify(currentPhotos);
+
+      currentPhotos.forEach((url, idx) => {
+        const box = document.createElement('div');
+        box.className = 'photo-preview-box';
+        if(coverSource === 'existing' && coverIndex === idx){
+          box.classList.add('is-cover');
+        }
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Foto do local';
+        img.className = 'photo-preview-img';
+        box.appendChild(img);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'photo-remove-btn';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', () => {
+          currentPhotos.splice(idx, 1);
+          if(coverSource === 'existing'){
+            if(coverIndex === idx){
+              resetCoverSelection();
+            } else if(coverIndex > idx){
+              coverIndex--;
+            }
+          }
+          renderPhotoPreview();
+        });
+        box.appendChild(removeBtn);
+
+        const coverBtn = document.createElement('button');
+        coverBtn.type = 'button';
+        coverBtn.className = 'photo-cover-btn';
+        coverBtn.textContent = (coverSource === 'existing' && coverIndex === idx) ? 'Capa' : 'Usar como capa';
+        coverBtn.addEventListener('click', () => {
+          coverSource = 'existing';
+          coverIndex = idx;
+          renderPhotoPreview();
+        });
+        box.appendChild(coverBtn);
+
+        photoPreview.appendChild(box);
+      });
+
+      selectedFiles.forEach((file, idx) => {
+        const box = document.createElement('div');
+        box.className = 'photo-preview-box';
+        if(coverSource === 'new' && coverIndex === idx){
+          box.classList.add('is-cover');
+        }
+
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = 'Foto selecionada';
+        img.className = 'photo-preview-img';
+        box.appendChild(img);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'photo-remove-btn';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', () => {
+          selectedFiles.splice(idx, 1);
+          if(coverSource === 'new'){
+            if(coverIndex === idx){
+              resetCoverSelection();
+            } else if(coverIndex > idx){
+              coverIndex--;
+            }
+          }
+          renderPhotoPreview();
+        });
+        box.appendChild(removeBtn);
+
+        const coverBtn = document.createElement('button');
+        coverBtn.type = 'button';
+        coverBtn.className = 'photo-cover-btn';
+        coverBtn.textContent = (coverSource === 'new' && coverIndex === idx) ? 'Capa' : 'Usar como capa';
+        coverBtn.addEventListener('click', () => {
+          coverSource = 'new';
+          coverIndex = idx;
+          renderPhotoPreview();
+        });
+        box.appendChild(coverBtn);
+
+        photoPreview.appendChild(box);
+      });
+    }
+
+    photosInput.addEventListener('change', (e) => {
+        selectedFiles = Array.from(e.target.files);
+        renderPhotoPreview();
+    });
+
+    async function uploadListingPhotos(files, listingId) {
+        if(files.length === 0) return [];
+        const uploadedUrls = [];
+        const folderName = listingId ? `${listingId}/` : `temp-${Date.now()}/`;
+
+        for (const file of files) {
+            const ext = file.name.split('.').pop();
+            const fileName = `${folderName}photo-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+            
+            const { error } = await sb.storage.from('listing-photos').upload(fileName, file);
+            if (error) { console.error("Erro upload:", error); continue; }
+
+            const { data: pub } = sb.storage.from('listing-photos').getPublicUrl(fileName);
+            uploadedUrls.push(pub.publicUrl);
+        }
+        return uploadedUrls;
+    }
+
+    // --- FORMULÁRIO ---
+    const btnToggle = document.getElementById('btnToggleForm');
+    const cardForm = document.getElementById('cardNovaHospedagem');
+    const formModeText = document.getElementById('formModeText');
+    const btnSalvar = document.getElementById('btnSalvarAnuncio');
+    
+    function resetForm(){
+        document.getElementById('formNovaHospedagem').reset();
+        editingListingId = null;
+        formModeText.textContent = "Novo";
+        btnSalvar.textContent = "Publicar Anúncio";
+
+        currentPhotos = [];
+        selectedFiles = [];
+        resetCoverSelection();
+        renderPhotoPreview();
+        photosInput.value = '';
+
+        document.getElementById('existingPhotos').value = '';
+        document.getElementById('alertOk').style.display = 'none';
+        document.getElementById('alertErr').style.display = 'none';
+    }
+
+    function toggleForm(forceOpen = false){
+       const isClosed = cardForm.style.display === 'none' || cardForm.style.display === '';
+       if(forceOpen || isClosed) {
+         cardForm.style.display = 'flex';
+         btnToggle.innerHTML = '<i class="fa-solid fa-minus"></i> <span>Fechar</span>';
+         cardForm.scrollIntoView({behavior:'smooth'});
+       } else {
+         cardForm.style.display = 'none';
+         btnToggle.innerHTML = '<i class="fa-solid fa-plus"></i> <span>Criar anúncio</span>';
+         resetForm();
+       }
+    }
+    btnToggle.addEventListener('click', () => toggleForm());
+    document.getElementById('btnCancelarForm').addEventListener('click', () => toggleForm());
+
+    window.startEditListing = function(id) {
+        const listing = myListingsData.find(item => item.id === id);
+        if(!listing) return;
+
+        editingListingId = id; 
+        formModeText.textContent = "Editar"; 
+        btnSalvar.textContent = "Atualizar Anúncio"; 
+
+        document.getElementById('titulo').value = listing.title;
+        document.getElementById('cidade').value = listing.city || "";
+        document.getElementById('preco_noite').value = listing.price_night || "";
+        document.getElementById('capacidade').value = listing.capacity || "";
+        document.getElementById('descricao').value = listing.description || "";
+        document.getElementById('data_inicio').value = listing.available_start || "";
+        document.getElementById('data_fim').value = listing.available_end || "";
+
+        document.querySelectorAll('input[name="servicos"]').forEach(cb => {
+            cb.checked = listing.services?.includes(cb.value);
+        });
+
+        currentPhotos = listing.photos_url || [];
+        selectedFiles = [];
+        resetCoverSelection();
+        if(currentPhotos.length > 0){
+          coverSource = 'existing';
+          coverIndex = 0;
+        }
+        renderPhotoPreview();
+
+        toggleForm(true);
+    }
+
+    // --- EXCLUSÃO DE ANÚNCIO ---
+    const ppDeleteListing = document.getElementById('ppDeleteListing');
+    
+    window.confirmDeleteListing = function(id) {
+        deletingListingId = id;
+        ppDeleteListing.style.display = 'flex';
+        requestAnimationFrame(() => {
+            ppDeleteListing.querySelector('.pp-card').classList.add('show');
+        });
+    }
+
+    document.getElementById('delListingCancel').addEventListener('click', () => {
+        const card = ppDeleteListing.querySelector('.pp-card');
+        card.classList.remove('show');
+        setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
+        deletingListingId = null;
+    });
+
+    document.getElementById('delListingOk').addEventListener('click', async () => {
+        if(!deletingListingId) return;
+        
+        const { error } = await sb.from('listings').delete().eq('id', deletingListingId);
+        
+        if(error) {
+            toastHost("Erro ao excluir anúncio.");
+            console.error(error);
+        } else {
+            toastHost("Anúncio excluído com sucesso.");
+            loadMyListings();
+        }
+        
+        const card = ppDeleteListing.querySelector('.pp-card');
+        card.classList.remove('show');
+        setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
+    });
+
+    // --- EXCLUSÃO DE CONTA ---
+    const ppDeleteAccount = document.getElementById('ppDeleteAccount');
+    const linkExcluirConta = document.getElementById('linkExcluirConta');
+
+    linkExcluirConta.addEventListener('click', (e) => {
+      e.preventDefault();
+      ppDeleteAccount.style.display = 'flex';
+      requestAnimationFrame(() => {
+        ppDeleteAccount.querySelector('.pp-card').classList.add('show');
+      });
+    });
+
+    document.getElementById('delAccountCancel').addEventListener('click', () => {
+      const card = ppDeleteAccount.querySelector('.pp-card');
+      card.classList.remove('show');
+      setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
+    });
+
+    document.getElementById('delAccountOk').addEventListener('click', async () => {
+      try {
+        if(!currentUser) return;
+
+        // remove todos os anúncios do host
+        await sb.from('listings').delete().eq('host_id', currentUser.id);
+
+        // remove dado de host e profile
+        await sb.from('hosts').delete().eq('id', currentUser.id);
+        await sb.from('profiles').delete().eq('id', currentUser.id);
+
+        toastHost("Conta excluída. Encerrando sessão...");
+
         await sb.auth.signOut();
-      }catch(e){}
-      location.href = "cadastrarouentrar.html";
-    }
-
-    // ===== Modal EXCLUIR CONTA =====
-    const ppDelete            = document.getElementById("ppDelete");
-    const delCancelHost       = document.getElementById("delCancelHost");
-    const delOkHost           = document.getElementById("delOkHost");
-    const delConfirmTextHost  = document.getElementById("delConfirmTextHost");
-
-    function openDeleteModal(){
-      ppDelete.style.display = "flex";
-      requestAnimationFrame(()=>{
-        ppDelete.querySelector(".pp-card").classList.add("show");
-      });
-    }
-
-    function closeDeleteModal(){
-      const card = ppDelete.querySelector(".pp-card");
-      card.classList.remove("show");
-      setTimeout(()=>{ ppDelete.style.display = "none"; }, 200);
-      delConfirmTextHost.value = "";
-    }
-
-    ppDelete.addEventListener("click", (e)=>{
-      if(e.target.id === "ppDelete") closeDeleteModal();
-    });
-
-    delCancelHost.addEventListener("click", (e)=>{
-      e.preventDefault();
-      closeDeleteModal();
-    });
-
-    async function handleDeleteAccount(){
-      if(!currentUserId){
-        toastHost("Erro: usuário não identificado. Faça login novamente.");
-        return;
+        window.location.href = 'cadastrarouentrar.html';
+      } catch (err) {
+        console.error(err);
+        toastHost("Erro ao excluir conta.");
+      } finally {
+        const card = ppDeleteAccount.querySelector('.pp-card');
+        card.classList.remove('show');
+        setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
       }
+    });
 
-      const text = delConfirmTextHost.value.trim().toUpperCase();
-      if(text !== "EXCLUIR"){
-        toastHost("Digite EXCLUIR para confirmar.");
-        return;
-      }
-
-      closeDeleteModal();
-      window.location.href = "processaExclusao.php";
-    }
-
-    delOkHost.addEventListener("click", async (e)=>{
+    document.getElementById('formNovaHospedagem').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await handleDeleteAccount();
-    });
+      btnSalvar.disabled = true;
+      const originalBtnText = btnSalvar.textContent;
+      btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
 
-    // ===== FILTRO "Serviços que você oferece" =====
-    const filterButtons = document.querySelectorAll(".btn-filtro");
-    const hostCards     = document.querySelectorAll(".lista-hosts .host-card");
+      try {
+        const titulo = document.getElementById('titulo').value;
+        const cidade = document.getElementById('cidade').value;
+        const desc = document.getElementById('descricao').value;
+        const preco_noite = document.getElementById('preco_noite').value;
+        const capacidade = document.getElementById('capacidade').value;
+        const d_ini = document.getElementById('data_inicio').value;
+        const d_fim = document.getElementById('data_fim').value;
+        const servicos = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(x=>x.value);
 
-    function aplicarFiltro(service){
-      hostCards.forEach(card => {
-        const services = (card.dataset.service || "").split(",").map(s => s.trim());
-        const mostrar  = service === "all" || services.includes(service);
-        card.style.display = mostrar ? "grid" : "none";
-      });
-    }
+        let finalPhotosUrl = [...currentPhotos];
 
-    filterButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterButtons.forEach(b => b.classList.remove("ativo"));
-        btn.classList.add("ativo");
-        const service = btn.dataset.service || "all";
-        aplicarFiltro(service);
-      });
-    });
-
-    // ===== CARD EXPANSÍVEL "NOVA HOSPEDAGEM" =====
-    const cardNovaHosp   = document.getElementById("cardNovaHospedagem");
-    const btnToggleForm  = document.getElementById("btnToggleForm");
-    const btnCancelarForm= document.getElementById("btnCancelarForm");
-    const formNova       = document.getElementById("formNovaHospedagem");
-    const btnSalvar      = document.getElementById("btnSalvarAnuncio");
-
-    function abrirForm(){
-      if(!cardNovaHosp) return;
-      cardNovaHosp.style.display = "flex";
-      btnToggleForm.innerHTML = '<i class="fa-solid fa-xmark"></i><span>Fechar</span>';
-      setTimeout(() => {
-          cardNovaHosp.scrollIntoView({behavior:"smooth", block:"start"});
-      }, 100);
-    }
-
-    function fecharForm(){
-      if(!cardNovaHosp) return;
-      cardNovaHosp.style.display = "none";
-      btnToggleForm.innerHTML = '<i class="fa-solid fa-plus"></i><span>Criar anúncio</span>';
-      showAlertOk("");
-      showAlertErr("");
-      if(formNova) formNova.reset();
-    }
-
-    if(btnToggleForm){
-      btnToggleForm.addEventListener("click", ()=>{
-        const isVisible = cardNovaHosp && cardNovaHosp.style.display === "flex";
-        if(isVisible) fecharForm(); else abrirForm();
-      });
-    }
-
-    if(btnCancelarForm){
-      btnCancelarForm.addEventListener("click", (e)=>{
-        e.preventDefault();
-        fecharForm();
-      });
-    }
-
-    if(formNova){
-      formNova.addEventListener("submit", async (e)=>{
-        e.preventDefault();
-
-        if(!currentUserId){
-          showAlertErr("Sessão expirada. Faça login novamente.");
-          return;
+        let newPhotos = [];
+        if(selectedFiles.length > 0){
+             newPhotos = await uploadListingPhotos(selectedFiles, editingListingId || 'new');
+             finalPhotosUrl = [...finalPhotosUrl, ...newPhotos];
         }
 
-        if(!btnSalvar) return;
-        btnSalvar.disabled = true;
-        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-
-        const titulo       = document.getElementById("titulo").value.trim();
-        const cidade       = document.getElementById("cidade").value;
-        const preco_noite  = document.getElementById("preco_noite").value;
-        const preco_daycare= document.getElementById("preco_daycare").value;
-        const capacidade   = document.getElementById("capacidade").value;
-        const descricao    = document.getElementById("descricao").value.trim();
-        const regras       = document.getElementById("regras").value.trim();
-
-        const servicos = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(el=>el.value);
-        const portes   = Array.from(document.querySelectorAll('input[name="portes"]:checked')).map(el=>el.value);
-
-        if(!titulo){
-          showAlertErr("O título do anúncio é obrigatório.");
-          btnSalvar.disabled = false;
-          btnSalvar.textContent = "Publicar Anúncio";
-          return;
+        let coverUrl = null;
+        if(coverSource === 'existing' && currentPhotos[coverIndex]){
+          coverUrl = currentPhotos[coverIndex];
+        } else if(coverSource === 'new' && newPhotos[coverIndex]){
+          coverUrl = newPhotos[coverIndex];
         }
-        if(servicos.length === 0){
-          showAlertErr("Selecione ao menos um tipo de serviço.");
-          btnSalvar.disabled = false;
-          btnSalvar.textContent = "Publicar Anúncio";
-          return;
+
+        if(coverUrl){
+          finalPhotosUrl = [coverUrl, ...finalPhotosUrl.filter(u => u !== coverUrl)];
         }
 
         const payload = {
-          host_id: currentUserId,
-          titulo,
-          cidade: cidade || null,
-          servicos,
-          preco_noite: preco_noite ? Number(preco_noite) : null,
-          preco_daycare: preco_daycare ? Number(preco_daycare) : null,
-          capacidade: capacidade ? Number(capacidade) : null,
-          portes,
-          descricao,
-          regras
+          host_id: currentUser.id,
+          title: titulo,
+          city: cidade,
+          description: desc,
+          services: servicos,
+          price_night: preco_noite || null,
+          capacity: capacidade || null,
+          available_start: d_ini || null,
+          available_end: d_fim || null,
+          photos_url: finalPhotosUrl
         };
 
-        try{
-          console.log("Dados para envio:", payload);
-          // const { error } = await sb.from('anuncios').insert([payload]);
-          await new Promise(r => setTimeout(r, 1000)); 
-          showAlertOk("Anúncio criado com sucesso! (Simulação)");
-          setTimeout(fecharForm, 2000);
-          
-        }catch(err){
-          console.error(err);
-          showAlertErr("Erro ao salvar. Tente novamente.");
-        }finally{
-          btnSalvar.disabled = false;
-          btnSalvar.textContent = "Publicar Anúncio";
+        let error = null;
+
+        if(editingListingId) {
+            const res = await sb.from('listings').update(payload).eq('id', editingListingId);
+            error = res.error;
+        } else {
+            const res = await sb.from('listings').insert(payload);
+            error = res.error;
         }
-      });
+
+        if(error) throw error;
+
+        document.getElementById('alertOk').innerText = editingListingId ? 'Anúncio atualizado!' : 'Anúncio publicado!';
+        document.getElementById('alertOk').style.display = 'block';
+        
+        resetForm();
+        await loadMyListings();
+        setTimeout(() => toggleForm(), 1500);
+
+      } catch(err) {
+        console.error(err);
+        document.getElementById('alertErr').innerText = 'Erro: ' + err.message;
+        document.getElementById('alertErr').style.display = 'block';
+      } finally {
+        btnSalvar.disabled = false;
+        btnSalvar.textContent = originalBtnText;
+      }
+    });
+
+    document.getElementById('linkSair').addEventListener('click', async () => {
+      await sb.auth.signOut(); 
+      window.location.href = 'cadastrarouentrar.html';
+    });
+
+    function filtrarLista(tipo){
+      document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+      // (filtro real pode ser implementado depois)
     }
 
-    // ============ CHAT PATAS POUSADA ============
+    // =================== LÓGICA DO CHAT (ANFITRIÃO) ===================
     let ppChatUser = null;
     let ppActiveChatId = null;
     let ppChatChannel = null;
@@ -1623,10 +1301,12 @@
     const ppChatForm      = document.getElementById('ppChatForm');
     const ppChatInput     = document.getElementById('ppChatInput');
     const ppChatSubtitle  = document.getElementById('ppChatSubtitle');
+    const ppBadge         = document.getElementById('ppBadge');
 
     ppChatFab?.addEventListener('click', () => {
       ppChatWidget.style.display = 'flex';
       ppChatFab.style.display = 'none';
+      ppBadge.classList.remove('show');   // limpamos "não lidas" ao abrir
     });
 
     ppChatClose?.addEventListener('click', () => {
@@ -1634,238 +1314,154 @@
       ppChatFab.style.display = 'grid';
     });
 
-    // === Host iniciando chat com tutor (por reserva) ===
-    async function startChatWithTutor(tutorId, bookingId = null) {
-      if (!tutorId) {
-        toastHost("Erro: tutor não identificado.");
-        return;
-      }
-
-      if (!currentUserId) {
-        const user = await requireAuth();
-        if (!user) return;
-      }
-
-      try {
-        const { data, error } = await sb
-          .from('chats')
-          .upsert(
-            {
-              tutor_id: tutorId,
-              host_id: currentUserId,
-              booking_id: bookingId
-            },
-            {
-              onConflict: 'tutor_id,host_id,booking_id'
-            }
-          )
-          .select('*')
-          .single();
-
-        if (error) {
-          console.error('Erro ao criar/abrir chat:', error);
-          toastHost('Não foi possível abrir o chat agora.');
-          return;
-        }
-
-        // Recarrega lista de conversas garantindo que esse chat esteja presente
-        await ppLoadConversations();
-
-        // Abre widget e essa conversa específica
-        ppChatWidget.style.display = 'flex';
-        ppChatFab.style.display    = 'none';
-        await ppOpenConversation(data);
-
-      } catch (e) {
-        console.error('Erro inesperado ao iniciar chat com tutor:', e);
-        toastHost('Erro ao iniciar chat.');
-      }
-    }
-
-    // Clique em "Conversar com tutor" nas reservas
-    document.addEventListener('click', async (ev) => {
-      const btn = ev.target.closest('.btn-chat-tutor');
-      if (!btn) return;
-
-      const tutorId   = btn.dataset.tutorId;
-      const bookingId = btn.dataset.bookingId || btn.closest('.reserva-item')?.dataset.bookingId || null;
-
-      await startChatWithTutor(tutorId, bookingId);
-    });
-
     async function ppInitChat() {
-      if (!currentUserId) {
-        const { data, error } = await sb.auth.getUser();
-        if (error || !data?.user) {
-          console.warn('Nenhum usuário logado para o chat.');
-          return;
-        }
-        ppChatUser = data.user;
-      } else {
-        ppChatUser = { id: currentUserId, email: currentUserEmail };
-      }
+      if (!currentUser) return;
+      ppChatUser = currentUser;
       await ppLoadConversations();
     }
 
     async function ppLoadConversations() {
-      if (!ppChatUser) return;
+        if (!ppChatUser) return;
 
-      const { data, error } = await sb
+        const { data, error } = await sb
         .from('chats')
         .select('*')
         .or(`tutor_id.eq.${ppChatUser.id},host_id.eq.${ppChatUser.id}`)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Erro ao carregar conversas:', error);
-        return;
-      }
+        if (error) { console.error('Erro chat:', error); return; }
 
-      ppChatConvList.innerHTML = '';
+        ppChatConvList.innerHTML = '';
+        if (!data || data.length === 0) {
+            ppChatConvList.innerHTML = `<div style="font-size:0.8rem;color:#666;padding:8px;">Sem conversas.</div>`;
+            return;
+        }
 
-      if (!data || data.length === 0) {
-        ppChatConvList.innerHTML = `
-          <div style="font-size:0.8rem;color:#6b7280;padding:8px;">
-            Sem conversas ainda.
-          </div>`;
-        return;
-      }
+        // Para o anfitrião, o 'outro' é o tutor_id
+        const otherIds = data.map(c => c.tutor_id);
+        
+        // Busca nomes dos tutores
+        let profilesMap = {};
+        if(otherIds.length > 0){
+            const { data: profilesData } = await sb
+            .from('profiles')
+            .select('id, full_name, first_name, email')
+            .in('id', otherIds);
+            
+            if(profilesData){
+                profilesData.forEach(p => {
+                    profilesMap[p.id] = p.full_name || p.first_name || p.email;
+                });
+            }
+        }
 
-      data.forEach(chat => {
-        const otherIsHost = chat.tutor_id === ppChatUser.id;
-        const label = otherIsHost ? 'Anfitrião' : 'Tutor';
+        data.forEach(chat => {
+            const otherName = profilesMap[chat.tutor_id] || "Tutor";
+            const roleLabel = "Tutor"; 
 
-        const item = document.createElement('div');
-        item.className = 'pp-chat-conv-item';
-        item.dataset.id = chat.id;
-        item.innerHTML = `
-          <span class="pp-chat-conv-name">${label}</span>
-          <span class="pp-chat-conv-meta">
-            ${chat.booking_id ? 'Reserva vinculada' : 'Sem reserva'}
-          </span>
-        `;
-        item.addEventListener('click', () => ppOpenConversation(chat));
-        ppChatConvList.appendChild(item);
-      });
+            const item = document.createElement('div');
+            item.className = 'pp-chat-conv-item';
+            item.dataset.id = chat.id;
+            item.innerHTML = `
+                <span class="pp-chat-conv-name">${otherName}</span>
+                <div class="pp-chat-conv-role">${roleLabel}</div>
+                <span class="pp-chat-conv-meta">${chat.booking_id ? 'Reserva' : 'Sem reserva'}</span>
+                <button class="pp-chat-conv-delete" title="Excluir" onclick="ppDeleteChat('${chat.id}', event)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            item.addEventListener('click', () => ppOpenConversation(chat));
+            ppChatConvList.appendChild(item);
+        });
+    }
+
+    window.ppDeleteChat = async function(id, event) {
+        event.stopPropagation(); 
+        if(!confirm("Excluir conversa?")) return;
+        
+        await sb.from('messages').delete().eq('chat_id', id);
+        const { error } = await sb.from('chats').delete().eq('id', id);
+
+        if(!error) {
+            if(ppActiveChatId === id) {
+                ppChatMessages.innerHTML = '';
+                ppChatSubtitle.textContent = "Selecione uma conversa";
+                ppActiveChatId = null;
+                if(ppChatChannel) sb.removeChannel(ppChatChannel);
+            }
+            ppLoadConversations();
+        }
     }
 
     function ppSetActiveConversation(chatId) {
-      document.querySelectorAll('.pp-chat-conv-item').forEach(item => {
-        item.classList.toggle('active', item.dataset.id === chatId);
-      });
+        document.querySelectorAll('.pp-chat-conv-item').forEach(i => i.classList.toggle('active', i.dataset.id === chatId));
     }
 
     async function ppOpenConversation(chat) {
-      ppActiveChatId = chat.id;
-      ppSetActiveConversation(chat.id);
-      ppChatSubtitle.textContent = chat.booking_id ? 'Chat da reserva' : 'Chat direto';
+        ppActiveChatId = chat.id;
+        ppSetActiveConversation(chat.id);
+        
+        const nameEl = document.querySelector(`.pp-chat-conv-item[data-id="${chat.id}"] .pp-chat-conv-name`);
+        ppChatSubtitle.textContent = nameEl ? nameEl.textContent : "Chat";
+        ppChatMessages.innerHTML = '<div style="text-align:center;font-size:0.8rem;color:#666;margin-top:10px;">Carregando...</div>';
 
-      ppChatMessages.innerHTML = '<div style="font-size:0.8rem;color:#9ca3af;text-align:center;margin-top:8px;">Carregando mensagens...</div>';
+        if(ppChatChannel) sb.removeChannel(ppChatChannel);
 
-      if (ppChatChannel) {
-        sb.removeChannel(ppChatChannel);
-        ppChatChannel = null;
-      }
+        const { data, error } = await sb.from('messages').select('*').eq('chat_id', chat.id).order('created_at', {ascending: true});
+        if(error) return;
 
-      const { data, error } = await sb
-        .from('messages')
-        .select('*')
-        .eq('chat_id', chat.id)
-        .order('created_at', { ascending: true });
+        ppChatMessages.innerHTML = '';
+        data.forEach(m => ppRenderMessage(m));
+        ppScrollToBottom();
 
-      if (error) {
-        console.error('Erro ao carregar mensagens:', error);
-        ppChatMessages.innerHTML = '<div style="font-size:0.8rem;color:#b91c1c;text-align:center;margin-top:8px;">Erro ao carregar mensagens.</div>';
-        return;
-      }
-
-      ppChatMessages.innerHTML = '';
-      data.forEach(msg => ppRenderMessage(msg));
-      ppScrollToBottom();
-
-      ppChatChannel = sb
-        .channel('chat-' + chat.id)
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'messages', filter: 'chat_id=eq.' + chat.id },
-          payload => {
-            ppRenderMessage(payload.new);
+        // canal em tempo real para ESTA conversa
+        ppChatChannel = sb.channel('chat-'+chat.id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'chat_id=eq.'+chat.id }, payload => {
+            const msg = payload.new;
+            ppRenderMessage(msg);
             ppScrollToBottom();
-          }
-        )
-        .subscribe();
+
+            const isMe = msg.sender_id === ppChatUser.id;
+            // mostra a bolinha somente se for mensagem do outro
+            // e se o widget estiver fechado OU se a conversa ativa não for a dessa mensagem
+            if(!isMe && (ppChatWidget.style.display === 'none' || ppActiveChatId !== msg.chat_id)){
+                ppBadge.classList.add('show');
+            }
+        }).subscribe();
     }
 
-    function ppRenderMessage(msg) {
-      if (!ppChatUser) return;
-      const isMe = msg.sender_id === ppChatUser.id;
+    function ppRenderMessage(msg){
+        if(!ppChatUser) return;
+        const isMe = msg.sender_id === ppChatUser.id;
+        const div = document.createElement('div');
+        div.className = 'pp-chat-msg-row ' + (isMe ? 'me' : 'other');
+        
+        const date = new Date(msg.created_at);
+        const time = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0');
 
-      const row = document.createElement('div');
-      row.className = 'pp-chat-msg-row ' + (isMe ? 'me' : 'other');
-
-      const created = msg.created_at ? new Date(msg.created_at) : new Date();
-      const hh = String(created.getHours()).padStart(2,'0');
-      const mm = String(created.getMinutes()).padStart(2,'0');
-      const time = `${hh}:${mm}`;
-
-      row.innerHTML = `
-        <div class="pp-chat-bubble ${isMe ? 'me' : 'other'}">
-          <div>${msg.content}</div>
-          <div class="pp-chat-time">${time}</div>
-        </div>
-      `;
-      ppChatMessages.appendChild(row);
+        div.innerHTML = `
+            <div class="pp-chat-bubble ${isMe ? 'me' : 'other'}">
+                <div>${msg.content}</div>
+                <div class="pp-chat-time">${time}</div>
+            </div>
+        `;
+        ppChatMessages.appendChild(div);
     }
 
     function ppScrollToBottom() {
-      ppChatMessages.scrollTop = ppChatMessages.scrollHeight;
+        ppChatMessages.scrollTop = ppChatMessages.scrollHeight;
     }
 
     ppChatForm?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!ppActiveChatId || !ppChatUser) return;
-
-      const text = ppChatInput.value.trim();
-      if (!text) return;
-
-      ppChatInput.value = '';
-
-      const { error } = await sb
-        .from('messages')
-        .insert({
-          chat_id: ppActiveChatId,
-          sender_id: ppChatUser.id,
-          content: text
-        });
-
-      if (error) {
-        console.error('Erro ao enviar mensagem:', error);
-      }
+        e.preventDefault();
+        if(!ppActiveChatId || !ppChatUser) return;
+        const text = ppChatInput.value.trim();
+        if(!text) return;
+        ppChatInput.value = '';
+        await sb.from('messages').insert({ chat_id: ppActiveChatId, sender_id: ppChatUser.id, content: text });
     });
 
-    // Boot
-    (async function init(){
-      const user = await requireAuth();
-      if(!user) return;
-
-      await loadHostName(user);
-
-      document.getElementById("linkSair")
-        .addEventListener("click", handleLogout);
-
-      document.getElementById("linkExcluir")
-        .addEventListener("click", (event)=>{
-          event.preventDefault();
-          if(!currentUserId){
-            toastHost("Erro de sessão.");
-            return;
-          }
-          openDeleteModal();
-        });
-
-      aplicarFiltro("all");
-      await ppInitChat();
-    })();
+    init();
   </script>
 </body>
 </html>

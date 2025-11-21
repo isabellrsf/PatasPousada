@@ -10,7 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&display=swap');
 
-        /* VARIÁVEIS GLOBAIS (Consistência com a outra página) */
+        /* VARIÁVEIS GLOBAIS */
         :root {
             --primary-color: #e2725b;
             --primary-hover: #c45b43;
@@ -22,17 +22,16 @@
             --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Nunito', Arial, sans-serif;
             line-height: 1.6;
             background-color: var(--background-body);
             color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* --- HEADER --- */
@@ -54,7 +53,6 @@
             padding: 0 20px;
         }
 
-        /* Logo */
         .brand {
             display: flex;
             align-items: center;
@@ -63,14 +61,9 @@
             transition: transform 0.2s;
         }
 
-        .brand:hover {
-            transform: scale(1.03);
-        }
+        .brand:hover { transform: scale(1.03); }
 
-        .brand img {
-            width: 36px;
-            height: 36px;
-        }
+        .brand img { width: 36px; height: 36px; }
 
         .brand span {
             font-size: 1.5em;
@@ -79,7 +72,6 @@
             font-family: 'Parkinsans', sans-serif;
         }
 
-        /* Menu Links */
         .nav-links {
             list-style: none;
             display: flex;
@@ -96,11 +88,8 @@
             transition: color 0.2s;
         }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
+        .nav-links a:hover { color: var(--primary-color); }
 
-        /* Botão CTA no Header */
         .btn-auth {
             background-color: var(--primary-color);
             color: #fff !important;
@@ -115,11 +104,12 @@
             box-shadow: 0 4px 10px rgba(226, 114, 91, 0.3);
         }
 
-        /* --- HERO SECTION (Banner Principal) --- */
+        /* --- HERO SECTION --- */
         .hero-wrapper {
             padding: 20px;
             max-width: 1280px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .hero {
@@ -154,14 +144,15 @@
             text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
-        /* --- CAIXA DE BUSCA (Search Box) --- */
+        /* --- SEARCH BOX --- */
         .search-section {
-            margin-top: -80px; /* Faz sobrepor o banner */
+            margin-top: -80px;
             padding: 0 20px;
             position: relative;
             z-index: 10;
             display: flex;
             justify-content: center;
+            flex: 1; /* Garante que o conteúdo ocupe espaço antes do footer */
         }
 
         .search-card {
@@ -174,19 +165,16 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            height: fit-content;
         }
 
-        /* Opções de Serviço (Grid de Cards) */
         .service-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
         }
 
-        /* Estilo do Radio Button Escondido */
-        .service-option input[type="radio"] {
-            display: none;
-        }
+        .service-option input[type="radio"] { display: none; }
 
         .service-option label {
             display: flex;
@@ -223,7 +211,6 @@
             line-height: 1.3;
         }
 
-        /* Estados: Hover e Checked */
         .service-option label:hover {
             border-color: #ddd;
             background-color: #fafafa;
@@ -243,7 +230,6 @@
             color: var(--primary-color);
         }
 
-        /* Botão Buscar */
         .search-action {
             display: flex;
             justify-content: flex-end;
@@ -273,91 +259,150 @@
             box-shadow: 0 4px 15px rgba(226, 114, 91, 0.4);
         }
 
-        /* --- FOOTER --- */
+        /* --- FOOTER (Linear e Fino) --- */
         footer {
             background-color: #fff;
             margin-top: 60px;
-            padding: 40px 20px 20px;
+            padding: 25px 0; /* Padding reduzido */
             border-top: 1px solid #eee;
         }
 
-        .footer-content {
+        .footer-container {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 30px;
+            padding: 0 20px;
+            display: flex; /* Torna linear */
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Quebra linha em mobile */
+            gap: 20px;
         }
 
-        .footer-col h4 {
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-brand {
+            font-family: 'Parkinsans', sans-serif;
+            font-weight: 800;
             color: var(--primary-color);
-            font-family: 'Parkinsans';
-            margin-bottom: 15px;
+            font-size: 1.1rem;
         }
 
-        .footer-col ul {
+        .footer-copy {
+            color: #999;
+            font-size: 0.85rem;
+            border-left: 1px solid #ddd;
+            padding-left: 15px;
+        }
+
+        .footer-links {
             list-style: none;
+            display: flex;
+            gap: 25px;
         }
 
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-col ul li a {
+        .footer-links a {
             text-decoration: none;
             color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 600;
             transition: 0.2s;
         }
 
-        .footer-col ul li a:hover {
+        .footer-links a:hover {
             color: var(--primary-color);
             text-decoration: underline;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-            color: #999;
-            font-size: 0.9rem;
+        /* --- MODALS (Termos e Privacidade) --- */
+        .legal-backdrop {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
-        /* RESPONSIVO */
+        .legal-modal {
+            background: #fff;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInModal 0.3s ease-out;
+        }
+
+        .legal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .legal-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+            font-family: 'Parkinsans', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .close-legal-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-legal-btn:hover { color: var(--text-dark); }
+
+        .legal-body {
+            padding: 24px;
+            overflow-y: auto;
+            line-height: 1.7;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .legal-body h4 {
+            color: var(--text-dark);
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-family: 'Parkinsans', sans-serif;
+        }
+
+        .legal-body ul { padding-left: 20px; margin-bottom: 10px; }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none; /* Em produção usaria um menu hamburguer */
-            }
+            .nav-links { display: none; }
+            nav { justify-content: center; }
+            .hero { height: 400px; }
+            .hero h1 { font-size: 2rem; }
+            .search-section { margin-top: -40px; }
+            .search-card { padding: 20px; }
+            .search-action { justify-content: center; }
+            .btn-search { width: 100%; justify-content: center; }
             
-            /* Mantém apenas o logo e talvez o login no mobile */
-            nav {
-                justify-content: center;
-            }
-
-            .hero {
-                height: 400px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .search-section {
-                margin-top: -40px;
-            }
-
-            .search-card {
-                padding: 20px;
-            }
-
-            .search-action {
-                justify-content: center;
-            }
-
-            .btn-search {
-                width: 100%;
-                justify-content: center;
-            }
+            .footer-container { flex-direction: column; text-align: center; gap: 15px; }
+            .footer-left { flex-direction: column; gap: 5px; }
+            .footer-copy { border-left: none; padding-left: 0; }
+            .footer-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
         }
     </style>
 </head>
@@ -438,39 +483,70 @@
     </main>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <a href="#" class="brand" style="font-size: 0.8em;">
-                    <span style="color:var(--primary-color)">Patas Pousada</span>
-                </a>
-                <p style="font-size: 0.9rem; color: #777; margin-top: 10px;">
-                    Conectando pets a lares amorosos desde 2025.
-                </p>
+        <div class="footer-container">
+            <div class="footer-left">
+                <span class="footer-brand">Patas Pousada</span>
+                <span class="footer-copy">© 2025. Todos os direitos reservados.</span>
             </div>
-
-            <div class="footer-col">
-                <h4>Institucional</h4>
-                <ul>
-                    <li><a href="sobrenos.html">Sobre Nós</a></li>
-                    <li><a href="#">Termos de Uso</a></li>
-                    <li><a href="#">Política de Privacidade</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Suporte</h4>
-                <ul>
-                    <li><a href="ajuda.html">Central de Ajuda</a></li>
-                    <li><a href="#">Segurança</a></li>
-                    <li><a href="#">Fale Conosco</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © 2025 Patas Pousada. Todos os direitos reservados.
+            
+            <ul class="footer-links">
+                <li><a href="sobrenos.html">Sobre Nós</a></li>
+                <li><a href="#" onclick="openModal('modalTerms')">Termos de Uso</a></li>
+                <li><a href="#" onclick="openModal('modalPrivacy')">Política de Privacidade</a></li>
+                <li><a href="ajuda.html">Ajuda</a></li>
+            </ul>
         </div>
     </footer>
+
+    <div id="modalTerms" class="legal-backdrop" onclick="closeModal(event, 'modalTerms')">
+        <div class="legal-modal">
+            <div class="legal-header">
+                <h3>Termos de Uso</h3>
+                <button class="close-legal-btn" onclick="document.getElementById('modalTerms').style.display='none'">&times;</button>
+            </div>
+            <div class="legal-body">
+                <p><strong>Bem-vindo à Patas Pousada!</strong></p>
+                <p>Ao utilizar nossa plataforma, você concorda com os seguintes termos, regidos pelas leis da República Federativa do Brasil:</p>
+                
+                <h4>1. Do Objeto</h4>
+                <p>A Patas Pousada atua como intermediadora entre Tutores (donos de pets) e Anfitriões (prestadores de serviço de hospedagem e day care), facilitando o agendamento e pagamento.</p>
+
+                <h4>2. Das Responsabilidades</h4>
+                <ul>
+                    <li><strong>Anfitriões:</strong> São os únicos responsáveis pela segurança, higiene e cuidado com os animais hospedados.</li>
+                    <li><strong>Tutores:</strong> Devem informar com veracidade sobre a saúde e comportamento do animal.</li>
+                    <li><strong>Plataforma:</strong> Atuamos conforme o Marco Civil da Internet (Lei nº 12.965/2014), não nos responsabilizando diretamente pelos atos das partes, mas oferecendo suporte para mediação.</li>
+                </ul>
+
+                <h4>3. Pagamentos e Cancelamentos</h4>
+                <p>Os pagamentos são processados de forma segura. Cancelamentos seguem a política definida no momento da reserva, respeitando o Código de Defesa do Consumidor (CDC).</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPrivacy" class="legal-backdrop" onclick="closeModal(event, 'modalPrivacy')">
+        <div class="legal-modal">
+            <div class="legal-header">
+                <h3>Política de Privacidade</h3>
+                <button class="close-legal-btn" onclick="document.getElementById('modalPrivacy').style.display='none'">&times;</button>
+            </div>
+            <div class="legal-body">
+                <p>Sua privacidade é prioridade para nós. Esta política está em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)</strong>.</p>
+
+                <h4>1. Coleta de Dados</h4>
+                <p>Coletamos apenas os dados essenciais para a prestação do serviço (Nome, CPF, Endereço, Dados do Pet). Seu consentimento é a base legal para este tratamento.</p>
+
+                <h4>2. Finalidade</h4>
+                <p>Seus dados são utilizados para identificar usuários, processar reservas, emitir notas fiscais e garantir a segurança da comunidade.</p>
+
+                <h4>3. Compartilhamento</h4>
+                <p>Compartilhamos dados estritamente necessários entre Tutor e Anfitrião apenas após a confirmação da reserva.</p>
+
+                <h4>4. Seus Direitos (Titular)</h4>
+                <p>Você pode solicitar a qualquer momento: confirmação da existência de tratamento, acesso aos dados, correção, anonimização ou exclusão, através da nossa Central de Ajuda.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Lógica de redirecionamento simples
@@ -484,7 +560,6 @@
             if (selectedServiceRadio) {
                 const serviceValue = selectedServiceRadio.value;
                 
-                // Efeito visual simples no botão ao clicar
                 const btn = document.querySelector('.btn-search');
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
 
@@ -496,12 +571,24 @@
                     } else if (serviceValue === 'lar_temporario') {
                         window.location.href = 'lartemp.html';
                     }
-                }, 600); // Pequeno delay para simular processamento
+                }, 600);
 
             } else {
                 alert('Por favor, selecione um tipo de serviço.');
             }
         });
+
+        // Lógica dos Modais Jurídicos
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(event, modalId) {
+            // Fecha apenas se clicar no fundo escuro (backdrop), não no conteúdo
+            if (event.target.id === modalId) {
+                document.getElementById(modalId).style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
