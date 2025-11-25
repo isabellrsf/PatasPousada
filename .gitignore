@@ -1,7 +1,17 @@
+# ENV (segredo)
 .env
-logout.php
-supabase.php
+
+# Certificados
+*.pem
+*.crt
+Certs/
+
+# Uploads de imagens temporárias
+uploads/
+
+# Arquivos de teste
 upload_teste.php
-delet-account.js
-notificacoes.js
-.gitgnore
+logout.php
+
+# Logs
+*.log
