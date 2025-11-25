@@ -32,6 +32,8 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            /* CURSOR PERSONALIZADO (troque a URL se quiser outro cursor) */
+            cursor: url('https://cur.cursors-4u.net/animals/ani-12/ani1133.cur'), auto;
         }
 
         /* --- HEADER --- */
@@ -404,6 +406,25 @@
             .footer-copy { border-left: none; padding-left: 0; }
             .footer-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
         }
+
+        /* --- PATINHAS SEGUINDO O MOUSE (DIMINUÍDAS) --- */
+        .paw-trail {
+            position: fixed;
+            pointer-events: none;   /* não bloqueia cliques */
+            z-index: 9999;
+            font-size: 15px;        /* diminuí um pouco o tamanho */
+            transform: translate(-50%, -50%);
+            animation: pawFade 0.8s ease-out forwards;
+        }
+
+        .paw-trail i {
+            color: var(--primary-color);
+        }
+
+        @keyframes pawFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -588,6 +609,33 @@
             if (event.target.id === modalId) {
                 document.getElementById(modalId).style.display = 'none';
             }
+        }
+
+        // Efeito de patinhas seguindo o mouse (um pouco menos frequente)
+        if (window.matchMedia('(pointer: fine)').matches) {
+            let lastPawTime = 0;
+
+            document.addEventListener('mousemove', function(e) {
+                const now = Date.now();
+                if (now - lastPawTime < 70) return; // antes era 40ms, agora 70ms
+                lastPawTime = now;
+
+                const paw = document.createElement('span');
+                paw.classList.add('paw-trail');
+                paw.innerHTML = '<i class="fas fa-paw"></i>';
+
+                paw.style.left = e.clientX + 'px';
+                paw.style.top = e.clientY + 'px';
+
+                const rotate = (Math.random() * 60 - 30).toFixed(0); // -30 a 30 graus
+                paw.style.transform = `translate(-50%, -50%) rotate(${rotate}deg)`;
+
+                document.body.appendChild(paw);
+
+                setTimeout(() => {
+                    paw.remove();
+                }, 800);
+            });
         }
     </script>
 </body>
