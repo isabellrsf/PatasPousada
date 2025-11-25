@@ -1,9 +1,7 @@
 .env
-processaExclusao.php
 logout.php
 supabase.php
 upload_teste.php
-auth.php
 delet-account.js
 notificacoes.js
 .gitgnore
