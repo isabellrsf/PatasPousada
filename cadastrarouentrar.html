@@ -31,6 +31,8 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      /* MESMO CURSOR DO INDEX */
+      cursor: url('https://cur.cursors-4u.net/animals/ani-12/ani1133.cur'), auto;
     }
 
     /* --- HEADER (Restaurado) --- */
@@ -333,6 +335,49 @@
       /* Card branco apenas no form no mobile */
       form { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
     }
+
+    /* --- MESMA PATINHA DO INDEX: RASTRO NO MOUSE --- */
+    .paw-trail {
+      position: fixed;
+      pointer-events: none;   /* não bloqueia cliques */
+      z-index: 9999;
+      font-size: 15px;
+      transform: translate(-50%, -50%);
+      animation: pawFade 0.8s ease-out forwards;
+    }
+
+    .paw-trail i {
+      color: var(--primary);
+    }
+
+    @keyframes pawFade {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* --- EXPLOSÃO DE PATINHAS AO CLICAR (extra fofura) --- */
+    .paw-explosion {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 18px;
+      animation: pawExplode 0.6s ease-out forwards;
+    }
+
+    .paw-explosion i {
+      color: var(--primary);
+    }
+
+    @keyframes pawExplode {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.5);
+      }
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -525,6 +570,73 @@
         console.warn("PHP Bridge skipped (ambiente estático)");
       }
     }
+
+    /* ============================
+       MESMA PATINHA DO INDEX NO MOUSE
+    ============================ */
+    if (window.matchMedia('(pointer: fine)').matches) {
+      let lastPawTime = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        const now = Date.now();
+        if (now - lastPawTime < 70) return; // igual ao index (70ms)
+        lastPawTime = now;
+
+        const paw = document.createElement('span');
+        paw.classList.add('paw-trail');
+        paw.innerHTML = '<i class="fas fa-paw"></i>';
+
+        paw.style.left = e.clientX + 'px';
+        paw.style.top = e.clientY + 'px';
+
+        const rotate = (Math.random() * 60 - 30).toFixed(0); // -30 a 30 graus
+        paw.style.transform = `translate(-50%, -50%) rotate(${rotate}deg)`;
+
+        document.body.appendChild(paw);
+
+        setTimeout(() => {
+          paw.remove();
+        }, 800);
+      });
+    }
+
+    /* ===============================
+       EXPLOSÃO DE PATINHAS NO CLIQUE
+    =============================== */
+    function explodePaws(x, y) {
+      for (let i = 0; i < 12; i++) {
+        const paw = document.createElement('span');
+        paw.classList.add('paw-explosion');
+        paw.innerHTML = '<i class="fas fa-paw"></i>';
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 40 + Math.random() * 40;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        paw.style.setProperty('--dx', dx + 'px');
+        paw.style.setProperty('--dy', dy + 'px');
+        paw.style.left = x + 'px';
+        paw.style.top = y + 'px';
+
+        document.body.appendChild(paw);
+
+        setTimeout(() => {
+          paw.remove();
+        }, 600);
+      }
+    }
+
+    document.addEventListener('click', function(e) {
+      const target = e.target;
+      if (
+        target.closest('#btn-login') ||
+        target.closest('.signup-card') ||
+        target.closest('.btn-back')
+      ) {
+        explodePaws(e.clientX, e.clientY);
+      }
+    });
   </script>
 </body>
 </html>
