@@ -173,6 +173,10 @@
     .pp-ft { padding: 15px 20px; background: #f9fafb; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
     .pp-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid #ccc; background: #fff; }
     .pp-btn.pp-ok { background: #dc2626; color: #fff; border-color: #dc2626; }
+    .pp-btn[disabled]{
+      opacity:0.6;
+      cursor:not-allowed;
+    }
     .pp-btn:hover { opacity: 0.9; }
     
     .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: none; z-index: 1100; }
@@ -769,20 +773,25 @@
     </div>
   </div>
 
-  <!-- Modal excluir CONTA -->
+  <!-- Modal excluir CONTA (igual ao layout da imagem) -->
   <div class="pp-wrap" id="ppDeleteAccount">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
-        <span class="ic">!</span>
-        <h4>Excluir conta</h4>
+        <span class="ic"><i class="fa-solid fa-exclamation"></i></span>
+        <h4>Excluir sua conta</h4>
       </header>
       <div class="pp-body">
-        <p>Tem certeza que deseja excluir sua conta de anfitrião?</p>
-        <p>Isso irá remover seus anúncios e dados de perfil. Essa ação não pode ser desfeita.</p>
+        <p><strong>Esta ação é irreversível.</strong> Seus dados de tutor, pets e histórico de reservas serão permanentemente removidos.</p>
+        <p>Para confirmar, digite <strong>EXCLUIR</strong> no campo abaixo:</p>
+        <input
+          type="text"
+          id="deleteConfirmInput"
+          placeholder="Digite EXCLUIR aqui"
+        >
       </div>
       <div class="pp-ft">
         <button class="pp-btn" id="delAccountCancel">Cancelar</button>
-        <button class="pp-btn pp-ok" id="delAccountOk">Sim, excluir conta</button>
+        <button class="pp-btn pp-ok" id="delAccountOk" disabled>Confirmar Exclusão</button>
       </div>
     </div>
   </div>
@@ -1164,9 +1173,17 @@
         setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
     });
 
-    // --- EXCLUSÃO DE CONTA (mesmo método do TUTOR: processaExclusao.php) ---
+    // --- EXCLUSÃO DE CONTA (igual tutor) ---
     const ppDeleteAccount = document.getElementById('ppDeleteAccount');
     const linkExcluirConta = document.getElementById('linkExcluirConta');
+    const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+    const delAccountOkBtn = document.getElementById('delAccountOk');
+
+    // libera o botão somente quando digitar EXCLUIR
+    deleteConfirmInput.addEventListener('input', () => {
+      const value = deleteConfirmInput.value.trim().toUpperCase();
+      delAccountOkBtn.disabled = value !== 'EXCLUIR';
+    });
 
     linkExcluirConta.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1174,6 +1191,10 @@
         toastHost("Erro: sessão expirada. Faça login novamente.");
         return;
       }
+      // reseta campo e botão sempre que abrir
+      deleteConfirmInput.value = '';
+      delAccountOkBtn.disabled = true;
+
       ppDeleteAccount.style.display = 'flex';
       requestAnimationFrame(() => {
         ppDeleteAccount.querySelector('.pp-card').classList.add('show');
@@ -1183,7 +1204,11 @@
     document.getElementById('delAccountCancel').addEventListener('click', () => {
       const card = ppDeleteAccount.querySelector('.pp-card');
       card.classList.remove('show');
-      setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
+      setTimeout(() => { 
+        ppDeleteAccount.style.display = 'none'; 
+        deleteConfirmInput.value = '';
+        delAccountOkBtn.disabled = true;
+      }, 200);
     });
 
     async function handleDeleteAccountHost() {
@@ -1228,11 +1253,16 @@
       } finally {
         const card = ppDeleteAccount.querySelector('.pp-card');
         card.classList.remove('show');
-        setTimeout(() => { ppDeleteAccount.style.display = 'none'; }, 200);
+        setTimeout(() => { 
+          ppDeleteAccount.style.display = 'none'; 
+          deleteConfirmInput.value = '';
+          delAccountOkBtn.disabled = true;
+        }, 200);
       }
     }
 
     document.getElementById('delAccountOk').addEventListener('click', async () => {
+      if (delAccountOkBtn.disabled) return;
       await handleDeleteAccountHost();
     });
 
