@@ -752,6 +752,7 @@
     </div>
   </div>
 
+  <!-- Modal excluir ANÚNCIO -->
   <div class="pp-wrap" id="ppDeleteListing">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -768,6 +769,7 @@
     </div>
   </div>
 
+  <!-- Modal excluir CONTA -->
   <div class="pp-wrap" id="ppDeleteAccount">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -1162,7 +1164,7 @@
         setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
     });
 
-    // --- EXCLUSÃO DE CONTA (usa processaExclusao.php com SERVICE KEY) ---
+    // --- EXCLUSÃO DE CONTA (mesmo método do TUTOR: processaExclusao.php) ---
     const ppDeleteAccount = document.getElementById('ppDeleteAccount');
     const linkExcluirConta = document.getElementById('linkExcluirConta');
 
