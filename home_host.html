@@ -97,7 +97,7 @@
     .card-form-anuncio { background: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 30px; display: none; flex-direction: column; gap: 20px; border: 1px solid #e0e0e0; }
     .row-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 15px; }
     label { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--cor-texto); }
-    input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Nunito', sans-serif; font-size: 0.95rem; outline: none; }
+    input[type="text"], input[type="number"], input[type="date"], input[type="password"], select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Nunito', sans-serif; font-size: 0.95rem; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: var(--cor-principal); box-shadow: 0 0 0 3px rgba(226, 114, 91, 0.1); }
     .photo-upload-area { border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; transition: border-color 0.2s; background: #f9fafb; }
     .photo-upload-area:hover { border-color: var(--cor-principal); background: #fff5f5; }
@@ -166,13 +166,26 @@
     .pp-card { background: #fff; width: 100%; max-width: 450px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: all 0.2s ease; }
     .pp-card.show { transform: scale(1); opacity: 1; }
     .pp-card header { background: #fee2e2; padding: 15px 20px; display: flex; align-items: center; gap: 12px; color: #991b1b; font-weight: 700; }
+    
+    /* Header do modal de senha com a cor da marca */
+    .pp-card header.brand-header {
+      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura));
+      color: #fff;
+    }
+    .pp-card header.brand-header .ic {
+      color: var(--cor-principal);
+      background: #fff;
+    }
+    
     .pp-card .ic { background: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: #991b1b; }
+    
     .pp-body { padding: 20px; }
     .pp-body p { margin-bottom: 15px; font-size: 0.95rem; color: #555; }
     .pp-body input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
     .pp-ft { padding: 15px 20px; background: #f9fafb; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
     .pp-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid #ccc; background: #fff; }
     .pp-btn.pp-ok { background: #dc2626; color: #fff; border-color: #dc2626; }
+    
     .pp-btn[disabled]{
       opacity:0.6;
       cursor:not-allowed;
@@ -545,6 +558,62 @@
       .pp-chat-conversations { display: none; } 
       .pp-chat-fab { bottom: 20px; right: 20px; } 
     }
+
+    /* --- CSS ESPECIAL PARA SENHA (NOVO) --- */
+    /* Wrapper para o input com ícone */
+    .pass-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .pass-wrapper input {
+      padding-right: 40px; /* Espaço para o ícone */
+      transition: all 0.2s;
+    }
+    .pass-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    .pass-toggle:hover { color: var(--cor-principal); }
+
+    /* Medidor de força da senha */
+    .strength-container {
+      margin-bottom: 15px;
+    }
+    .strength-track {
+      width: 100%;
+      height: 4px;
+      background-color: #e5e7eb;
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .strength-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #dc2626; /* Começa vermelho */
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+    .strength-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    /* Estados de validação do input */
+    .input-match { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important; }
+    .input-mismatch { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -576,6 +645,7 @@
           </button>
           <div class="user-dropdown">
             <a href="menu_perfil_host.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+            <a href="#" id="linkAlterarSenha"><i class="fa-solid fa-lock"></i> Alterar senha</a>
             <a href="#" id="linkExcluirConta" style="color:#dc2626;"><i class="fa-solid fa-user-xmark"></i> Excluir conta</a>
             <a href="#" id="linkSair"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
           </div>
@@ -715,7 +785,7 @@
         </div>
       </aside>
     </section>
-  </main -->
+  </main>
 
   <div class="pp-chat-fab" id="ppChatFab">
     <i class="fa-solid fa-comments"></i>
@@ -756,7 +826,6 @@
     </div>
   </div>
 
-  <!-- Modal excluir ANÚNCIO -->
   <div class="pp-wrap" id="ppDeleteListing">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -773,7 +842,6 @@
     </div>
   </div>
 
-  <!-- Modal excluir CONTA (igual ao layout da imagem) -->
   <div class="pp-wrap" id="ppDeleteAccount">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -792,6 +860,58 @@
       <div class="pp-ft">
         <button class="pp-btn" id="delAccountCancel">Cancelar</button>
         <button class="pp-btn pp-ok" id="delAccountOk" disabled>Confirmar Exclusão</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-wrap" id="ppChangePassword">
+    <div class="pp-card" role="dialog" aria-modal="true">
+      <header class="brand-header">
+        <span class="ic"><i class="fa-solid fa-shield-halved"></i></span>
+        <h4>Alterar Senha</h4>
+      </header>
+      
+      <div class="pp-body">
+        <p>Defina uma senha forte para proteger sua conta.</p>
+        
+        <div style="display:flex; flex-direction:column; gap:15px;">
+          
+          <div>
+            <label style="font-size:0.8rem; color:#666;">Nova senha</label>
+            <div class="pass-wrapper">
+              <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" oninput="checkStrength()">
+              <button type="button" class="pass-toggle" onclick="togglePass('newPassword', this)">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+            
+            <div class="strength-container">
+              <div class="strength-track">
+                <div class="strength-bar" id="strengthBar"></div>
+              </div>
+              <div class="strength-text">
+                <span id="strengthLabel">Digite a senha</span>
+                <span id="matchLabel" style="display:none;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.8rem; color:#666;">Confirme a senha</label>
+            <div class="pass-wrapper">
+              <input type="password" id="confirmPassword" placeholder="Repita a senha" oninput="checkMatch()">
+              <button type="button" class="pass-toggle" onclick="togglePass('confirmPassword', this)">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <div class="pp-ft">
+        <button class="pp-btn" id="changePassCancel">Cancelar</button>
+        <button class="pp-btn pp-ok" id="changePassOk" style="background:var(--cor-principal); border-color:var(--cor-principal);">Salvar Senha</button>
       </div>
     </div>
   </div>
@@ -816,6 +936,77 @@
     let selectedFiles = [];      // Files novos selecionados
     let coverSource = null;      // 'existing' | 'new' | null
     let coverIndex = 0;
+
+    // --- LÓGICA DE SENHA MELHORADA (NOVAS FUNÇÕES) ---
+    
+    // 1. Alternar visibilidade (olhinho)
+    window.togglePass = function(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    // 2. Medidor de Força
+    window.checkStrength = function() {
+        const pass = document.getElementById('newPassword').value;
+        const bar = document.getElementById('strengthBar');
+        const label = document.getElementById('strengthLabel');
+        
+        // Critérios simples
+        let strength = 0;
+        if(pass.length >= 6) strength++;
+        if(pass.length >= 10) strength++;
+        if(/[A-Z]/.test(pass)) strength++;
+        if(/[0-9]/.test(pass)) strength++;
+        if(/[^A-Za-z0-9]/.test(pass)) strength++;
+
+        let width = 0;
+        let color = '#dc2626'; // Vermelho
+        let text = 'Muito fraca';
+
+        switch(strength) {
+            case 0: width = 0; text = 'Digite a senha'; break;
+            case 1: width = 20; text = 'Fraca'; break;
+            case 2: width = 40; color = '#f59e0b'; text = 'Média'; break; // Laranja
+            case 3: width = 60; color = '#f59e0b'; text = 'Boa'; break;
+            case 4: width = 80; color = '#10b981'; text = 'Forte'; break; // Verde
+            case 5: width = 100; color = '#059669'; text = 'Excelente'; break;
+        }
+
+        bar.style.width = width + '%';
+        bar.style.backgroundColor = color;
+        label.textContent = text;
+        label.style.color = color;
+        
+        checkMatch(); // Revalida a confirmação
+    }
+
+    // 3. Verificar se senhas batem visualmente
+    window.checkMatch = function() {
+        const pass = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        const confirmInput = document.getElementById('confirmPassword');
+        
+        // Remove classes anteriores
+        confirmInput.classList.remove('input-match', 'input-mismatch');
+
+        if(confirm.length === 0) return;
+
+        if(pass === confirm) {
+            confirmInput.classList.add('input-match');
+        } else {
+            confirmInput.classList.add('input-mismatch');
+        }
+    }
 
     // --- 1. INICIALIZAÇÃO ---
     async function init(){
@@ -1171,6 +1362,77 @@
         const card = ppDeleteListing.querySelector('.pp-card');
         card.classList.remove('show');
         setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
+    });
+
+    // --- ALTERAR SENHA (ATUALIZADO E MELHORADO) ---
+    const ppChangePassword = document.getElementById('ppChangePassword');
+    const linkAlterarSenha = document.getElementById('linkAlterarSenha');
+    const newPassInput = document.getElementById('newPassword');
+    const confirmPassInput = document.getElementById('confirmPassword');
+    const changePassOkBtn = document.getElementById('changePassOk');
+
+    linkAlterarSenha.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Limpa campos e estilos
+      newPassInput.value = '';
+      confirmPassInput.value = '';
+      document.getElementById('strengthBar').style.width = '0%';
+      document.getElementById('strengthLabel').textContent = 'Digite a senha';
+      confirmPassInput.classList.remove('input-match', 'input-mismatch');
+      
+      // Reseta inputs para type="password" e ícones
+      newPassInput.type = 'password';
+      confirmPassInput.type = 'password';
+      document.querySelectorAll('.pass-toggle i').forEach(i => {
+          i.classList.remove('fa-eye-slash');
+          i.classList.add('fa-eye');
+      });
+
+      ppChangePassword.style.display = 'flex';
+      requestAnimationFrame(() => {
+        ppChangePassword.querySelector('.pp-card').classList.add('show');
+      });
+    });
+
+    document.getElementById('changePassCancel').addEventListener('click', () => {
+      const card = ppChangePassword.querySelector('.pp-card');
+      card.classList.remove('show');
+      setTimeout(() => { ppChangePassword.style.display = 'none'; }, 200);
+    });
+
+    changePassOkBtn.addEventListener('click', async () => {
+      const newPass = newPassInput.value;
+      const confirmPass = confirmPassInput.value;
+
+      if(newPass.length < 6) {
+        toastHost("A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+      if(newPass !== confirmPass) {
+        toastHost("As senhas não coincidem.");
+        return;
+      }
+
+      const originalText = changePassOkBtn.textContent;
+      changePassOkBtn.textContent = "Salvando...";
+      changePassOkBtn.disabled = true;
+
+      try {
+        const { error } = await sb.auth.updateUser({ password: newPass });
+        if(error) throw error;
+        
+        toastHost("Senha alterada com sucesso!");
+        // Fechar modal
+        const card = ppChangePassword.querySelector('.pp-card');
+        card.classList.remove('show');
+        setTimeout(() => { ppChangePassword.style.display = 'none'; }, 200);
+      } catch (err) {
+        console.error("Erro ao alterar senha:", err);
+        toastHost("Erro: " + err.message);
+      } finally {
+        changePassOkBtn.textContent = "Salvar Senha";
+        changePassOkBtn.disabled = false;
+      }
     });
 
     // --- EXCLUSÃO DE CONTA (igual tutor) ---
