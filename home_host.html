@@ -4,617 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Anfitrião | Patas Pousada</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Parkinsans:wght@500;600;700&display=swap');
-  </style>
+  
+  <link rel="stylesheet" href="home_host.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    /* --- CSS GERAL --- */
-    :root { 
-      --cor-principal:#e2725b; 
-      --cor-principal-escura:#d35e46; 
-      --cor-fundo:#f8f9fa; 
-      --cor-card:#ffffff; 
-      --cor-texto:#333333; 
-      --cor-texto-secundario:#666666; 
-      --radius-card:12px; 
-      --shadow-card:0 2px 8px rgba(0,0,0,0.06); 
-      --shadow-hover:0 8px 24px rgba(0,0,0,0.12); 
-      --transition-speed:0.2s; 
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito', Arial, sans-serif; background-color: var(--cor-fundo); color: var(--cor-texto); line-height: 1.5; }
-    
-    /* HEADER */
-    header { background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 0 20px; position: sticky; top: 0; z-index: 100; height: 80px; display: flex; align-items: center; }
-    .topbar { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .topbar-left { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .topbar-left img { width: 38px; height: 38px; }
-    .logo-text { font-family: 'Parkinsans', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--cor-principal); }
-    .topbar-center nav ul { list-style: none; display: flex; gap: 30px; }
-    .topbar-center nav a { text-decoration: none; font-family: 'Parkinsans', sans-serif; font-weight: 600; color: var(--cor-texto-secundario); font-size: 1rem; transition: color var(--transition-speed); }
-    .topbar-center nav a:hover { color: var(--cor-principal); }
-    .topbar-right { display: flex; align-items: center; gap: 15px; }
-    
-    /* MENU USUÁRIO */
-    .user-menu { position: relative; }
-    .user-trigger { border: none; background: transparent; display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 8px 12px; border-radius: 40px; transition: background-color var(--transition-speed); }
-    .user-trigger:hover { background-color: #f0f0f0; }
-    .perfil-bolinha { width: 42px; height: 42px; border-radius: 50%; background-color: #ffe2da; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--cor-principal-escura); font-size: 1.2rem; overflow: hidden; position: relative; border: 1px solid var(--cor-principal); }
-    .perfil-bolinha img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
-    .perfil-nome { font-family: 'Parkinsans', sans-serif; font-weight: 600; font-size: 1rem; color: var(--cor-texto); }
-    
-    .user-dropdown { position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); min-width: 200px; padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s ease; z-index: 101; border: 1px solid #eee; }
-    .user-menu:hover .user-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-    .user-dropdown a { display: flex; align-items: center; gap: 12px; padding: 10px 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem; color: var(--cor-texto); transition: background-color var(--transition-speed); }
-    .user-dropdown a:hover { background-color: #f8f9fa; color: var(--cor-principal); }
-
-    /* LAYOUT */
-    .container-main { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
-    .top-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .top-card { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 20px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform var(--transition-speed), box-shadow var(--transition-speed); border: 1px solid transparent; }
-    .top-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #ffe2da; }
-    .top-card-titulo { font-weight: 700; font-size: 1.1rem; color: var(--cor-texto); }
-    .top-card-sub { font-size: 0.9rem; color: var(--cor-texto-secundario); line-height: 1.4; }
-    
-    .grid-main { display: grid; grid-template-columns: 280px 1fr 300px; gap: 24px; align-items: flex-start; }
-    .sidebar-esq { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 24px; display: flex; flex-direction: column; gap: 24px; }
-    .sidebar-section h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--cor-texto); }
-    .filtro-botoes { display: flex; flex-direction: column; gap: 10px; }
-    .btn-filtro { border-radius: 8px; border: 1px solid #ddd; padding: 10px 14px; font-size: 0.9rem; cursor: pointer; background-color: #fff; text-align: left; display: flex; align-items: center; gap: 10px; font-family: 'Nunito', sans-serif; color: var(--cor-texto); transition: all var(--transition-speed); }
-    .btn-filtro:hover { background-color: #f8f9fa; }
-    .btn-filtro.ativo { background-color: #fff0ec; color: var(--cor-principal-escura); border-color: var(--cor-principal); font-weight: 600; }
-    
-    .lista-hosts { display: flex; flex-direction: column; gap: 20px; }
-    .lista-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .lista-header h2 { font-size: 1.4rem; font-weight: 700; font-family: 'Parkinsans', sans-serif; color: var(--cor-texto); }
-    
-    .btn-criar-anuncio { border: none; border-radius: 30px; padding: 10px 20px; background: var(--cor-principal); color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(226, 114, 91, 0.2); transition: background var(--transition-speed); }
-    .btn-criar-anuncio:hover { background: var(--cor-principal-escura); transform: translateY(-2px); }
-    
-    /* CARD ANÚNCIO */
-    .host-card { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 20px; display: grid; grid-template-columns: 160px 1fr auto; gap: 20px; align-items: start; transition: transform var(--transition-speed); position: relative; }
-    .host-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-    .listing-main-photo { width: 160px; height: 140px; border-radius: 12px; overflow: hidden; background-color: #eee; flex-shrink: 0; }
-    .listing-main-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .host-info-principal { display: flex; flex-direction: column; gap: 10px; }
-    .host-header-row { display: flex; align-items: center; gap: 10px; }
-    .small-host-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .host-nome { font-weight: 700; font-size: 1.1rem; color: var(--cor-texto); line-height: 1.3; }
-    .host-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag { background-color: #f0f0f0; color: #555; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; }
-    .host-experiencia { font-size: 0.9rem; color: var(--cor-texto-secundario); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .host-dates { font-size: 0.85rem; color: var(--cor-texto-secundario); font-weight: 600; margin-top: 4px; }
-    .host-preco { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; text-align: right; min-width: 120px;}
-    .host-preco strong { font-size: 1.2rem; color: var(--cor-texto); font-weight: 800; }
-    .card-actions { display: flex; gap: 8px; margin-top: 5px; }
-    .btn-ver-perfil { border-radius: 20px; border: 1px solid var(--cor-principal); padding: 8px 16px; font-size: 0.9rem; cursor: pointer; background-color: transparent; color: var(--cor-principal); font-weight: 600; transition: all var(--transition-speed); }
-    .btn-ver-perfil:hover { background-color: var(--cor-principal); color: #fff; }
-    .btn-delete { border-radius: 20px; border: 1px solid #dc2626; padding: 8px 12px; font-size: 0.9rem; cursor: pointer; background-color: #fff; color: #dc2626; font-weight: 600; transition: all var(--transition-speed); }
-    .btn-delete:hover { background-color: #dc2626; color: #fff; }
-
-    /* FORMULÁRIO */
-    .card-form-anuncio { background: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 30px; display: none; flex-direction: column; gap: 20px; border: 1px solid #e0e0e0; }
-    .row-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 15px; }
-    label { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--cor-texto); }
-    input[type="text"], input[type="number"], input[type="date"], input[type="password"], select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Nunito', sans-serif; font-size: 0.95rem; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: var(--cor-principal); box-shadow: 0 0 0 3px rgba(226, 114, 91, 0.1); }
-    .photo-upload-area { border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; transition: border-color 0.2s; background: #f9fafb; }
-    .photo-upload-area:hover { border-color: var(--cor-principal); background: #fff5f5; }
-    .photo-preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-
-    /* PRÉ-VISUALIZAÇÃO COM CAPA E EXCLUIR FOTO */
-    .photo-preview-box{
-      position: relative;
-      width: 80px;
-      height: 80px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:#f3f4f6;
-    }
-    .photo-preview-img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .photo-remove-btn{
-      position:absolute;
-      top:4px;
-      right:4px;
-      background:rgba(0,0,0,0.7);
-      color:#fff;
-      border:none;
-      border-radius:50%;
-      width:18px;
-      height:18px;
-      font-size:12px;
-      line-height:18px;
-      text-align:center;
-      cursor:pointer;
-    }
-    .photo-cover-btn{
-      position:absolute;
-      bottom:4px;
-      left:4px;
-      background:rgba(0,0,0,0.7);
-      color:#fff;
-      border:none;
-      border-radius:12px;
-      padding:2px 6px;
-      font-size:10px;
-      cursor:pointer;
-    }
-    .photo-preview-box.is-cover{
-      border:2px solid var(--cor-principal);
-    }
-
-    .check-group { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9rem; margin-top: 8px; }
-    .actions-inline { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
-    .btn-primary { border: none; border-radius: 25px; padding: 10px 20px; background: var(--cor-principal); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
-    .btn-outline { border-radius: 25px; padding: 10px 20px; border: 1px solid #ccc; background: #fff; color: var(--cor-texto); cursor: pointer; font-weight: 600; font-size: 0.95rem; }
-    .alert { padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 15px; display: none; }
-    .alert.ok { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-    .alert.err { background: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
-    .sidebar-dir { background-color: var(--cor-card); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 24px; display: flex; flex-direction: column; gap: 24px; }
-    
-    /* MODALS */
-    .pp-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
-    .pp-card { background: #fff; width: 100%; max-width: 450px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: all 0.2s ease; }
-    .pp-card.show { transform: scale(1); opacity: 1; }
-    .pp-card header { background: #fee2e2; padding: 15px 20px; display: flex; align-items: center; gap: 12px; color: #991b1b; font-weight: 700; }
-    
-    /* Header do modal de senha com a cor da marca */
-    .pp-card header.brand-header {
-      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura));
-      color: #fff;
-    }
-    .pp-card header.brand-header .ic {
-      color: var(--cor-principal);
-      background: #fff;
-    }
-    
-    .pp-card .ic { background: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: #991b1b; }
-    
-    .pp-body { padding: 20px; }
-    .pp-body p { margin-bottom: 15px; font-size: 0.95rem; color: #555; }
-    .pp-body input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    .pp-ft { padding: 15px 20px; background: #f9fafb; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
-    .pp-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid #ccc; background: #fff; }
-    .pp-btn.pp-ok { background: #dc2626; color: #fff; border-color: #dc2626; }
-    
-    .pp-btn[disabled]{
-      opacity:0.6;
-      cursor:not-allowed;
-    }
-    .pp-btn:hover { opacity: 0.9; }
-    
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: none; z-index: 1100; }
-
-    @media (max-width: 1024px) { 
-      .grid-main { grid-template-columns: 1fr 300px; } 
-      .sidebar-esq { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; } 
-      .sidebar-esq > div { flex: 1; min-width: 250px; } 
-    }
-    @media (max-width: 768px) { 
-        .grid-main { grid-template-columns: 1fr; } 
-        .topbar-center { display: none; } 
-        .sidebar-esq { flex-direction: column; } 
-        .host-card { grid-template-columns: 1fr; gap: 15px; } 
-        .listing-main-photo { width: 100%; height: 200px; } 
-        .host-header-row { flex-direction: column; align-items: flex-start; } 
-        .host-preco { align-items: flex-start; text-align: left; flex-direction: row; justify-content: space-between; width: 100%; margin-top: 10px; } 
-    }
-
-    /* =====================================================
-       CHAT WIDGET - MESMO VISUAL DO TUTOR (TAMANHO/COR)
-       ===================================================== */
-    .pp-chat-fab { 
-      position: fixed; 
-      right: 25px; 
-      bottom: 25px; 
-      width: 60px; 
-      height: 60px; 
-      border-radius: 50%; 
-      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
-      color: #fff; 
-      display: grid; 
-      place-items: center; 
-      cursor: pointer; 
-      box-shadow: 0 8px 24px rgba(226,114,91,0.4); 
-      z-index: 120; 
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .pp-chat-fab:hover { 
-      transform: scale(1.1) rotate(-5deg); 
-      box-shadow: 0 12px 28px rgba(226,114,91,0.6); 
-    }
-    .pp-chat-fab i { font-size: 1.6rem; }
-
-    .pp-badge { 
-      position: absolute; 
-      top: 0; 
-      right: 0; 
-      width: 20px; 
-      height: 20px; 
-      background: #dc2626; 
-      color: #fff; 
-      border-radius: 50%; 
-      font-size: 0.7rem; 
-      display: none; 
-      place-items: center; 
-      justify-content: center; 
-      border: 2px solid #fff; 
-      font-weight: 800; 
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-      animation: pulseBadge 2s infinite; 
-    }
-    .pp-badge.show { display: flex; }
-
-    @keyframes pulseBadge { 
-      0% { transform: scale(1); } 
-      50% { transform: scale(1.1); } 
-      100% { transform: scale(1); } 
-    }
-
-    .pp-chat-widget { 
-      position: fixed; 
-      right: 25px; 
-      bottom: 100px; 
-      width: 420px; 
-      max-height: 600px; 
-      background: #fff; 
-      border-radius: 20px; 
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.03); 
-      display: none; 
-      flex-direction: column; 
-      overflow: hidden; 
-      z-index: 130; 
-      font-family: 'Nunito', sans-serif; 
-      animation: chatSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes chatSlideUp { 
-      from { opacity: 0; transform: translateY(20px) scale(0.95); } 
-      to { opacity: 1; transform: translateY(0) scale(1); } 
-    }
-
-    .pp-chat-header { 
-      padding: 16px 20px; 
-      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
-      color: #fff; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      flex-shrink: 0; 
-      box-shadow: 0 4px 12px rgba(212, 95, 71, 0.2); 
-      z-index: 2; 
-    }
-    .pp-chat-header strong { 
-      font-family: 'Parkinsans', sans-serif; 
-      font-size: 1.1rem; 
-      line-height: 1.2; 
-      letter-spacing: -0.5px; 
-      color: #fff; 
-    }
-    #ppChatSubtitle { 
-      display: block; 
-      font-size: 0.8rem; 
-      color: rgba(255,255,255,0.85); 
-      margin-top: 2px; 
-      font-weight: 400; 
-    }
-    .pp-chat-close { 
-      border: none; 
-      background: rgba(255,255,255,0.2); 
-      width: 32px; 
-      height: 32px; 
-      border-radius: 50%; 
-      font-size: 0.9rem; 
-      cursor: pointer; 
-      color: #fff; 
-      display: grid; 
-      place-items: center; 
-      transition: background 0.2s; 
-    }
-    .pp-chat-close:hover { background: rgba(255,255,255,0.35); }
-
-    .pp-chat-body { 
-      display: grid; 
-      grid-template-columns: 140px 1fr; 
-      height: 450px; 
-      overflow: hidden; 
-      background: #fff; 
-    }
-
-    .pp-chat-conversations { 
-      background: #f8f9fa; 
-      border-right: 1px solid #e5e7eb; 
-      overflow-y: auto; 
-      padding: 8px; 
-      scrollbar-width: thin; 
-    }
-    .pp-chat-conversations::-webkit-scrollbar, 
-    .pp-chat-messages::-webkit-scrollbar { width: 8px; }
-    .pp-chat-conversations::-webkit-scrollbar-track, 
-    .pp-chat-messages::-webkit-scrollbar-track { background: transparent; }
-    .pp-chat-conversations::-webkit-scrollbar-thumb, 
-    .pp-chat-messages::-webkit-scrollbar-thumb { 
-      background-color: #ccc; 
-      border-radius: 10px; 
-      border: 2px solid #fff; 
-    }
-
-    .pp-chat-conv-item { 
-      border-radius: 10px; 
-      padding: 12px 10px; 
-      cursor: pointer; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 4px; 
-      transition: all 0.2s; 
-      border-left: 3px solid transparent; 
-      margin-bottom: 4px; 
-      position: relative; 
-      padding-right: 32px; 
-      min-height: 50px; 
-      justify-content: center;
-    }
-    .pp-chat-conv-item:hover { 
-      background: #fff; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-    }
-    .pp-chat-conv-item.active { 
-      background: #fff; 
-      border-left-color: var(--cor-principal); 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
-    }
-
-    .pp-chat-conv-name { 
-      font-size: 0.85rem; 
-      font-weight: 700; 
-      color: #374151; 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-    }
-    .pp-chat-conv-role { 
-      font-size: 0.65rem; 
-      color: var(--cor-principal); 
-      font-weight: 700; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .pp-chat-conv-meta { 
-      font-size: 0.7rem; 
-      color: #9ca3af; 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      width: 100%; 
-    }
-
-    /* botão excluir conversa – mesmo visual do tutor */
-    .pp-chat-conv-delete {
-      position:absolute;
-      top:6px;
-      right:6px;
-      width:18px;
-      height:18px;
-      border-radius:50%;
-      border:none;
-      background:transparent;
-      color:#9ca3af;
-      display:grid;
-      place-items:center;
-      font-size:0.6rem;
-      cursor:pointer;
-      transition:background .15s,color .15s;
-      z-index:10;
-    }
-    .pp-chat-conv-item:hover .pp-chat-conv-delete{ color:#6b7280; }
-    .pp-chat-conv-delete:hover{
-      background:#fee2e2;
-      color:#b91c1c;
-    }
-
-    .pp-chat-thread { 
-      display: flex; 
-      flex-direction: column; 
-      height: 100%; 
-      position: relative; 
-      background-color: #fff9f8; 
-      background-image: radial-gradient(rgba(226, 114, 91, 0.15) 1px, transparent 1px); 
-      background-size: 20px 20px; 
-      overflow: hidden; 
-    }
-    .pp-chat-messages { 
-      flex: 1; 
-      padding: 16px; 
-      overflow-y: auto; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
-      min-height: 0; 
-    }
-    .pp-chat-messages::-webkit-scrollbar-thumb { 
-      border: 2px solid #fff9f8; 
-    }
-    .pp-chat-messages:empty::before { 
-      content: "👋 Selecione ou inicie uma conversa"; 
-      display: flex; 
-      height: 100%; 
-      align-items: center; 
-      justify-content: center; 
-      color: #9ca3af; 
-      font-size: 0.9rem; 
-      font-weight: 600; 
-      text-align: center; 
-    }
-
-    .pp-chat-msg-row { 
-      display: flex; 
-      width: 100%; 
-      animation: fadeInMsg 0.2s ease-out; 
-    }
-    .pp-chat-msg-row.me { justify-content: flex-end; }
-
-    @keyframes fadeInMsg { 
-      from{opacity:0; transform:translateY(5px);} 
-      to{opacity:1; transform:translateY(0);} 
-    }
-
-    .pp-chat-bubble { 
-      max-width: 80%; 
-      padding: 10px 14px; 
-      font-size: 0.9rem; 
-      line-height: 1.45; 
-      position: relative; 
-      word-wrap: break-word; 
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08); 
-    }
-    .pp-chat-bubble.me { 
-      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura)); 
-      color: #fff; 
-      border-radius: 16px 16px 2px 16px; 
-    }
-    .pp-chat-bubble.other { 
-      background: #fff; 
-      color: #1f2937; 
-      border: 1px solid #eee; 
-      border-radius: 16px 16px 16px 2px; 
-    }
-
-    .pp-chat-time { 
-      font-size: 0.65rem; 
-      margin-top: 4px; 
-      text-align: right; 
-      opacity: 0.8; 
-      font-weight: 500; 
-    }
-    .pp-chat-bubble.other .pp-chat-time { color: #9ca3af; }
-
-    .pp-chat-input-area { 
-      display: flex; 
-      padding: 12px; 
-      gap: 10px; 
-      border-top: 1px solid #e5e7eb; 
-      background: #fff; 
-      flex-shrink: 0; 
-    }
-    .pp-chat-input-area input { 
-      flex: 1; 
-      border-radius: 24px; 
-      border: 1px solid #e5e7eb; 
-      padding: 10px 16px; 
-      font-size: 0.9rem; 
-      outline: none; 
-      font-family: 'Nunito', sans-serif; 
-      background: #f9fafb; 
-      transition: all 0.2s; 
-    }
-    .pp-chat-input-area input:focus { 
-      background: #fff; 
-      border-color: var(--cor-principal); 
-      box-shadow: 0 0 0 4px rgba(226,114,91,0.1); 
-    }
-    .pp-chat-input-area button { 
-      width: 42px; 
-      height: 42px; 
-      border-radius: 50%; 
-      border: none; 
-      background: var(--cor-principal); 
-      color: #fff; 
-      cursor: pointer; 
-      display: grid; 
-      place-items: center; 
-      transition: all 0.2s; 
-      flex-shrink: 0; 
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
-    }
-    .pp-chat-input-area button:hover { 
-      background: var(--cor-principal-escura); 
-      transform: scale(1.05); 
-      box-shadow: 0 4px 10px rgba(226,114,91,0.3); 
-    }
-
-    @media (max-width: 600px) { 
-      .pp-chat-widget { 
-        right: 0; 
-        left: 0; 
-        bottom: 0; 
-        width: 100%; 
-        height: 100dvh; 
-        max-height: none; 
-        border-radius: 0; 
-      } 
-      .pp-chat-body { 
-        grid-template-columns: 1fr; 
-        height: calc(100% - 65px); 
-      } 
-      .pp-chat-conversations { display: none; } 
-      .pp-chat-fab { bottom: 20px; right: 20px; } 
-    }
-
-    /* --- CSS ESPECIAL PARA SENHA (NOVO) --- */
-    /* Wrapper para o input com ícone */
-    .pass-wrapper {
-      position: relative;
-      width: 100%;
-      margin-bottom: 5px;
-    }
-    .pass-wrapper input {
-      padding-right: 40px; /* Espaço para o ícone */
-      transition: all 0.2s;
-    }
-    .pass-toggle {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-      background: transparent;
-      border: none;
-      padding: 0;
-    }
-    .pass-toggle:hover { color: var(--cor-principal); }
-
-    /* Medidor de força da senha */
-    .strength-container {
-      margin-bottom: 15px;
-    }
-    .strength-track {
-      width: 100%;
-      height: 4px;
-      background-color: #e5e7eb;
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-    .strength-bar {
-      height: 100%;
-      width: 0%;
-      background-color: #dc2626; /* Começa vermelho */
-      transition: width 0.3s ease, background-color 0.3s ease;
-    }
-    .strength-text {
-      font-size: 0.75rem;
-      color: #6b7280;
-      margin-top: 4px;
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    /* Estados de validação do input */
-    .input-match { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important; }
-    .input-mismatch { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -706,16 +98,11 @@
                 <label for="titulo">Título do anúncio</label>
                 <input type="text" id="titulo" required placeholder="Ex: Casa com quintal amplo">
               </div>
+              
               <div>
-                <label for="cidade">Cidade</label>
-                <select id="cidade" required>
-                  <option value="">Selecione...</option>
-                  <option value="Brasília">Brasília</option>
-                  <option value="Taguatinga">Taguatinga</option>
-                  <option value="Guará">Guará</option>
-                  <option value="Águas Claras">Águas Claras</option>
-                  <option value="Sobradinho">Sobradinho</option>
-                </select>
+                <label for="cidade">Cidade (RA)</label>
+                <input type="text" id="cidade" list="lista-cidades" placeholder="Digite ou selecione a cidade..." required autocomplete="off">
+                <datalist id="lista-cidades"></datalist>
               </div>
             </div>
 
@@ -778,15 +165,36 @@
         </div>
       </section>
 
+      <!-- LADO DIREITO: perfil + reservas aprovadas -->
       <aside class="sidebar-dir">
         <div class="sidebar-section">
             <h3>Perfil do Anfitrião</h3>
             <p>Complete as informações para atrair mais tutores.</p>
         </div>
+
+        <div class="sidebar-section">
+          <h3>Reservas aprovadas</h3>
+          <div id="listaReservasAprovadas">
+            <p style="font-size:0.85rem; color:#6b7280;">
+              Nenhuma reserva aprovada ainda.
+            </p>
+          </div>
+        </div>
       </aside>
+    </section>
+
+    <!-- LISTA PRINCIPAL DE RESERVAS (pendentes etc.) -->
+    <section class="lista-reservas-host" id="blocoReservas">
+      <div class="lista-header">
+        <h2>Reservas recebidas</h2>
+      </div>
+      <div id="listaReservasContainer">
+        <p style="padding:20px; color:#666;">Carregando reservas...</p>
+      </div>
     </section>
   </main>
 
+  <!-- CHAT -->
   <div class="pp-chat-fab" id="ppChatFab">
     <i class="fa-solid fa-comments"></i>
     <span class="pp-badge" id="ppBadge">!</span>
@@ -826,6 +234,7 @@
     </div>
   </div>
 
+  <!-- MODAL EXCLUIR ANÚNCIO -->
   <div class="pp-wrap" id="ppDeleteListing">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -842,6 +251,7 @@
     </div>
   </div>
 
+  <!-- MODAL EXCLUIR CONTA -->
   <div class="pp-wrap" id="ppDeleteAccount">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header>
@@ -864,6 +274,7 @@
     </div>
   </div>
 
+  <!-- MODAL ALTERAR SENHA -->
   <div class="pp-wrap" id="ppChangePassword">
     <div class="pp-card" role="dialog" aria-modal="true">
       <header class="brand-header">
@@ -932,14 +343,32 @@
     let deletingListingId = null;
 
     // controle de fotos
-    let currentPhotos = [];      // URLs já salvas no anúncio
-    let selectedFiles = [];      // Files novos selecionados
-    let coverSource = null;      // 'existing' | 'new' | null
+    let currentPhotos = [];
+    let selectedFiles = [];
+    let coverSource = null;
     let coverIndex = 0;
 
-    // --- LÓGICA DE SENHA MELHORADA (NOVAS FUNÇÕES) ---
-    
-    // 1. Alternar visibilidade (olhinho)
+    // --- LISTA DE CIDADES DO DF ---
+    const cidadesDF = [
+      "Águas Claras","Arniqueira","Brazlândia","Candangolândia","Ceilândia","Cruzeiro",
+      "Fercal","Gama","Guará","Itapoã","Jardim Botânico","Lago Norte","Lago Sul",
+      "Núcleo Bandeirante","Paranoá","Park Way","Planaltina","Plano Piloto (Brasília)",
+      "Recanto das Emas","Riacho Fundo","Riacho Fundo II","Samambaia","Santa Maria",
+      "São Sebastião","SCIA (Estrutural)","SIA","Sobradinho","Sobradinho II",
+      "Sol Nascente/Pôr do Sol","Sudoeste/Octogonal","Taguatinga","Varjão","Vicente Pires"
+    ];
+
+    function popularCidades() {
+        const datalist = document.getElementById('lista-cidades');
+        datalist.innerHTML = '';
+        cidadesDF.forEach(cidade => {
+            const option = document.createElement('option');
+            option.value = cidade;
+            datalist.appendChild(option);
+        });
+    }
+
+    // --- LÓGICA DE SENHA ---
     window.togglePass = function(inputId, btn) {
         const input = document.getElementById(inputId);
         const icon = btn.querySelector('i');
@@ -955,13 +384,11 @@
         }
     }
 
-    // 2. Medidor de Força
     window.checkStrength = function() {
         const pass = document.getElementById('newPassword').value;
         const bar = document.getElementById('strengthBar');
         const label = document.getElementById('strengthLabel');
         
-        // Critérios simples
         let strength = 0;
         if(pass.length >= 6) strength++;
         if(pass.length >= 10) strength++;
@@ -970,15 +397,15 @@
         if(/[^A-Za-z0-9]/.test(pass)) strength++;
 
         let width = 0;
-        let color = '#dc2626'; // Vermelho
+        let color = '#dc2626';
         let text = 'Muito fraca';
 
         switch(strength) {
             case 0: width = 0; text = 'Digite a senha'; break;
             case 1: width = 20; text = 'Fraca'; break;
-            case 2: width = 40; color = '#f59e0b'; text = 'Média'; break; // Laranja
+            case 2: width = 40; color = '#f59e0b'; text = 'Média'; break;
             case 3: width = 60; color = '#f59e0b'; text = 'Boa'; break;
-            case 4: width = 80; color = '#10b981'; text = 'Forte'; break; // Verde
+            case 4: width = 80; color = '#10b981'; text = 'Forte'; break;
             case 5: width = 100; color = '#059669'; text = 'Excelente'; break;
         }
 
@@ -987,16 +414,14 @@
         label.textContent = text;
         label.style.color = color;
         
-        checkMatch(); // Revalida a confirmação
+        checkMatch();
     }
 
-    // 3. Verificar se senhas batem visualmente
     window.checkMatch = function() {
         const pass = document.getElementById('newPassword').value;
         const confirm = document.getElementById('confirmPassword').value;
         const confirmInput = document.getElementById('confirmPassword');
         
-        // Remove classes anteriores
         confirmInput.classList.remove('input-match', 'input-mismatch');
 
         if(confirm.length === 0) return;
@@ -1016,7 +441,6 @@
       currentUserId = user.id;
       currentUserEmail = user.email;
       
-      // Busca dados do anfitrião
       let { data: hostData } = await sb.from('hosts').select('*').eq('id', user.id).maybeSingle();
       
       if (!hostData) {
@@ -1026,9 +450,11 @@
          currentProfile = hostData;
       }
       
+      popularCidades();
       updateHeader();
       loadMyListings();
-      ppInitChat(); // Inicia o chat
+      loadMyBookings();
+      ppInitChat(); 
     }
 
     function updateHeader(){
@@ -1082,7 +508,12 @@
         div.className = 'host-card';
         
         let tagsHtml = '';
-        if(ad.services){ ad.services.forEach(s => { const cls = s.replace(/\s+/g, '.'); tagsHtml += `<span class="tag ${cls}">${s}</span>`; }); }
+        if(ad.services){ 
+          ad.services.forEach(s => { 
+            const cls = s.replace(/\s+/g, '.'); 
+            tagsHtml += `<span class="tag ${cls}">${s}</span>`; 
+          }); 
+        }
 
         const preco = ad.price_night || ad.price_daycare || 0;
 
@@ -1132,6 +563,206 @@
         `;
         container.appendChild(div);
       });
+    }
+
+    // --- HELPER PARA NORMALIZAR STATUS ---
+    function normalizaStatus(bk) {
+      return (bk.status || '').toString().trim().toLowerCase();
+    }
+
+    // --- CARREGAR RESERVAS (pendentes na lista principal + aprovadas na direita) ---
+    async function loadMyBookings() {
+      const container = document.getElementById('listaReservasContainer');
+      const aprovadasBox = document.getElementById('listaReservasAprovadas');
+
+      if (!container) return;
+
+      if (!currentUser) {
+        container.innerHTML = '<p style="padding:8px;color:#666;font-size:0.9rem;">Você precisa estar logado.</p>';
+        if (aprovadasBox) {
+          aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Nenhuma reserva aprovada ainda.</p>';
+        }
+        return;
+      }
+
+      container.innerHTML = '<p style="padding:8px;color:#666;font-size:0.9rem;">Carregando reservas...</p>';
+      if (aprovadasBox) {
+        aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Carregando reservas aprovadas...</p>';
+      }
+
+      const { data, error } = await sb
+        .from('bookings')
+        .select('*')
+        .eq('host_id', currentUser.id)
+        .order('created_at', { ascending:false });
+
+      if (error) {
+        console.error('Erro ao carregar reservas:', error);
+        container.innerHTML = '<p style="padding:8px;color:#b91c1c;font-size:0.9rem;">Erro ao carregar reservas.</p>';
+        if (aprovadasBox) {
+          aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#b91c1c;">Erro ao carregar reservas aprovadas.</p>';
+        }
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `
+          <div style="padding:24px; border-radius:12px; background:#fff; border:1px dashed #e5e7eb; text-align:center; font-size:0.9rem; color:#6b7280;">
+            Nenhuma reserva recebida ainda.
+          </div>
+        `;
+        if (aprovadasBox) {
+          aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Nenhuma reserva aprovada ainda.</p>';
+        }
+        return;
+      }
+
+      // separa por status (normalizado com trim + lower)
+      const aprovadas = data.filter(bk => normalizaStatus(bk) === 'aprovada');
+      const abertas   = data.filter(bk => {
+        const st = normalizaStatus(bk);
+        // não mostrar canceladas nem aprovadas na lista principal
+        return st !== 'aprovada' && st !== 'cancelada';
+      });
+
+      // --- LISTA PRINCIPAL: apenas reservas "abertas" (pendentes etc.) ---
+      container.innerHTML = '';
+
+      if (abertas.length === 0) {
+        container.innerHTML = `
+          <div style="padding:24px; border-radius:12px; background:#fff; border:1px dashed #e5e7eb; text-align:center; font-size:0.9rem; color:#6b7280;">
+            Nenhuma reserva pendente no momento.
+          </div>
+        `;
+      } else {
+        abertas.forEach(bk => {
+          const inicio = bk.start_date ? new Date(bk.start_date) : null;
+          const fim    = bk.end_date   ? new Date(bk.end_date)   : null;
+          let datasTexto = 'Datas não informadas';
+          if (inicio && fim) {
+            const s = inicio.toLocaleDateString('pt-BR');
+            const e = fim.toLocaleDateString('pt-BR');
+            datasTexto = `${s} até ${e}`;
+          }
+          const total = bk.total_price != null ? Number(bk.total_price) : 0;
+          const totalFormatado = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+          const card = document.createElement('div');
+          card.className = 'reserva-card';
+          card.dataset.id = bk.id;
+          card.innerHTML = `
+            <div>
+              <h3>Reserva #${bk.id}</h3>
+              <p><strong>Período:</strong> ${datasTexto}</p>
+              <p><strong>Valor total:</strong> ${totalFormatado}</p>
+            </div>
+            <div>
+              <p class="reserva-status">
+                <strong>${bk.status || 'sem status'}</strong><br>
+                <span>Status da reserva</span>
+              </p>
+              <p class="reserva-status">
+                <strong>${bk.payment_status || 'pendente'}</strong><br>
+                <span>Status do pagamento</span>
+              </p>
+              ${bk.payment_method ? `<p style="font-size:0.85rem;color:#6b7280;margin-top:4px;">Forma de pagamento: ${bk.payment_method}</p>` : ''}
+            </div>
+            <div class="reserva-actions">
+              <button class="btn-status btn-aprovar" onclick="updateBookingStatus(${bk.id}, 'aprovada')">Aprovar</button>
+              <button class="btn-status btn-cancelar" onclick="updateBookingStatus(${bk.id}, 'cancelada')">Cancelar</button>
+              <button class="btn-status btn-pago" onclick="updatePaymentStatus(${bk.id}, 'pago')">Marcar como pago</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      // --- LATERAL DIREITA: reservas aprovadas ---
+      if (aprovadasBox) {
+        aprovadasBox.innerHTML = '';
+
+        if (aprovadas.length === 0) {
+          aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Nenhuma reserva aprovada ainda.</p>';
+        } else {
+          aprovadas.forEach(bk => {
+            const inicio = bk.start_date ? new Date(bk.start_date) : null;
+            const fim    = bk.end_date   ? new Date(bk.end_date)   : null;
+            let datasTexto = 'Datas não informadas';
+            if (inicio && fim) {
+              const s = inicio.toLocaleDateString('pt-BR');
+              const e = fim.toLocaleDateString('pt-BR');
+              datasTexto = `${s} até ${e}`;
+            }
+            const total = bk.total_price != null ? Number(bk.total_price) : 0;
+            const totalFormatado = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            const mini = document.createElement('div');
+            mini.className = 'reserva-aprovada-item';
+            mini.innerHTML = `
+              <div class="reserva-aprovada-top">
+                <div>
+                  <strong>Reserva #${bk.id}</strong><br>
+                  <span class="reserva-aprovada-datas">${datasTexto}</span>
+                </div>
+                <div class="reserva-aprovada-valor">
+                  <span class="valor">${totalFormatado}</span><br>
+                  <span class="status-pagamento">${bk.payment_status || 'pendente'}</span>
+                </div>
+              </div>
+              <div class="reserva-aprovada-actions">
+                <button 
+                  class="btn-status btn-pago" 
+                  onclick="updatePaymentStatus(${bk.id}, 'pago')">
+                  Marcar como pago
+                </button>
+              </div>
+            `;
+            aprovadasBox.appendChild(mini);
+          });
+        }
+      }
+    }
+
+    // --- ATUALIZAR STATUS (agora com normalização + reload da lista) ---
+    async function updateBookingStatus(id, novoStatus) {
+      try {
+        const { error } = await sb
+          .from('bookings')
+          .update({ status: novoStatus })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        if (novoStatus === 'cancelada') {
+          toastHost('Reserva cancelada.');
+        } else if (novoStatus === 'aprovada') {
+          toastHost('Reserva aprovada.');
+        } else {
+          toastHost('Status da reserva atualizado.');
+        }
+
+        // Recarrega listas (pendentes e aprovadas) 
+        loadMyBookings();
+      } catch (err) {
+        console.error('Erro ao atualizar status:', err);
+        toastHost('Erro ao atualizar status da reserva.');
+      }
+    }
+
+    async function updatePaymentStatus(id, novoStatus) {
+      try {
+        const { error } = await sb
+          .from('bookings')
+          .update({ payment_status: novoStatus })
+          .eq('id', id);
+
+        if (error) throw error;
+        toastHost('Status de pagamento atualizado.');
+        loadMyBookings();
+      } catch (err) {
+        console.error('Erro ao atualizar pagamento:', err);
+        toastHost('Erro ao atualizar status de pagamento.');
+      }
     }
 
     // --- UPLOAD / PRÉ-VISUALIZAÇÃO DE FOTOS ---
@@ -1236,26 +867,37 @@
     }
 
     photosInput.addEventListener('change', (e) => {
-        selectedFiles = Array.from(e.target.files);
-        renderPhotoPreview();
+      const newFiles = Array.from(e.target.files);
+      const totalExisting = currentPhotos.length;
+      const totalSelected = selectedFiles.length;
+        
+      if (totalExisting + totalSelected + newFiles.length > 5) {
+        alert("O limite é de 5 fotos por anúncio.");
+        e.target.value = ''; 
+        return;
+      }
+
+      selectedFiles = [...selectedFiles, ...newFiles];
+      renderPhotoPreview();
+      e.target.value = '';
     });
 
     async function uploadListingPhotos(files, listingId) {
-        if(files.length === 0) return [];
-        const uploadedUrls = [];
-        const folderName = listingId ? `${listingId}/` : `temp-${Date.now()}/`;
+      if(files.length === 0) return [];
+      const uploadedUrls = [];
+      const folderName = listingId ? `${listingId}/` : `temp-${Date.now()}/`;
 
-        for (const file of files) {
-            const ext = file.name.split('.').pop();
-            const fileName = `${folderName}photo-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-            
-            const { error } = await sb.storage.from('listing-photos').upload(fileName, file);
-            if (error) { console.error("Erro upload:", error); continue; }
+      for (const file of files) {
+        const ext = file.name.split('.').pop();
+        const fileName = `${folderName}photo-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+        
+        const { error } = await sb.storage.from('listing-photos').upload(fileName, file);
+        if (error) { console.error("Erro upload:", error); continue; }
 
-            const { data: pub } = sb.storage.from('listing-photos').getPublicUrl(fileName);
-            uploadedUrls.push(pub.publicUrl);
-        }
-        return uploadedUrls;
+        const { data: pub } = sb.storage.from('listing-photos').getPublicUrl(fileName);
+        uploadedUrls.push(pub.publicUrl);
+      }
+      return uploadedUrls;
     }
 
     // --- FORMULÁRIO ---
@@ -1265,20 +907,20 @@
     const btnSalvar = document.getElementById('btnSalvarAnuncio');
     
     function resetForm(){
-        document.getElementById('formNovaHospedagem').reset();
-        editingListingId = null;
-        formModeText.textContent = "Novo";
-        btnSalvar.textContent = "Publicar Anúncio";
+      document.getElementById('formNovaHospedagem').reset();
+      editingListingId = null;
+      formModeText.textContent = "Novo";
+      btnSalvar.textContent = "Publicar Anúncio";
 
-        currentPhotos = [];
-        selectedFiles = [];
-        resetCoverSelection();
-        renderPhotoPreview();
-        photosInput.value = '';
+      currentPhotos = [];
+      selectedFiles = [];
+      resetCoverSelection();
+      renderPhotoPreview();
+      photosInput.value = '';
 
-        document.getElementById('existingPhotos').value = '';
-        document.getElementById('alertOk').style.display = 'none';
-        document.getElementById('alertErr').style.display = 'none';
+      document.getElementById('existingPhotos').value = '';
+      document.getElementById('alertOk').style.display = 'none';
+      document.getElementById('alertErr').style.display = 'none';
     }
 
     function toggleForm(forceOpen = false){
@@ -1297,151 +939,78 @@
     document.getElementById('btnCancelarForm').addEventListener('click', () => toggleForm());
 
     window.startEditListing = function(id) {
-        const listing = myListingsData.find(item => item.id === id);
-        if(!listing) return;
+      const listing = myListingsData.find(item => item.id === id);
+      if(!listing) return;
 
-        editingListingId = id; 
-        formModeText.textContent = "Editar"; 
-        btnSalvar.textContent = "Atualizar Anúncio"; 
+      editingListingId = id; 
+      formModeText.textContent = "Editar"; 
+      btnSalvar.textContent = "Atualizar Anúncio"; 
 
-        document.getElementById('titulo').value = listing.title;
-        document.getElementById('cidade').value = listing.city || "";
-        document.getElementById('preco_noite').value = listing.price_night || "";
-        document.getElementById('capacidade').value = listing.capacity || "";
-        document.getElementById('descricao').value = listing.description || "";
-        document.getElementById('data_inicio').value = listing.available_start || "";
-        document.getElementById('data_fim').value = listing.available_end || "";
+      document.getElementById('titulo').value = listing.title;
+      document.getElementById('cidade').value = listing.city || "";
+      document.getElementById('preco_noite').value = listing.price_night || "";
+      document.getElementById('capacidade').value = listing.capacity || "";
+      document.getElementById('descricao').value = listing.description || "";
+      document.getElementById('data_inicio').value = listing.available_start || "";
+      document.getElementById('data_fim').value = listing.available_end || "";
 
-        document.querySelectorAll('input[name="servicos"]').forEach(cb => {
-            cb.checked = listing.services?.includes(cb.value);
-        });
+      document.querySelectorAll('input[name="servicos"]').forEach(cb => {
+        cb.checked = listing.services?.includes(cb.value);
+      });
 
-        currentPhotos = listing.photos_url || [];
-        selectedFiles = [];
-        resetCoverSelection();
-        if(currentPhotos.length > 0){
-          coverSource = 'existing';
-          coverIndex = 0;
-        }
-        renderPhotoPreview();
-
-        toggleForm(true);
+      currentPhotos = listing.photos_url || [];
+      selectedFiles = [];
+      resetCoverSelection();
+      if(currentPhotos.length > 0){
+        coverSource = 'existing';
+        coverIndex = 0;
+      }
+      renderPhotoPreview();
+      toggleForm(true);
     }
 
     // --- EXCLUSÃO DE ANÚNCIO ---
     const ppDeleteListing = document.getElementById('ppDeleteListing');
     
     window.confirmDeleteListing = function(id) {
-        deletingListingId = id;
-        ppDeleteListing.style.display = 'flex';
-        requestAnimationFrame(() => {
-            ppDeleteListing.querySelector('.pp-card').classList.add('show');
-        });
+      deletingListingId = id;
+      ppDeleteListing.style.display = 'flex';
+      requestAnimationFrame(() => {
+        ppDeleteListing.querySelector('.pp-card').classList.add('show');
+      });
     }
 
     document.getElementById('delListingCancel').addEventListener('click', () => {
-        const card = ppDeleteListing.querySelector('.pp-card');
-        card.classList.remove('show');
-        setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
-        deletingListingId = null;
+      const card = ppDeleteListing.querySelector('.pp-card');
+      card.classList.remove('show');
+      setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
+      deletingListingId = null;
     });
 
     document.getElementById('delListingOk').addEventListener('click', async () => {
-        if(!deletingListingId) return;
-        
-        const { error } = await sb.from('listings').delete().eq('id', deletingListingId);
-        
-        if(error) {
-            toastHost("Erro ao excluir anúncio.");
-            console.error(error);
-        } else {
-            toastHost("Anúncio excluído com sucesso.");
-            loadMyListings();
-        }
-        
-        const card = ppDeleteListing.querySelector('.pp-card');
-        card.classList.remove('show');
-        setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
-    });
-
-    // --- ALTERAR SENHA (ATUALIZADO E MELHORADO) ---
-    const ppChangePassword = document.getElementById('ppChangePassword');
-    const linkAlterarSenha = document.getElementById('linkAlterarSenha');
-    const newPassInput = document.getElementById('newPassword');
-    const confirmPassInput = document.getElementById('confirmPassword');
-    const changePassOkBtn = document.getElementById('changePassOk');
-
-    linkAlterarSenha.addEventListener('click', (e) => {
-      e.preventDefault();
-      // Limpa campos e estilos
-      newPassInput.value = '';
-      confirmPassInput.value = '';
-      document.getElementById('strengthBar').style.width = '0%';
-      document.getElementById('strengthLabel').textContent = 'Digite a senha';
-      confirmPassInput.classList.remove('input-match', 'input-mismatch');
+      if(!deletingListingId) return;
       
-      // Reseta inputs para type="password" e ícones
-      newPassInput.type = 'password';
-      confirmPassInput.type = 'password';
-      document.querySelectorAll('.pass-toggle i').forEach(i => {
-          i.classList.remove('fa-eye-slash');
-          i.classList.add('fa-eye');
-      });
-
-      ppChangePassword.style.display = 'flex';
-      requestAnimationFrame(() => {
-        ppChangePassword.querySelector('.pp-card').classList.add('show');
-      });
-    });
-
-    document.getElementById('changePassCancel').addEventListener('click', () => {
-      const card = ppChangePassword.querySelector('.pp-card');
+      const { error } = await sb.from('listings').delete().eq('id', deletingListingId);
+      
+      if(error) {
+        toastHost("Erro ao excluir anúncio.");
+        console.error(error);
+      } else {
+        toastHost("Anúncio excluído com sucesso.");
+        loadMyListings();
+      }
+      
+      const card = ppDeleteListing.querySelector('.pp-card');
       card.classList.remove('show');
-      setTimeout(() => { ppChangePassword.style.display = 'none'; }, 200);
+      setTimeout(() => { ppDeleteListing.style.display = 'none'; }, 200);
     });
 
-    changePassOkBtn.addEventListener('click', async () => {
-      const newPass = newPassInput.value;
-      const confirmPass = confirmPassInput.value;
-
-      if(newPass.length < 6) {
-        toastHost("A senha deve ter pelo menos 6 caracteres.");
-        return;
-      }
-      if(newPass !== confirmPass) {
-        toastHost("As senhas não coincidem.");
-        return;
-      }
-
-      const originalText = changePassOkBtn.textContent;
-      changePassOkBtn.textContent = "Salvando...";
-      changePassOkBtn.disabled = true;
-
-      try {
-        const { error } = await sb.auth.updateUser({ password: newPass });
-        if(error) throw error;
-        
-        toastHost("Senha alterada com sucesso!");
-        // Fechar modal
-        const card = ppChangePassword.querySelector('.pp-card');
-        card.classList.remove('show');
-        setTimeout(() => { ppChangePassword.style.display = 'none'; }, 200);
-      } catch (err) {
-        console.error("Erro ao alterar senha:", err);
-        toastHost("Erro: " + err.message);
-      } finally {
-        changePassOkBtn.textContent = "Salvar Senha";
-        changePassOkBtn.disabled = false;
-      }
-    });
-
-    // --- EXCLUSÃO DE CONTA (igual tutor) ---
+    // --- EXCLUSÃO DE CONTA ---
     const ppDeleteAccount = document.getElementById('ppDeleteAccount');
     const linkExcluirConta = document.getElementById('linkExcluirConta');
     const deleteConfirmInput = document.getElementById('deleteConfirmInput');
     const delAccountOkBtn = document.getElementById('delAccountOk');
 
-    // libera o botão somente quando digitar EXCLUIR
     deleteConfirmInput.addEventListener('input', () => {
       const value = deleteConfirmInput.value.trim().toUpperCase();
       delAccountOkBtn.disabled = value !== 'EXCLUIR';
@@ -1453,7 +1022,6 @@
         toastHost("Erro: sessão expirada. Faça login novamente.");
         return;
       }
-      // reseta campo e botão sempre que abrir
       deleteConfirmInput.value = '';
       delAccountOkBtn.disabled = true;
 
@@ -1502,7 +1070,6 @@
           toastHost('Conta excluída com sucesso.');
         }
 
-        // encerra sessão no front
         try { await sb.auth.signOut(); } catch(e) {}
 
         setTimeout(() => {
@@ -1548,8 +1115,8 @@
 
         let newPhotos = [];
         if(selectedFiles.length > 0){
-             newPhotos = await uploadListingPhotos(selectedFiles, editingListingId || 'new');
-             finalPhotosUrl = [...finalPhotosUrl, ...newPhotos];
+          newPhotos = await uploadListingPhotos(selectedFiles, editingListingId || 'new');
+          finalPhotosUrl = [...finalPhotosUrl, ...newPhotos];
         }
 
         let coverUrl = null;
@@ -1579,11 +1146,11 @@
         let error = null;
 
         if(editingListingId) {
-            const res = await sb.from('listings').update(payload).eq('id', editingListingId);
-            error = res.error;
+          const res = await sb.from('listings').update(payload).eq('id', editingListingId);
+          error = res.error;
         } else {
-            const res = await sb.from('listings').insert(payload);
-            error = res.error;
+          const res = await sb.from('listings').insert(payload);
+          error = res.error;
         }
 
         if(error) throw error;
@@ -1620,20 +1187,20 @@
     let ppActiveChatId = null;
     let ppChatChannel = null;
 
-    const ppChatFab       = document.getElementById('ppChatFab');
-    const ppChatWidget    = document.getElementById('ppChatWidget');
-    const ppChatClose     = document.getElementById('ppChatClose');
-    const ppChatConvList  = document.getElementById('ppChatConvList');
-    const ppChatMessages  = document.getElementById('ppChatMessages');
-    const ppChatForm      = document.getElementById('ppChatForm');
-    const ppChatInput     = document.getElementById('ppChatInput');
-    const ppChatSubtitle  = document.getElementById('ppChatSubtitle');
-    const ppBadge         = document.getElementById('ppBadge');
+    const ppChatFab        = document.getElementById('ppChatFab');
+    const ppChatWidget     = document.getElementById('ppChatWidget');
+    const ppChatClose      = document.getElementById('ppChatClose');
+    const ppChatConvList   = document.getElementById('ppChatConvList');
+    const ppChatMessages   = document.getElementById('ppChatMessages');
+    const ppChatForm       = document.getElementById('ppChatForm');
+    const ppChatInput      = document.getElementById('ppChatInput');
+    const ppChatSubtitle   = document.getElementById('ppChatSubtitle');
+    const ppBadge          = document.getElementById('ppBadge');
 
     ppChatFab?.addEventListener('click', () => {
       ppChatWidget.style.display = 'flex';
       ppChatFab.style.display = 'none';
-      ppBadge.classList.remove('show');   // limpamos "não lidas" ao abrir
+      ppBadge.classList.remove('show');
     });
 
     ppChatClose?.addEventListener('click', () => {
@@ -1648,144 +1215,155 @@
     }
 
     async function ppLoadConversations() {
-        if (!ppChatUser) return;
+      if (!ppChatUser) return;
 
-        const { data, error } = await sb
+      const { data, error } = await sb
         .from('chats')
         .select('*')
         .or(`tutor_id.eq.${ppChatUser.id},host_id.eq.${ppChatUser.id}`)
         .order('created_at', { ascending: false });
 
-        if (error) { console.error('Erro chat:', error); return; }
+      if (error) { console.error('Erro chat:', error); return; }
 
-        ppChatConvList.innerHTML = '';
-        if (!data || data.length === 0) {
-            ppChatConvList.innerHTML = `<div style="font-size:0.8rem;color:#666;padding:8px;">Sem conversas.</div>`;
-            return;
-        }
+      ppChatConvList.innerHTML = '';
+      if (!data || data.length === 0) {
+        ppChatConvList.innerHTML = `<div style="font-size:0.8rem;color:#666;padding:8px;">Sem conversas.</div>`;
+        return;
+      }
 
-        // Para o anfitrião, o 'outro' é o tutor_id
-        const otherIds = data.map(c => c.tutor_id);
+      const otherIds = data.map(c => c.tutor_id);
         
-        // Busca nomes dos tutores
-        let profilesMap = {};
-        if(otherIds.length > 0){
-            const { data: profilesData } = await sb
-            .from('profiles')
-            .select('id, full_name, first_name, email')
-            .in('id', otherIds);
+      let profilesMap = {};
+      if(otherIds.length > 0){
+        const { data: profilesData } = await sb
+          .from('profiles')
+          .select('id, full_name, first_name, email')
+          .in('id', otherIds);
             
-            if(profilesData){
-                profilesData.forEach(p => {
-                    profilesMap[p.id] = p.full_name || p.first_name || p.email;
-                });
-            }
+        if(profilesData){
+          profilesData.forEach(p => {
+            profilesMap[p.id] = p.full_name || p.first_name || p.email;
+          });
         }
+      }
 
-        data.forEach(chat => {
-            const otherName = profilesMap[chat.tutor_id] || "Tutor";
-            const roleLabel = "Tutor"; 
+      data.forEach(chat => {
+        const otherName = profilesMap[chat.tutor_id] || "Tutor";
+        const roleLabel = "Tutor"; 
 
-            const item = document.createElement('div');
-            item.className = 'pp-chat-conv-item';
-            item.dataset.id = chat.id;
-            item.innerHTML = `
-                <span class="pp-chat-conv-name">${otherName}</span>
-                <div class="pp-chat-conv-role">${roleLabel}</div>
-                <span class="pp-chat-conv-meta">${chat.booking_id ? 'Reserva' : 'Sem reserva'}</span>
-                <button class="pp-chat-conv-delete" title="Excluir" onclick="ppDeleteChat('${chat.id}', event)">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            `;
-            item.addEventListener('click', () => ppOpenConversation(chat));
-            ppChatConvList.appendChild(item);
-        });
+        const item = document.createElement('div');
+        item.className = 'pp-chat-conv-item';
+        item.dataset.id = chat.id;
+        item.innerHTML = `
+          <span class="pp-chat-conv-name">${otherName}</span>
+          <div class="pp-chat-conv-role">${roleLabel}</div>
+          <span class="pp-chat-conv-meta">${chat.booking_id ? 'Reserva' : 'Sem reserva'}</span>
+          <button class="pp-chat-conv-delete" title="Excluir" onclick="ppDeleteChat('${chat.id}', event)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        `;
+        item.addEventListener('click', () => ppOpenConversation(chat));
+        ppChatConvList.appendChild(item);
+      });
     }
 
     window.ppDeleteChat = async function(id, event) {
-        event.stopPropagation(); 
-        if(!confirm("Excluir conversa?")) return;
+      event.stopPropagation(); 
+      if(!confirm("Excluir conversa?")) return;
         
-        await sb.from('messages').delete().eq('chat_id', id);
-        const { error } = await sb.from('chats').delete().eq('id', id);
+      await sb.from('messages').delete().eq('chat_id', id);
+      const { error } = await sb.from('chats').delete().eq('id', id);
 
-        if(!error) {
-            if(ppActiveChatId === id) {
-                ppChatMessages.innerHTML = '';
-                ppChatSubtitle.textContent = "Selecione uma conversa";
-                ppActiveChatId = null;
-                if(ppChatChannel) sb.removeChannel(ppChatChannel);
-            }
-            ppLoadConversations();
+      if(!error) {
+        if(ppActiveChatId === id) {
+          ppChatMessages.innerHTML = '';
+          ppChatSubtitle.textContent = "Selecione uma conversa";
+          ppActiveChatId = null;
+          if(ppChatChannel) sb.removeChannel(ppChatChannel);
         }
+        ppLoadConversations();
+      }
     }
 
     function ppSetActiveConversation(chatId) {
-        document.querySelectorAll('.pp-chat-conv-item').forEach(i => i.classList.toggle('active', i.dataset.id === chatId));
+      document.querySelectorAll('.pp-chat-conv-item').forEach(i => 
+        i.classList.toggle('active', i.dataset.id === chatId)
+      );
     }
 
     async function ppOpenConversation(chat) {
-        ppActiveChatId = chat.id;
-        ppSetActiveConversation(chat.id);
+      ppActiveChatId = chat.id;
+      ppSetActiveConversation(chat.id);
         
-        const nameEl = document.querySelector(`.pp-chat-conv-item[data-id="${chat.id}"] .pp-chat-conv-name`);
-        ppChatSubtitle.textContent = nameEl ? nameEl.textContent : "Chat";
-        ppChatMessages.innerHTML = '<div style="text-align:center;font-size:0.8rem;color:#666;margin-top:10px;">Carregando...</div>';
+      const nameEl = document.querySelector(`.pp-chat-conv-item[data-id="${chat.id}"] .pp-chat-conv-name`);
+      ppChatSubtitle.textContent = nameEl ? nameEl.textContent : "Chat";
+      ppChatMessages.innerHTML = '<div style="text-align:center;font-size:0.8rem;color:#666;margin-top:10px;">Carregando...</div>';
 
-        if(ppChatChannel) sb.removeChannel(ppChatChannel);
+      if(ppChatChannel) sb.removeChannel(ppChatChannel);
 
-        const { data, error } = await sb.from('messages').select('*').eq('chat_id', chat.id).order('created_at', {ascending: true});
-        if(error) return;
+      const { data, error } = await sb
+        .from('messages')
+        .select('*')
+        .eq('chat_id', chat.id)
+        .order('created_at', {ascending: true});
 
-        ppChatMessages.innerHTML = '';
-        data.forEach(m => ppRenderMessage(m));
-        ppScrollToBottom();
+      if(error) return;
 
-        // canal em tempo real para ESTA conversa
-        ppChatChannel = sb.channel('chat-'+chat.id)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'chat_id=eq.'+chat.id }, payload => {
-            const msg = payload.new;
-            ppRenderMessage(msg);
-            ppScrollToBottom();
+      ppChatMessages.innerHTML = '';
+      data.forEach(m => ppRenderMessage(m));
+      ppScrollToBottom();
 
-            const isMe = msg.sender_id === ppChatUser.id;
-            // mostra a bolinha somente se for mensagem do outro
-            // e se o widget estiver fechado OU se a conversa ativa não for a dessa mensagem
-            if(!isMe && (ppChatWidget.style.display === 'none' || ppActiveChatId !== msg.chat_id)){
-                ppBadge.classList.add('show');
-            }
+      ppChatChannel = sb.channel('chat-'+chat.id)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: 'chat_id=eq.'+chat.id
+        }, payload => {
+          const msg = payload.new;
+          ppRenderMessage(msg);
+          ppScrollToBottom();
+
+          const isMe = msg.sender_id === ppChatUser.id;
+          if(!isMe && (ppChatWidget.style.display === 'none' || ppActiveChatId !== msg.chat_id)){
+            ppBadge.classList.add('show');
+          }
         }).subscribe();
     }
 
     function ppRenderMessage(msg){
-        if(!ppChatUser) return;
-        const isMe = msg.sender_id === ppChatUser.id;
-        const div = document.createElement('div');
-        div.className = 'pp-chat-msg-row ' + (isMe ? 'me' : 'other');
+      if(!ppChatUser) return;
+      const isMe = msg.sender_id === ppChatUser.id;
+      const div = document.createElement('div');
+      div.className = 'pp-chat-msg-row ' + (isMe ? 'me' : 'other');
         
-        const date = new Date(msg.created_at);
-        const time = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0');
+      const date = new Date(msg.created_at);
+      const time = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0');
 
-        div.innerHTML = `
-            <div class="pp-chat-bubble ${isMe ? 'me' : 'other'}">
-                <div>${msg.content}</div>
-                <div class="pp-chat-time">${time}</div>
-            </div>
-        `;
-        ppChatMessages.appendChild(div);
+      div.innerHTML = `
+        <div class="pp-chat-bubble ${isMe ? 'me' : 'other'}">
+          <div>${msg.content}</div>
+          <div class="pp-chat-time">${time}</div>
+        </div>
+      `;
+      ppChatMessages.appendChild(div);
     }
 
     function ppScrollToBottom() {
-        ppChatMessages.scrollTop = ppChatMessages.scrollHeight;
+      ppChatMessages.scrollTop = ppChatMessages.scrollHeight;
     }
 
     ppChatForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if(!ppActiveChatId || !ppChatUser) return;
-        const text = ppChatInput.value.trim();
-        if(!text) return;
-        ppChatInput.value = '';
-        await sb.from('messages').insert({ chat_id: ppActiveChatId, sender_id: ppChatUser.id, content: text });
+      e.preventDefault();
+      if(!ppActiveChatId || !ppChatUser) return;
+      const text = ppChatInput.value.trim();
+      if(!text) return;
+      ppChatInput.value = '';
+      await sb.from('messages').insert({ 
+        chat_id: ppActiveChatId, 
+        sender_id: ppChatUser.id, 
+        content: text 
+      });
     });
 
     init();

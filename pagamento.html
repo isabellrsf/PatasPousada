@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- CSS: exatamente igual ao seu -->
   <style>
     :root{
       --pri:#e2725b; --pri-dark:#d45f47; --bg:#f7f7f7; --card:#fff; --border:#e5e5e5;
@@ -42,9 +41,35 @@
     .msg{margin-top:12px;padding:10px;border-radius:12px;font-weight:700;text-align:center;display:none}
     .msg.ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;display:block}
     .msg.err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;display:block}
+
+    /* Botão de voltar */
+    .back-row{
+      display:flex;
+      justify-content:flex-start;
+      margin-bottom:12px;
+    }
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#fff;
+      color:var(--pri-dark);
+      border:1px solid var(--border);
+      font-weight:800;
+      font-size:0.9rem;
+      cursor:pointer;
+      min-width:auto;
+    }
+    .back-btn span{
+      font-size:1.1rem;
+    }
+    .back-btn:hover{
+      background:#fef2f2;
+    }
   </style>
 
-  <!-- Supabase opcional -->
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -64,6 +89,13 @@
 
   <main>
     <div class="card">
+      <!-- BOTÃO DE VOLTAR -->
+      <div class="back-row">
+        <button type="button" class="back-btn" id="btn-voltar">
+          <span>←</span> Voltar
+        </button>
+      </div>
+
       <h1>Pagamento seguro 🐾</h1>
       <p class="hint">Revise sua reserva e escolha a forma de pagamento</p>
 
@@ -250,6 +282,29 @@
       ctx.font='14px Nunito, Arial'; ctx.fillText(digits, ml, H-8);
     }
 
+    /* ===== Supabase client (lazy) ===== */
+    let sb = null;
+    async function getSupabaseClient(){
+      if (sb) return sb;
+      if (window.supabase){
+        sb = window.supabase.createClient(
+          "https://nwbgzokttjgkipwzfgzc.supabase.co",
+          "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ"
+        );
+        return sb;
+      }
+      // se por algum motivo ainda não carregou, espera um pouquinho
+      await new Promise(r => setTimeout(r, 100));
+      if (window.supabase){
+        sb = window.supabase.createClient(
+          "https://nwbgzokttjgkipwzfgzc.supabase.co",
+          "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ"
+        );
+        return sb;
+      }
+      return null;
+    }
+
     /* ===== Elementos dos blocos ===== */
     const elCartao = document.getElementById('bloco-cartao');
     const elPix    = document.getElementById('bloco-pix');
@@ -293,29 +348,114 @@
     btnAceitar.addEventListener('click', aceitarTermos);
     btnRecusar.addEventListener('click', recusarTermos);
 
-    // Fecha ao clicar fora do card
     overlay.addEventListener('click', (e)=>{
       if(e.target === overlay) fecharTermos();
     });
-    // Fecha com ESC
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape' && overlay.style.display === 'flex') fecharTermos();
     });
 
     /* ===== Inicialização ===== */
-    (function init(){
-      const params=new URLSearchParams(location.search);
-      const reserva=params.get('reserva')||'PP-0000';
-      const checkin=params.get('checkin')||'—';
-      const checkout=params.get('checkout')||'—';
-      const pets=params.get('pets')||'1';
-      const nomePet=params.get('nomePet')||'';
-      const anfitriao=params.get('anfitriao')||'Anfitrião';
-      const total=params.get('total')||'0';
+    (async function init(){
+      const params = new URLSearchParams(location.search);
+      const bookingId = params.get('booking_id');
 
-      document.getElementById('resumo-linha').value =
+      const btnVoltar = document.getElementById('btn-voltar');
+      if (btnVoltar){
+        btnVoltar.addEventListener('click', async () => {
+          try{
+            const sbClient = await getSupabaseClient();
+            if (sbClient){
+              const { data:{ user } } = await sbClient.auth.getUser();
+              if (user){
+                window.location.href = 'home_tutor.html';
+                return;
+              }
+            }
+          }catch(e){
+            console.error('Erro ao verificar usuário logado no botão Voltar:', e);
+          }
+          // fallback se não estiver logado
+          window.location.href = 'cadastrarouentrar.html';
+        });
+      }
+
+      const sbClient = await getSupabaseClient();
+
+      // Valores padrão / fallback
+      let reserva   = params.get('reserva')   || 'PP-0000';
+      let checkin   = params.get('checkin')   || '—';
+      let checkout  = params.get('checkout')  || '—';
+      let pets      = params.get('pets')      || '1';
+      let nomePet   = params.get('nomePet')   || '';
+      let anfitriao = params.get('anfitriao') || 'Anfitrião';
+      let total     = params.get('total')     || '0';
+
+      // Se veio booking_id na URL, tenta carregar tudo do banco
+      if (bookingId && sbClient){
+        try{
+          const { data: booking, error: bErr } = await sbClient
+            .from('bookings')
+            .select('id, start_date, end_date, total_price, pets_count, pet_name, listing_id, host_id')
+            .eq('id', bookingId)
+            .maybeSingle();
+
+          if (!bErr && booking){
+            reserva = booking.id || reserva;
+            pets    = booking.pets_count != null ? String(booking.pets_count) : pets;
+            nomePet = booking.pet_name || nomePet;
+            total   = booking.total_price != null ? String(booking.total_price) : total;
+
+            if (booking.start_date){
+              const dIn = new Date(booking.start_date);
+              checkin = dIn.toLocaleDateString('pt-BR');
+            }
+            if (booking.end_date){
+              const dOut = new Date(booking.end_date);
+              checkout = dOut.toLocaleDateString('pt-BR');
+            }
+
+            let hostName = '';
+            let listingTitle = '';
+
+            if (booking.listing_id){
+              const { data: listing } = await sbClient
+                .from('listings')
+                .select('title')
+                .eq('id', booking.listing_id)
+                .maybeSingle();
+              if (listing?.title) listingTitle = listing.title;
+            }
+
+            if (booking.host_id){
+              const { data: host } = await sbClient
+                .from('hosts')
+                .select('full_name')
+                .eq('id', booking.host_id)
+                .maybeSingle();
+              if (host?.full_name) hostName = host.full_name;
+            }
+
+            anfitriao = hostName || listingTitle || anfitriao;
+          } else {
+            console.warn('Não foi possível carregar booking pelo ID, usando parâmetros da URL.');
+          }
+        }catch(e){
+          console.error('Erro ao carregar booking:', e);
+        }
+      }
+
+      // Monta o resumo
+      const resumoInput = document.getElementById('resumo-linha');
+      resumoInput.value =
         `Reserva ${reserva} • ${anfitriao} • ${pets} pet(s) ${nomePet?('('+nomePet+')'):''} • ${checkin} → ${checkout} • Total ${formatCurrency(total)}`;
-      document.getElementById('editar-reserva').href = `index.html?reserva=${encodeURIComponent(reserva)}`;
+
+      const editarLink = document.getElementById('editar-reserva');
+      if (bookingId){
+        editarLink.href = `home_tutor.html?booking_id=${encodeURIComponent(bookingId)}`;
+      } else {
+        editarLink.href = `index.html?reserva=${encodeURIComponent(reserva)}`;
+      }
 
       // Preenche Pix/Boleto
       document.getElementById('pix-copia').value = gerarPixCode({ total });
@@ -395,16 +535,11 @@
       // Estado inicial: mostrar cartão
       onMetodoChange();
 
-      // Supabase opcional (não bloqueia)
+      // Pré-preenche email com usuário logado, se existir
       try{
-        if(window.supabase){
-          const sb = window.supabase.createClient(
-            "https://nwbgzokttjgkipwzfgzc.supabase.co",
-            "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ"
-          );
-          sb.auth.getUser().then(({data:{user}})=>{
-            if(user?.email) document.getElementById('email').value = user.email;
-          }).catch(()=>{});
+        if(sbClient){
+          const { data:{ user } } = await sbClient.auth.getUser();
+          if(user?.email) document.getElementById('email').value = user.email;
         }
       }catch(e){}
     })();
