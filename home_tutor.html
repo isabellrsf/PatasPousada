@@ -8,6 +8,40 @@
 <link rel="stylesheet" href="home_tutor.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Estilo extra só para os filtros de reservas -->
+<style>
+  .tutor-bookings-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .tutor-bookings-filter{
+    display:flex;
+    gap:6px;
+  }
+  .tb-filter-btn{
+    border-radius:999px;
+    padding:3px 10px;
+    font-size:0.7rem;
+    border:1px solid #e5e7eb;
+    background:#fff;
+    cursor:pointer;
+    color:#6b7280;
+    font-weight:600;
+    transition:all .15s;
+  }
+  .tb-filter-btn:hover{
+    background:#f3f4f6;
+  }
+  .tb-filter-btn.active{
+    background:#fee2e2;
+    border-color:#f97373;
+    color:#b91c1c;
+    box-shadow:0 1px 4px rgba(248,113,113,.4);
+  }
+</style>
 </head>
 <body>
 <header>
@@ -108,9 +142,15 @@
           </div>
         </div>
 
-        <!-- NOVO CARD: MINHAS RESERVAS -->
+        <!-- CARD: MINHAS RESERVAS (com filtros Ativas/Canceladas) -->
         <div class="card">
-          <div class="hd">Minhas reservas ✔</div>
+          <div class="hd tutor-bookings-header">
+            <span>Minhas reservas ✔</span>
+            <div class="tutor-bookings-filter">
+              <button type="button" class="tb-filter-btn active" data-filter="ativas">Ativas</button>
+              <button type="button" class="tb-filter-btn" data-filter="canceladas">Canceladas</button>
+            </div>
+          </div>
           <div id="tutorBookings" class="tutor-bookings">
             <!-- preenchido via JS -->
           </div>
@@ -229,7 +269,7 @@
 
 <script>
   const SUPABASE_URL     = "https://nwbgzokttjgkipwzfgzc.supabase.co";
-  const SUPABASE_ANON_KEY= "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ"; // CUIDADO: Em produção, proteja isso com RLS
+  const SUPABASE_ANON_KEY= "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const DF_CITIES_BASE = [
@@ -244,6 +284,9 @@
   let currentUserId    = null;
   let HOSTS = [];
   let currentModalListing = null;
+
+  // filtro atual das reservas: 'ativas' ou 'canceladas'
+  let tutorBookingsFilter = 'ativas';
 
   // --- UI HELPERS ---
   function toast(msg){
@@ -567,7 +610,7 @@
     }
   }
 
-  // --- MINHAS RESERVAS (sem mostrar canceladas + botão cancelar) ---
+  // --- MINHAS RESERVAS (Ativas / Canceladas) ---
   async function loadTutorBookings(){
     const container = document.getElementById('tutorBookings');
     if(!container || !currentUserId) return;
@@ -589,17 +632,22 @@
             return;
         }
 
-        const visibleBookings = bookings.filter(b => 
-          b.status !== 'cancelada' && 
-          b.status !== 'cancelado'
-        );
+        const showCanceled = (tutorBookingsFilter === 'canceladas');
 
-        if(!visibleBookings.length){
-            container.innerHTML = '<div class="empty" style="padding:10px;">Nenhuma reserva ativa no momento.</div>';
+        const filteredBookings = bookings.filter(b => {
+          const st = (b.status || '').toLowerCase();
+          const isCanceled = (st === 'cancelada' || st === 'cancelado');
+          return showCanceled ? isCanceled : !isCanceled;
+        });
+
+        if(!filteredBookings.length){
+            container.innerHTML = showCanceled
+              ? '<div class="empty" style="padding:10px;">Nenhuma reserva cancelada até o momento.</div>'
+              : '<div class="empty" style="padding:10px;">Nenhuma reserva ativa no momento.</div>';
             return;
         }
 
-        const hostIds = [...new Set(visibleBookings.map(b => b.host_id).filter(Boolean))];
+        const hostIds = [...new Set(filteredBookings.map(b => b.host_id).filter(Boolean))];
 
         const profilesMap = {};
         if (hostIds.length) {
@@ -617,7 +665,7 @@
             }
         }
 
-        container.innerHTML = visibleBookings.map(b => {
+        container.innerHTML = filteredBookings.map(b => {
             const profile = profilesMap[b.host_id] || {};
             const hostName = profile.first_name || profile.full_name || 'Anfitrião';
             const start = new Date(b.start_date).toLocaleDateString('pt-BR');
@@ -626,11 +674,12 @@
             const status = (b.status || '').toLowerCase();
 
             let stColor = '#6b7280';
-            if(status === 'pendente')             stColor = '#f59e0b';
+            if(status === 'pendente')                           stColor = '#f59e0b';
             if(status === 'confirmada' || status === 'aprovada') stColor = '#10b981';
-            if(status === 'cancelada' || status === 'cancelado') stColor = '#ef4444';
+            if(status === 'cancelada'  || status === 'cancelado') stColor = '#ef4444';
 
-            const showCancelBtn = (status === 'confirmada' || status === 'aprovada');
+            const showCancelBtn = !showCanceled &&
+              (status === 'confirmada' || status === 'aprovada');
 
             return `
                 <div class="tutor-booking-row"
@@ -663,7 +712,7 @@
     }
   }
 
-  // cancela reserva aprovada/confirmada
+  // Cancela reserva aprovada/confirmada (fica com status "cancelada")
   window.cancelBooking = async function(bookingId){
     const ok = confirm("Tem certeza que deseja cancelar esta reserva?");
     if(!ok) return;
@@ -873,6 +922,13 @@
   const ppChatSubtitle  = document.getElementById('ppChatSubtitle');
   const ppBadge         = document.getElementById('ppBadge');
 
+  // elementos do modal de exclusão de conversa
+  const ppChatDelete    = document.getElementById('ppChatDelete');
+  const chatDelCancel   = document.getElementById('chatDelCancel');
+  const chatDelOk       = document.getElementById('chatDelOk');
+  let chatToDeleteId    = null;
+  let chatToDeleteName  = '';
+
   let ppActiveChatId = null;
   let chatChannel = null;
 
@@ -886,6 +942,84 @@
     ppChatWidget.style.display = 'none';
   });
 
+  // Abrir modal de exclusão de conversa
+  function openDeleteChatModal(chatId, hostName) {
+    chatToDeleteId = chatId;
+    chatToDeleteName = hostName || '';
+    const textEl = document.getElementById('chatDelText');
+    if (textEl) {
+      if (chatToDeleteName) {
+        textEl.innerHTML = `Tem certeza que deseja excluir a conversa com <strong>${chatToDeleteName}</strong>?<br>Esta ação apagará todo o histórico de mensagens.`;
+      } else {
+        textEl.innerHTML = `Tem certeza que deseja excluir esta conversa?<br>Esta ação apagará todo o histórico de mensagens.`;
+      }
+    }
+    ppChatDelete.style.display = 'flex';
+    requestAnimationFrame(()=> ppChatDelete.querySelector('.pp-card').classList.add('show'));
+  }
+
+  function closeDeleteChatModal() {
+    const card = ppChatDelete.querySelector('.pp-card');
+    card.classList.remove('show');
+    setTimeout(()=>{
+      ppChatDelete.style.display = 'none';
+      chatToDeleteId = null;
+      chatToDeleteName = '';
+    }, 200);
+  }
+
+  chatDelCancel.addEventListener('click', () => {
+    closeDeleteChatModal();
+  });
+
+  chatDelOk.addEventListener('click', async () => {
+    if (!chatToDeleteId || !currentUserId) {
+      closeDeleteChatModal();
+      return;
+    }
+
+    try {
+      // Apaga mensagens do chat
+      const { error: msgErr } = await sb
+        .from('messages')
+        .delete()
+        .eq('chat_id', chatToDeleteId);
+
+      if (msgErr) {
+        console.error('Erro ao apagar mensagens do chat:', msgErr);
+      }
+
+      // Apaga o próprio chat
+      const { error: chatErr } = await sb
+        .from('chats')
+        .delete()
+        .eq('id', chatToDeleteId)
+        .eq('tutor_id', currentUserId);
+
+      if (chatErr) {
+        console.error('Erro ao excluir conversa:', chatErr);
+        toast('Erro ao excluir conversa.');
+        return;
+      }
+
+      // Se o chat ativo for o que foi excluído, limpa a thread
+      if (ppActiveChatId === chatToDeleteId) {
+        ppActiveChatId = null;
+        ppChatMessages.innerHTML = '';
+        ppChatSubtitle.textContent = 'Selecione uma conversa';
+      }
+
+      toast('Conversa excluída.');
+      closeDeleteChatModal();
+      loadConversations();
+
+    } catch (e) {
+      console.error('Erro inesperado ao excluir conversa:', e);
+      toast('Erro ao excluir conversa.');
+      closeDeleteChatModal();
+    }
+  });
+
   // Carregar lista de conversas (tabela CHATS)
   async function loadConversations() {
     ppChatConvList.innerHTML = '<div style="padding:10px; font-size:0.8rem; color:#666;">Carregando...</div>';
@@ -895,9 +1029,8 @@
     try {
       const { data: chats, error } = await sb
         .from('chats')
-        .select('id, host_id, created_at, is_deleted')
+        .select('id, host_id, created_at')
         .eq('tutor_id', currentUserId)
-        .eq('is_deleted', false)
         .order('created_at', { ascending: false });
 
       if(error) throw error;
@@ -931,10 +1064,33 @@
         const item = document.createElement('div');
         item.className = `pp-chat-conv-item ${c.id === ppActiveChatId ? 'active' : ''}`;
         item.innerHTML = `
-          <div class="pp-chat-conv-name">${name}</div>
-          <div class="pp-chat-conv-meta">Clique para ver as mensagens</div>
+          <div class="pp-chat-conv-line" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="flex:1; min-width:0;">
+              <div class="pp-chat-conv-name">${name}</div>
+              <div class="pp-chat-conv-meta">Clique para ver as mensagens</div>
+            </div>
+            <button class="pp-chat-conv-del" data-chat-id="${c.id}" title="Excluir conversa"
+                    style="border:none; background:transparent; cursor:pointer; padding:4px; flex-shrink:0;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
         `;
-        item.onclick = () => openChat(c.id, name);
+
+        // Clicar no item abre o chat (exceto no botão de excluir)
+        item.onclick = (ev) => {
+          if (ev.target.closest('.pp-chat-conv-del')) return;
+          openChat(c.id, name);
+        };
+
+        // Clique no X abre modal de exclusão
+        const delBtn = item.querySelector('.pp-chat-conv-del');
+        if (delBtn) {
+          delBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            openDeleteChatModal(c.id, name);
+          });
+        }
+
         ppChatConvList.appendChild(item);
       });
 
@@ -1054,7 +1210,6 @@
         .eq('tutor_id', currentUserId)
         .eq('host_id', hostId)
         .is('booking_id', null)
-        .eq('is_deleted', false)
         .maybeSingle();
 
       if(error) throw error;
@@ -1097,6 +1252,17 @@
       toast("Erro ao iniciar conversa");
     }
   };
+
+  // --- LISTENERS DOS BOTÕES ATIVAS / CANCELADAS ---
+  document.addEventListener('click', (ev)=>{
+    const btn = ev.target.closest('.tb-filter-btn');
+    if(!btn) return;
+    const filter = btn.dataset.filter;
+    tutorBookingsFilter = filter === 'canceladas' ? 'canceladas' : 'ativas';
+    document.querySelectorAll('.tb-filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loadTutorBookings();
+  });
 
   // --- INITIALIZATION ---
   window.addEventListener('DOMContentLoaded', async ()=>{

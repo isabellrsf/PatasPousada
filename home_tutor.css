@@ -1300,6 +1300,7 @@ nav ul a:hover {
   color: #9ca3af;
 }
 
+/* ======== X de excluir conversa (atualizado) ======== */
 .pp-chat-delete {
   position: absolute;
   top: 6px;
@@ -1314,7 +1315,7 @@ nav ul a:hover {
   place-items: center;
   font-size: 0.6rem;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, transform .12s, box-shadow .12s;
 }
 
 .pp-chat-conv-item:hover .pp-chat-delete {
@@ -1324,7 +1325,15 @@ nav ul a:hover {
 .pp-chat-delete:hover {
   background: #fee2e2;
   color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(185, 28, 28, 0.25);
 }
+
+.pp-chat-delete:active {
+  transform: scale(0.8);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.25);
+}
+/* ===================================== */
 
 .pp-chat-thread {
   display: flex;
