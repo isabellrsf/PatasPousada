@@ -289,6 +289,40 @@ header {
   transform: translateY(-2px); 
 }
 
+/* BOTÃO "CANCELADAS" */
+.btn-toggle-canceladas {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+.btn-toggle-canceladas::before {
+  content: "🗂";
+  font-size: 0.95rem;
+}
+.btn-toggle-canceladas:hover {
+  background: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.04);
+}
+.btn-toggle-canceladas.ativo {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+.btn-toggle-canceladas.ativo::before {
+  content: "🙈";
+}
+
 /* CARD ANÚNCIO */
 .host-card { 
   background-color: var(--cor-card); 
@@ -663,10 +697,31 @@ textarea {
 .reserva-aprovada-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
 }
 .reserva-aprovada-actions .btn-pago {
   font-size: 0.7rem;
   padding: 4px 10px;
+}
+/* botão "Cancelar reserva" pequenininho na sidebar */
+.reserva-aprovada-actions .btn-cancelar {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+}
+/* selinho Pago quando não há botão */
+.pill-pago {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ecfdf3;
+  color: #166534;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid #bbf7d0;
 }
 
 /* ==============================
@@ -691,6 +746,11 @@ textarea {
 .lista-reservas-host .lista-header h2::before {
   content: "📬";
   font-size: 1.2rem;
+}
+
+/* header específico para a seção de canceladas */
+.lista-reservas-canceladas .lista-header h2::before {
+  content: "🚫";
 }
 
 #listaReservasContainer {

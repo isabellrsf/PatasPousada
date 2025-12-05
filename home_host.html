@@ -187,9 +187,23 @@
     <section class="lista-reservas-host" id="blocoReservas">
       <div class="lista-header">
         <h2>Reservas recebidas</h2>
+        <!-- BOTÃO PARA VER/OCULTAR CANCELADAS -->
+        <button type="button" class="btn-toggle-canceladas" id="btnToggleCanceladas">
+          Ver canceladas
+        </button>
       </div>
       <div id="listaReservasContainer">
         <p style="padding:20px; color:#666;">Carregando reservas...</p>
+      </div>
+    </section>
+
+    <!-- LISTA: RESERVAS CANCELADAS (INICIALMENTE OCULTA) -->
+    <section class="lista-reservas-host lista-reservas-canceladas" id="blocoReservasCanceladas" style="display:none;">
+      <div class="lista-header">
+        <h2>Reservas canceladas</h2>
+      </div>
+      <div id="listaReservasCanceladas">
+        <p style="padding:20px; color:#666;">Nenhuma reserva cancelada ainda.</p>
       </div>
     </section>
   </main>
@@ -570,10 +584,41 @@
       return (bk.status || '').toString().trim().toLowerCase();
     }
 
-    // --- CARREGAR RESERVAS (pendentes na lista principal + aprovadas na direita) ---
+    // --- CONTROLES DO BOTÃO "CANCELADAS" ---
+    const blocoReservasCanceladas = document.getElementById('blocoReservasCanceladas');
+    const btnToggleCanceladas = document.getElementById('btnToggleCanceladas');
+    let canceladasVisiveis = false;
+
+    function toggleCanceladasSection(forceState = null) {
+      if (!blocoReservasCanceladas || !btnToggleCanceladas) return;
+
+      if (forceState !== null) {
+        canceladasVisiveis = !!forceState;
+      }
+
+      if (canceladasVisiveis) {
+        blocoReservasCanceladas.style.display = 'flex';
+        btnToggleCanceladas.classList.add('ativo');
+        btnToggleCanceladas.textContent = 'Ocultar canceladas';
+      } else {
+        blocoReservasCanceladas.style.display = 'none';
+        btnToggleCanceladas.classList.remove('ativo');
+        btnToggleCanceladas.textContent = 'Ver canceladas';
+      }
+    }
+
+    if (btnToggleCanceladas) {
+      btnToggleCanceladas.addEventListener('click', () => {
+        canceladasVisiveis = !canceladasVisiveis;
+        toggleCanceladasSection();
+      });
+    }
+
+    // --- CARREGAR RESERVAS (pendentes, aprovadas e canceladas) ---
     async function loadMyBookings() {
-      const container = document.getElementById('listaReservasContainer');
-      const aprovadasBox = document.getElementById('listaReservasAprovadas');
+      const container      = document.getElementById('listaReservasContainer');
+      const aprovadasBox   = document.getElementById('listaReservasAprovadas');
+      const canceladasBox  = document.getElementById('listaReservasCanceladas');
 
       if (!container) return;
 
@@ -582,12 +627,19 @@
         if (aprovadasBox) {
           aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Nenhuma reserva aprovada ainda.</p>';
         }
+        if (canceladasBox) {
+          canceladasBox.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma reserva cancelada ainda.</p>';
+        }
+        toggleCanceladasSection(false);
         return;
       }
 
       container.innerHTML = '<p style="padding:8px;color:#666;font-size:0.9rem;">Carregando reservas...</p>';
       if (aprovadasBox) {
         aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Carregando reservas aprovadas...</p>';
+      }
+      if (canceladasBox) {
+        canceladasBox.innerHTML = '<p style="padding:8px;color:#666;font-size:0.9rem;">Carregando reservas canceladas...</p>';
       }
 
       const { data, error } = await sb
@@ -602,6 +654,10 @@
         if (aprovadasBox) {
           aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#b91c1c;">Erro ao carregar reservas aprovadas.</p>';
         }
+        if (canceladasBox) {
+          canceladasBox.innerHTML = '<p style="padding:8px;color:#b91c1c;font-size:0.9rem;">Erro ao carregar reservas canceladas.</p>';
+        }
+        toggleCanceladasSection(false);
         return;
       }
 
@@ -614,14 +670,19 @@
         if (aprovadasBox) {
           aprovadasBox.innerHTML = '<p style="font-size:0.85rem; color:#6b7280;">Nenhuma reserva aprovada ainda.</p>';
         }
+        if (canceladasBox) {
+          canceladasBox.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma reserva cancelada ainda.</p>';
+        }
+        toggleCanceladasSection(false);
         return;
       }
 
-      // separa por status (normalizado com trim + lower)
+      // separa por status
       const aprovadas = data.filter(bk => normalizaStatus(bk) === 'aprovada');
+      const canceladas = data.filter(bk => normalizaStatus(bk) === 'cancelada');
       const abertas   = data.filter(bk => {
         const st = normalizaStatus(bk);
-        // não mostrar canceladas nem aprovadas na lista principal
+        // não mostrar aprovadas nem canceladas na lista principal
         return st !== 'aprovada' && st !== 'cancelada';
       });
 
@@ -696,6 +757,29 @@
             const total = bk.total_price != null ? Number(bk.total_price) : 0;
             const totalFormatado = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+            const isPago = (bk.payment_status || '').toString().trim().toLowerCase() === 'pago';
+
+            let actionsHtml = '';
+            if (!isPago) {
+              actionsHtml += `
+                <button 
+                  class="btn-status btn-pago" 
+                  onclick="updatePaymentStatus(${bk.id}, 'pago')">
+                  Marcar como pago
+                </button>
+              `;
+            } else {
+              actionsHtml += `<span class="pill-pago">Pago</span>`;
+            }
+
+            actionsHtml += `
+              <button
+                class="btn-status btn-cancelar"
+                onclick="updateBookingStatus(${bk.id}, 'cancelada')">
+                Cancelar reserva
+              </button>
+            `;
+
             const mini = document.createElement('div');
             mini.className = 'reserva-aprovada-item';
             mini.innerHTML = `
@@ -710,20 +794,67 @@
                 </div>
               </div>
               <div class="reserva-aprovada-actions">
-                <button 
-                  class="btn-status btn-pago" 
-                  onclick="updatePaymentStatus(${bk.id}, 'pago')">
-                  Marcar como pago
-                </button>
+                ${actionsHtml}
               </div>
             `;
             aprovadasBox.appendChild(mini);
           });
         }
       }
+
+      // --- LISTA: RESERVAS CANCELADAS ---
+      if (canceladasBox) {
+        canceladasBox.innerHTML = '';
+
+        if (canceladas.length === 0) {
+          canceladasBox.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma reserva cancelada ainda.</p>';
+        } else {
+          canceladas.forEach(bk => {
+            const inicio = bk.start_date ? new Date(bk.start_date) : null;
+            const fim    = bk.end_date   ? new Date(bk.end_date)   : null;
+            let datasTexto = 'Datas não informadas';
+            if (inicio && fim) {
+              const s = inicio.toLocaleDateString('pt-BR');
+              const e = fim.toLocaleDateString('pt-BR');
+              datasTexto = `${s} até ${e}`;
+            }
+            const total = bk.total_price != null ? Number(bk.total_price) : 0;
+            const totalFormatado = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            const card = document.createElement('div');
+            card.className = 'reserva-card';
+            card.innerHTML = `
+              <div>
+                <h3>Reserva #${bk.id}</h3>
+                <p><strong>Período:</strong> ${datasTexto}</p>
+                <p><strong>Valor total:</strong> ${totalFormatado}</p>
+              </div>
+              <div>
+                <p class="reserva-status">
+                  <strong>Cancelada</strong><br>
+                  <span>Status da reserva</span>
+                </p>
+                <p class="reserva-status">
+                  <strong>${bk.payment_status || 'pendente'}</strong><br>
+                  <span>Status do pagamento</span>
+                </p>
+              </div>
+              <div class="reserva-actions">
+                <span style="font-size:0.8rem; color:#b91c1c; background:#fee2e2; border-radius:999px; padding:4px 10px;">
+                  Reserva cancelada
+                </span>
+              </div>
+            `;
+            canceladasBox.appendChild(card);
+          });
+        }
+      }
+
+      // garante que por padrão fica oculto, e só aparece se clicar no botão
+      toggleCanceladasSection(false);
     }
 
-    // --- ATUALIZAR STATUS (agora com normalização + reload da lista) ---
+    // --- ATUALIZAR STATUS (recarrega listas) ---
     async function updateBookingStatus(id, novoStatus) {
       try {
         const { error } = await sb
@@ -741,7 +872,7 @@
           toastHost('Status da reserva atualizado.');
         }
 
-        // Recarrega listas (pendentes e aprovadas) 
+        // Recarrega listas (pendentes, aprovadas e canceladas) 
         loadMyBookings();
       } catch (err) {
         console.error('Erro ao atualizar status:', err);

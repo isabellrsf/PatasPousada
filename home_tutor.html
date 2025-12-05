@@ -41,6 +41,55 @@
     color:#b91c1c;
     box-shadow:0 1px 4px rgba(248,113,113,.4);
   }
+
+  /* ------- CARROSSEL DO MODAL ------- */
+  .modal-photos{
+    position:relative;
+    border-radius:16px;
+    overflow:hidden;
+    background:#000;
+  }
+  .modal-photo{
+    width:100%;
+    max-height:320px;
+    object-fit:cover;
+    display:block;
+  }
+  .modal-photo-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:32px;
+    height:32px;
+    border-radius:999px;
+    border:none;
+    background:rgba(15,23,42,.8);
+    color:#f9fafb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+  }
+  .modal-photo-arrow.left{
+    left:10px;
+  }
+  .modal-photo-arrow.right{
+    right:10px;
+  }
+  .modal-photo-arrow i{
+    font-size:0.9rem;
+  }
+  .modal-photo-counter{
+    position:absolute;
+    right:12px;
+    bottom:10px;
+    padding:3px 10px;
+    border-radius:999px;
+    background:rgba(15,23,42,.85);
+    color:#e5e7eb;
+    font-size:0.8rem;
+  }
 </style>
 </head>
 <body>
@@ -285,6 +334,10 @@
   let HOSTS = [];
   let currentModalListing = null;
 
+  /* controle de fotos do modal */
+  let currentModalPhotos = [];
+  let currentModalPhotoIndex = 0;
+
   // filtro atual das reservas: 'ativas' ou 'canceladas'
   let tutorBookingsFilter = 'ativas';
 
@@ -304,6 +357,14 @@
     const i1=(p[0]?.[0]||"").toUpperCase();
     const i2=(p[1]?.[0]||"").toUpperCase();
     return (i1+i2) || "U";
+  }
+
+  // helper para converter qualquer coisa de data em 'YYYY-MM-DD'
+  function toIsoDateString(dateLike){
+    if(!dateLike) return null;
+    const d = new Date(dateLike);
+    if (Number.isNaN(d.getTime())) return null;
+    return d.toISOString().slice(0,10);
   }
 
   // --- AUTH ---
@@ -395,7 +456,11 @@
     `;
 
     let availableText = "Disponibilidade não informada";
-    if(h.availableEnd){
+    if (h.availableStart && h.availableEnd){
+        const s = new Date(h.availableStart).toLocaleDateString('pt-BR');
+        const e = new Date(h.availableEnd).toLocaleDateString('pt-BR');
+        availableText = `Disponível de ${s} até ${e}`;
+    } else if (h.availableEnd){
         const d = new Date(h.availableEnd);
         availableText = `Disponível até ${d.toLocaleDateString('pt-BR')}`;
     }
@@ -541,7 +606,25 @@
         return;
       }
 
-      const hostIds = [...new Set(listings.map(l => l.host_id).filter(Boolean))];
+      // === FILTRAR LISTINGS EXPIRADOS (available_end < hoje) ===
+      const todayIso = new Date().toISOString().slice(0,10);
+      const activeListings = listings.filter(l => {
+        const endIso = toIsoDateString(l.available_end);
+        // Se não tem data de fim, mantém o anúncio
+        if(!endIso) return true;
+        // só mantém se a data final for hoje ou futura
+        return endIso >= todayIso;
+      });
+
+      if(!activeListings.length){
+        HOSTS = [];
+        populateCityOptions();
+        applyFilters();
+        return;
+      }
+      // =========================================================
+
+      const hostIds = [...new Set(activeListings.map(l => l.host_id).filter(Boolean))];
 
       let hostsMap = {};
       let profilesMap = {};
@@ -562,7 +645,7 @@
         if(profilesData) profilesData.forEach(p => profilesMap[p.id] = p);
       }
 
-      HOSTS = listings.map(l => {
+      HOSTS = activeListings.map(l => {
         const host = hostsMap[l.host_id] || {};
         const profile = profilesMap[l.host_id] || {};
         
@@ -595,6 +678,7 @@
           about: l.description || host.about || 'Sem descrição.',
           rating: 5.0,
           reviews: 0,
+          availableStart: l.available_start,
           availableEnd: l.available_end,
           createdAt: l.created_at,
           capacity: l.capacity
@@ -618,7 +702,7 @@
     try {
         const { data: bookings, error } = await sb
             .from('bookings')
-            .select('id, status, start_date, end_date, total_price, host_id')
+            .select('id, status, start_date, end_date, total_price, host_id, listing_id')
             .eq('tutor_id', currentUserId)
             .order('created_at', { ascending: false });
 
@@ -672,14 +756,17 @@
             const end   = new Date(b.end_date).toLocaleDateString('pt-BR');
             
             const status = (b.status || '').toLowerCase();
+            const isCanceled = (status === 'cancelada' || status === 'cancelado');
+            const canCancel = !isCanceled &&
+               (status === 'pendente' || status === 'confirmada' || status === 'aprovada');
 
             let stColor = '#6b7280';
             if(status === 'pendente')                           stColor = '#f59e0b';
             if(status === 'confirmada' || status === 'aprovada') stColor = '#10b981';
-            if(status === 'cancelada'  || status === 'cancelado') stColor = '#ef4444';
+            if(isCanceled)                                      stColor = '#ef4444';
 
-            const showCancelBtn = !showCanceled &&
-              (status === 'confirmada' || status === 'aprovada');
+            const showCancelBtn = !showCanceled && canCancel;
+            const hasListing    = !!b.listing_id;
 
             return `
                 <div class="tutor-booking-row"
@@ -693,14 +780,32 @@
                           ${b.status}
                         </span>
                         <small style="display:block; margin-bottom:4px;">R$ ${b.total_price}</small>
-                        ${
-                          showCancelBtn 
-                          ? `<button onclick="cancelBooking('${b.id}')"
-                                     style="border:1px solid #ef4444; background:#fff; color:#ef4444; border-radius:999px; padding:4px 10px; font-size:0.75rem; font-weight:600; cursor:pointer;">
-                               Cancelar
-                             </button>`
-                          : ''
-                        }
+                        <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+                          ${
+                            hasListing
+                              ? `<button onclick="openBookingListing('${b.listing_id}', '${b.host_id}')"
+                                         style="border:1px solid #e5e7eb; background:#fff; color:#374151; border-radius:999px; padding:4px 10px; font-size:0.75rem; font-weight:600; cursor:pointer;">
+                                   Ver anúncio
+                                 </button>`
+                              : ''
+                          }
+                          ${
+                            showCancelBtn 
+                            ? `<button onclick="cancelBooking('${b.id}')"
+                                       style="border:1px solid #ef4444; background:#fff; color:#ef4444; border-radius:999px; padding:4px 10px; font-size:0.75rem; font-weight:600; cursor:pointer;">
+                                 Cancelar
+                               </button>`
+                            : ''
+                          }
+                          ${
+                            !showCanceled
+                              ? `<button onclick="goToPayment('${b.id}')"
+                                         style="border:1px solid #10b981; background:#10b98110; color:#059669; border-radius:999px; padding:4px 10px; font-size:0.75rem; font-weight:600; cursor:pointer;">
+                                   Pagamento
+                                 </button>`
+                              : ''
+                          }
+                        </div>
                     </div>
                 </div>
             `;
@@ -712,7 +817,7 @@
     }
   }
 
-  // Cancela reserva aprovada/confirmada (fica com status "cancelada")
+  // Cancela reserva (muda status para "cancelada" e passa para aba Canceladas)
   window.cancelBooking = async function(bookingId){
     const ok = confirm("Tem certeza que deseja cancelar esta reserva?");
     if(!ok) return;
@@ -738,6 +843,12 @@
     }
   };
 
+  // Botão de pagamento -> leva para pagamento.html com o id da reserva
+  window.goToPayment = function(bookingId){
+    if(!bookingId) return;
+    window.location.href = 'pagamento.html?booking_id=' + encodeURIComponent(bookingId);
+  };
+
   // --- MODAL ANÚNCIO ---
   function toggleModal(show){
     const modal = document.getElementById('modal');
@@ -745,28 +856,19 @@
     else modal.classList.remove('show');
   }
 
-  function toIsoDateString(dateLike){
-    if(!dateLike) return null;
-    const d = new Date(dateLike);
-    if (Number.isNaN(d.getTime())) return null;
-    return d.toISOString().slice(0,10);
-  }
-
-  // Modal com mais infos do host
-  function openProfile(listingId){
-    const h = HOSTS.find(x => x.id == listingId);
+  // FUNÇÃO GENÉRICA: monta o modal com todas as fotos (com carrossel)
+  function showListingModal(h){
     if(!h) return;
-
-    currentModalListing = h;
 
     document.getElementById('mName').innerHTML = `
       ${h.name} <span class="modal-city">${h.city}</span>
     `;
 
-    const hasPhotos = h.photos && h.photos.length;
-    const modalPhotos = hasPhotos
-      ? h.photos.map(url => `<img src="${url}" class="modal-photo" alt="Foto do anúncio">`).join('')
-      : `<img src="${h.img}" class="modal-photo" alt="Foto do anúncio">`;
+    // prepara array de fotos do anúncio
+    const photosArray = (h.photos && h.photos.length) ? h.photos : [h.img];
+    currentModalPhotos = photosArray.slice();
+    currentModalPhotoIndex = 0;
+    const totalPhotos = currentModalPhotos.length;
 
     const serviceLabelsMap = {
       daycare: 'Day Care',
@@ -781,9 +883,15 @@
       ? `Aceita até ${h.capacity} pet(s)`
       : 'Capacidade não informada';
 
-    const availableText = h.availableEnd
-      ? `Disp. até: ${new Date(h.availableEnd).toLocaleDateString('pt-BR')}`
-      : 'Disponibilidade não informada';
+    let availableText = 'Disponibilidade não informada';
+    if (h.availableStart && h.availableEnd){
+      const s = new Date(h.availableStart).toLocaleDateString('pt-BR');
+      const e = new Date(h.availableEnd).toLocaleDateString('pt-BR');
+      availableText = `Disponível de ${s} até ${e}`;
+    } else if (h.availableEnd){
+      const e = new Date(h.availableEnd).toLocaleDateString('pt-BR');
+      availableText = `Disponível até ${e}`;
+    }
 
     let ratingText = 'Ainda sem avaliações';
     if (h.reviews && h.reviews > 0) {
@@ -793,7 +901,29 @@
     document.getElementById('mBody').innerHTML = `
       <div class="modal-grid">
         <div class="modal-photos">
-          ${modalPhotos}
+          <button 
+            class="modal-photo-arrow left" 
+            onclick="changeModalPhoto(-1)" 
+            ${totalPhotos <= 1 ? 'style="display:none;"' : ''}>
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <img 
+            src="${currentModalPhotos[0]}" 
+            class="modal-photo" 
+            id="modalMainPhoto" 
+            alt="Foto do anúncio">
+
+          <button 
+            class="modal-photo-arrow right" 
+            onclick="changeModalPhoto(1)" 
+            ${totalPhotos <= 1 ? 'style="display:none;"' : ''}>
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <div class="modal-photo-counter" id="modalPhotoCounter">
+            ${totalPhotos > 1 ? `1 / ${totalPhotos}` : ''}
+          </div>
         </div>
 
         <div class="modal-content">
@@ -850,29 +980,175 @@
       </div>
     `;
 
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('reservaDataInicio').min = today;
-    document.getElementById('reservaDataFim').min = today;
+    // aplica limites nas datas (janela do anúncio + hoje)
+    const checkin  = document.getElementById('reservaDataInicio');
+    const checkout = document.getElementById('reservaDataFim');
+
+    const todayIso = new Date().toISOString().split('T')[0];
+    let minAllowed = todayIso;
+    let maxAllowed = null;
+
+    const startIso = toIsoDateString(h.availableStart);
+    const endIso   = toIsoDateString(h.availableEnd);
+
+    // min = maior entre hoje e availableStart (se existir)
+    if (startIso && startIso > minAllowed) {
+      minAllowed = startIso;
+    }
+
+    if (endIso) {
+      maxAllowed = endIso;
+    }
+
+    checkin.min  = minAllowed;
+    checkout.min = minAllowed;
+
+    if (maxAllowed) {
+      checkin.max  = maxAllowed;
+      checkout.max = maxAllowed;
+    }
 
     toggleModal(true);
   }
+
+  // função global para trocar a foto do modal
+  window.changeModalPhoto = function(step){
+    if(!currentModalPhotos.length) return;
+    const total = currentModalPhotos.length;
+    currentModalPhotoIndex = (currentModalPhotoIndex + step + total) % total;
+
+    const img = document.getElementById('modalMainPhoto');
+    const counter = document.getElementById('modalPhotoCounter');
+    if(img){
+      img.src = currentModalPhotos[currentModalPhotoIndex];
+    }
+    if(counter){
+      counter.textContent = total > 1 ? `${currentModalPhotoIndex + 1} / ${total}` : '';
+    }
+  };
+
+  // Modal a partir do card da HOME (usa HOSTS)
+  function openProfile(listingId){
+    const h = HOSTS.find(x => x.id == listingId);
+    if(!h) return;
+    currentModalListing = h;
+    showListingModal(h);
+  }
+
+  // abrir anúncio diretamente a partir da reserva
+  window.openBookingListing = async function(listingId, hostId){
+    if(!listingId) return;
+
+    // tenta achar nos anúncios ativos (HOSTS)
+    let h = HOSTS.find(x => x.id == listingId);
+
+    // se não estiver no HOSTS (por exemplo, anúncio expirado), busca direto no Supabase
+    if(!h){
+      const { data: listing, error: lErr } = await sb
+        .from('listings')
+        .select('*')
+        .eq('id', listingId)
+        .maybeSingle();
+
+      if(lErr || !listing){
+        console.error(lErr);
+        toast('Não foi possível carregar o anúncio desta reserva.');
+        return;
+      }
+
+      let host = {};
+      let profile = {};
+
+      if(hostId){
+        const [hostRes, profileRes] = await Promise.all([
+          sb.from('hosts')
+            .select('id, full_name, city, about, avatar_url')
+            .eq('id', hostId)
+            .maybeSingle(),
+          sb.from('profiles')
+            .select('id, first_name, last_name, full_name')
+            .eq('id', hostId)
+            .maybeSingle()
+        ]);
+        host = hostRes.data || {};
+        profile = profileRes.data || {};
+      }
+
+      const servicesArray = Array.isArray(listing.services) ? listing.services : [];
+      const normalizedServices = servicesArray.map(s=>{
+        const lower = (s || '').toLowerCase();
+        if(lower.includes('day')) return 'daycare';
+        if(lower.includes('hosp')) return 'hospedagem';
+        if(lower.includes('lar')) return 'lar';
+        return lower || 'hospedagem';
+      });
+
+      const avatar = host.avatar_url || "https://cdn-icons-png.flaticon.com/512/1373/1373255.png";
+      const profileNameFromParts = `${(profile.first_name || '').trim()} ${(profile.last_name || '').trim()}`.trim();
+      const displayName = (host.full_name && host.full_name.trim()) ||
+                          (profile.full_name && profile.full_name.trim()) ||
+                          profileNameFromParts ||
+                          'Anfitrião';
+
+      h = {
+        id: listing.id,
+        hostId: listing.host_id,
+        name: displayName,
+        city: listing.city || host.city || 'Brasília',
+        service: normalizedServices.length ? normalizedServices : ['hospedagem'],
+        price: listing.price_night || listing.price_daycare || 0,
+        img: avatar,
+        photos: listing.photos_url || [],
+        about: listing.description || host.about || 'Sem descrição.',
+        rating: 5.0,
+        reviews: 0,
+        availableStart: listing.available_start,
+        availableEnd: listing.available_end,
+        createdAt: listing.created_at,
+        capacity: listing.capacity
+      };
+    }
+
+    currentModalListing = h;
+    showListingModal(h);
+  };
 
   window.handleReserveClick = async function(){
     const di = document.getElementById('reservaDataInicio').value;
     const df = document.getElementById('reservaDataFim').value;
     const errEl = document.getElementById('reservaErro');
-    
-    if(!di || !df) { errEl.textContent="Selecione as datas."; return; }
-    if(df <= di) { errEl.textContent="Data de saída deve ser maior que entrada."; return; }
+    const listing = currentModalListing;
 
-    const d1 = new Date(di); const d2 = new Date(df);
+    errEl.textContent = "";
+
+    if(!di || !df) { errEl.textContent="Selecione as datas."; return; }
+    if(df <= di) { errEl.textContent="Data de saída deve ser maior que a de entrada."; return; }
+
+    const d1 = new Date(di);
+    const d2 = new Date(df);
+
+    // valida contra a janela do anúncio
+    const startIso = toIsoDateString(listing?.availableStart);
+    const endIso   = toIsoDateString(listing?.availableEnd);
+    const startAllowed = startIso ? new Date(startIso) : null;
+    const endAllowed   = endIso   ? new Date(endIso)   : null;
+
+    if (startAllowed && d1 < startAllowed) {
+      errEl.textContent = `Check-in permitido apenas a partir de ${startAllowed.toLocaleDateString('pt-BR')}.`;
+      return;
+    }
+    if (endAllowed && d2 > endAllowed) {
+      errEl.textContent = `Check-out permitido até ${endAllowed.toLocaleDateString('pt-BR')}.`;
+      return;
+    }
+
     const nights = Math.max(1, Math.round((d2-d1)/(1000*60*60*24)));
-    const total = nights * (currentModalListing.price || 0);
+    const total = nights * (listing.price || 0);
 
     const { error } = await sb.from('bookings').insert({
         tutor_id: currentUserId,
-        host_id: currentModalListing.hostId,
-        listing_id: currentModalListing.id,
+        host_id: listing.hostId,
+        listing_id: listing.id,
         start_date: di, end_date: df,
         total_price: total,
         status: 'pendente'
