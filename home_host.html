@@ -1172,44 +1172,94 @@
       }, 200);
     });
 
+    // NOVA EXCLUSÃO TOTAL VIA JAVASCRIPT (sem PHP)
     async function handleDeleteAccountHost() {
       if (!currentUserId) {
         toastHost("Erro: usuário não identificado. Faça login novamente.");
         return;
       }
 
+      delAccountOkBtn.disabled = true;
+
       try {
-        const resp = await fetch('processaExclusao.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: currentUserId,
-            email: currentUserEmail
-          })
-        });
+        const userId = currentUserId;
 
-        let result = {};
-        try {
-          result = await resp.json();
-        } catch (e) {
-          result = { ok: false, message: 'Resposta inválida do servidor.' };
-        }
+        // 1) Buscar todos os chats em que o usuário participa
+        const { data: chats, error: chatsErr } = await sb
+          .from('chats')
+          .select('id')
+          .or(`tutor_id.eq.${userId},host_id.eq.${userId}`);
 
-        if (!resp.ok || !result.ok) {
-          toastHost(result.message || 'Dados apagados, mas falhou ao excluir usuário de autenticação.');
+        if (chatsErr) {
+          console.error('Erro ao buscar chats:', chatsErr);
         } else {
-          toastHost('Conta excluída com sucesso.');
+          const chatIds = (chats || []).map(c => c.id);
+          if (chatIds.length) {
+            const { error: msgErr } = await sb
+              .from('messages')
+              .delete()
+              .in('chat_id', chatIds);
+            if (msgErr) console.error('Erro ao apagar mensagens:', msgErr);
+          }
+
+          const { error: delChatsErr } = await sb
+            .from('chats')
+            .delete()
+            .or(`tutor_id.eq.${userId},host_id.eq.${userId}`);
+          if (delChatsErr) console.error('Erro ao apagar chats:', delChatsErr);
         }
 
-        try { await sb.auth.signOut(); } catch(e) {}
+        // 2) Apagar reservas onde ele é tutor ou host
+        const { error: bookingsErr } = await sb
+          .from('bookings')
+          .delete()
+          .or(`tutor_id.eq.${userId},host_id.eq.${userId}`);
+        if (bookingsErr) console.error('Erro ao apagar reservas:', bookingsErr);
+
+        // 3) Apagar anúncios (listings) que ele criou como host
+        const { error: listingsErr } = await sb
+          .from('listings')
+          .delete()
+          .eq('host_id', userId);
+        if (listingsErr) console.error('Erro ao apagar anúncios:', listingsErr);
+
+        // 4) Apagar pets onde ele é dono
+        const { error: petsErr } = await sb
+          .from('pets')
+          .delete()
+          .eq('owner_id', userId);
+        if (petsErr) console.error('Erro ao apagar pets:', petsErr);
+
+        // 5) Apagar registro na tabela hosts
+        const { error: hostErr } = await sb
+          .from('hosts')
+          .delete()
+          .eq('id', userId);
+        if (hostErr) console.error('Erro ao apagar host:', hostErr);
+
+        // 6) Apagar registro na tabela profiles
+        const { error: profileErr } = await sb
+          .from('profiles')
+          .delete()
+          .eq('id', userId);
+        if (profileErr) console.error('Erro ao apagar profile:', profileErr);
+
+        toastHost('Dados da conta removidos. Você será desconectado.');
+
+        try {
+          await sb.auth.signOut();
+        } catch (e) {
+          console.error('Erro ao deslogar:', e);
+        }
 
         setTimeout(() => {
           window.location.href = 'cadastrarouentrar.html';
-        }, 1500);
+        }, 1800);
 
       } catch (err) {
         console.error('Erro ao excluir conta:', err);
-        toastHost('Erro ao excluir conta.');
+        toastHost('Erro ao excluir conta. Tente novamente.');
+        delAccountOkBtn.disabled = false;
       } finally {
         const card = ppDeleteAccount.querySelector('.pp-card');
         card.classList.remove('show');

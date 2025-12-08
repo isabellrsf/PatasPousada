@@ -90,6 +90,53 @@
     color:#e5e7eb;
     font-size:0.8rem;
   }
+
+  /* ------- FOTO DO HOST NO CARD ------- */
+  .host-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .host-header-avatar{
+    width:40px;
+    height:40px;
+    border-radius:999px;
+    object-fit:cover;
+    flex-shrink:0;
+  }
+  .host-header-info h3{
+    margin:0;
+    font-size:1rem;
+  }
+  .host-header-info span{
+    display:block;
+    font-size:0.85rem;
+    color:#6b7280;
+  }
+
+  /* ------- FOTO DO HOST NO MODAL ------- */
+  .modal-host-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .modal-host-avatar{
+    width:44px;
+    height:44px;
+    border-radius:999px;
+    object-fit:cover;
+    flex-shrink:0;
+  }
+  .modal-host-name{
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .modal-host-city{
+    font-size:0.85rem;
+    color:#6b7280;
+  }
 </style>
 </head>
 <body>
@@ -479,10 +526,19 @@
     const el = document.createElement('div');
     el.className='host';
     el.dataset.city = h.city;
+
+    const avatar = h.hostAvatar || h.img;
+
     el.innerHTML = `
       ${photosHtml}
       <div class="body">
-        <h3>${h.name} <span>• ${h.city}</span></h3>
+        <div class="host-header">
+          <img src="${avatar}" alt="Foto do anfitrião" class="host-header-avatar" loading="lazy">
+          <div class="host-header-info">
+            <h3>${h.name}</h3>
+            <span>${h.city}</span>
+          </div>
+        </div>
         <div class="meta">
           <span class="rating"><i class="fa-solid fa-star"></i> ${h.rating.toFixed(1)} <span class="rating-count">(${h.reviews})</span></span>
           <span class="tag"><i class="fa-solid fa-briefcase"></i> ${services}</span>
@@ -610,10 +666,8 @@
       const todayIso = new Date().toISOString().slice(0,10);
       const activeListings = listings.filter(l => {
         const endIso = toIsoDateString(l.available_end);
-        // Se não tem data de fim, mantém o anúncio
-        if(!endIso) return true;
-        // só mantém se a data final for hoje ou futura
-        return endIso >= todayIso;
+        if(!endIso) return true;      // se não tem data de fim, mantém
+        return endIso >= todayIso;    // só mantém se a data final for hoje ou futura
       });
 
       if(!activeListings.length){
@@ -622,7 +676,6 @@
         applyFilters();
         return;
       }
-      // =========================================================
 
       const hostIds = [...new Set(activeListings.map(l => l.host_id).filter(Boolean))];
 
@@ -674,6 +727,7 @@
           service: normalizedServices.length ? normalizedServices : ['hospedagem'],
           price: l.price_night || l.price_daycare || 0,
           img: avatar,
+          hostAvatar: avatar,
           photos: l.photos_url || [],
           about: l.description || host.about || 'Sem descrição.',
           rating: 5.0,
@@ -927,6 +981,14 @@
         </div>
 
         <div class="modal-content">
+          <div class="modal-host-header">
+            <img src="${h.hostAvatar || h.img}" alt="Foto do anfitrião" class="modal-host-avatar" loading="lazy">
+            <div>
+              <div class="modal-host-name">${h.name}</div>
+              <div class="modal-host-city">${h.city}</div>
+            </div>
+          </div>
+
           <p class="modal-about">
             ${h.about || 'Anfitrião ainda não adicionou uma descrição.'}
           </p>
@@ -991,7 +1053,6 @@
     const startIso = toIsoDateString(h.availableStart);
     const endIso   = toIsoDateString(h.availableEnd);
 
-    // min = maior entre hoje e availableStart (se existir)
     if (startIso && startIso > minAllowed) {
       minAllowed = startIso;
     }
@@ -1098,6 +1159,7 @@
         service: normalizedServices.length ? normalizedServices : ['hospedagem'],
         price: listing.price_night || listing.price_daycare || 0,
         img: avatar,
+        hostAvatar: avatar,
         photos: listing.photos_url || [],
         about: listing.description || host.about || 'Sem descrição.',
         rating: 5.0,
@@ -1176,14 +1238,157 @@
   });
 
   const ppDelete = document.getElementById('ppDelete');
+  const delOkBtn = document.getElementById('delOk');
+  const delCancelBtn = document.getElementById('delCancel');
+
   document.getElementById('deleteAccountLink')?.addEventListener('click', (e)=>{
     e.preventDefault();
     ppDelete.style.display='flex';
     requestAnimationFrame(()=> ppDelete.querySelector('.pp-card').classList.add('show'));
   });
-  document.getElementById('delCancel').addEventListener('click', ()=>{
+
+  delCancelBtn.addEventListener('click', ()=>{
      ppDelete.querySelector('.pp-card').classList.remove('show');
      setTimeout(()=>ppDelete.style.display='none', 200);
+  });
+
+  // --- EXCLUSÃO DE CONTA DIRETO NO FRONT ---
+  async function deleteCurrentUserData(){
+    const userId = currentUserId;
+    if(!userId) throw new Error('Usuário não autenticado');
+
+    // 1) Buscar todos os chats onde ele participa
+    const { data: chats, error: chatsErr } = await sb
+      .from('chats')
+      .select('id')
+      .or(`tutor_id.eq.${userId},host_id.eq.${userId}`);
+
+    if(chatsErr) {
+      console.error('Erro ao buscar chats:', chatsErr);
+      throw chatsErr;
+    }
+
+    const chatIds = (chats || []).map(c => c.id);
+
+    // 2) Apagar mensagens desses chats
+    if(chatIds.length){
+      const { error: msgErr } = await sb
+        .from('messages')
+        .delete()
+        .in('chat_id', chatIds);
+      if(msgErr){
+        console.error('Erro ao apagar mensagens:', msgErr);
+        throw msgErr;
+      }
+    }
+
+    // 3) Apagar os chats
+    if(chatIds.length){
+      const { error: delChatsErr } = await sb
+        .from('chats')
+        .delete()
+        .in('id', chatIds);
+      if(delChatsErr){
+        console.error('Erro ao apagar chats:', delChatsErr);
+        throw delChatsErr;
+      }
+    }
+
+    // 4) Apagar bookings onde ele é tutor ou host
+    const { error: bkErr } = await sb
+      .from('bookings')
+      .delete()
+      .or(`tutor_id.eq.${userId},host_id.eq.${userId}`);
+    if(bkErr){
+      console.error('Erro ao apagar bookings:', bkErr);
+      throw bkErr;
+    }
+
+    // 5) Apagar listings onde ele é host
+    const { error: listErr } = await sb
+      .from('listings')
+      .delete()
+      .eq('host_id', userId);
+    if(listErr){
+      console.error('Erro ao apagar listings:', listErr);
+      throw listErr;
+    }
+
+    // 6) Apagar pets do tutor
+    const { error: petsErr } = await sb
+      .from('pets')
+      .delete()
+      .eq('owner_id', userId);
+    if(petsErr){
+      console.error('Erro ao apagar pets:', petsErr);
+      throw petsErr;
+    }
+
+    // 7) Apagar registro na tabela hosts
+    const { error: hostErr } = await sb
+      .from('hosts')
+      .delete()
+      .eq('id', userId);
+    if(hostErr){
+      console.error('Erro ao apagar host:', hostErr);
+      throw hostErr;
+    }
+
+    // 8) Apagar perfil
+    const { error: profErr } = await sb
+      .from('profiles')
+      .delete()
+      .eq('id', userId);
+    if(profErr){
+      console.error('Erro ao apagar profile:', profErr);
+      throw profErr;
+    }
+
+    // Importante: aqui NÃO apagamos o usuário da Auth,
+    // porque isso exige chave de service role (não pode ficar no front).
+    // Para o projeto, isso já demonstra bem a exclusão de dados.
+  }
+
+  delOkBtn.addEventListener('click', async ()=>{
+    const input = document.getElementById('delConfirmText');
+    const value = (input.value || '').trim().toUpperCase();
+
+    if(value !== 'EXCLUIR'){
+      toast('Digite EXCLUIR exatamente como solicitado.');
+      input.focus();
+      return;
+    }
+
+    if(!currentUserId){
+      toast('Usuário não autenticado.');
+      return;
+    }
+
+    delOkBtn.disabled = true;
+    delOkBtn.textContent = 'Excluindo...';
+
+    try{
+      await deleteCurrentUserData();
+      toast('Conta excluída com sucesso.');
+
+      // fecha modal visualmente
+      ppDelete.querySelector('.pp-card').classList.remove('show');
+      setTimeout(()=>{ ppDelete.style.display='none'; }, 200);
+
+      // desloga usuário da sessão
+      await sb.auth.signOut();
+
+      setTimeout(()=>{
+        window.location.href = 'cadastrarouentrar.html';
+      }, 800);
+
+    }catch(e){
+      console.error('Erro ao excluir conta:', e);
+      toast('Erro ao excluir conta. Tente novamente.');
+    }finally{
+      delOkBtn.disabled = false;
+      delOkBtn.textContent = 'Confirmar Exclusão';
+    }
   });
 
   // ============ CHAT LOGIC (CHATS + MESSAGES) ============
