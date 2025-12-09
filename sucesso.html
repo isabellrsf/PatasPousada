@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pagamento concluído</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #059669;
+      margin-bottom: 10px;
+    }
+    p {
+      margin: 8px 0;
+    }
+    .erro {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: left;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #fff;
+      background: #059669;
+      padding: 10px 16px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Pagamento concluído</h1>
+  <p id="msg">Atualizando status da reserva...</p>
+  <p><strong>Reserva:</strong> <span id="booking-id">-</span></p>
+
+  <div id="mensagem-erro" class="erro" style="display:none;"></div>
+
+  <!-- TROCAR PELO SEU CAMINHO DA ÁREA DO TUTOR OU RESERVAS -->
+  <a id="link-voltar" href="home_tutor.html">Voltar para minhas reservas</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // MESMOS DADOS DO PROJETO
+  const SUPABASE_URL = 'https://SUA-URL-PROJETO.supabase.co';
+  const SUPABASE_ANON_KEY = 'SEU-ANON-KEY-AQUI';
+
+  const supabase = supabasejs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function mostrarErro(msg) {
+    const div = document.getElementById('mensagem-erro');
+    div.textContent = msg;
+    div.style.display = 'block';
+  }
+
+  async function atualizarStatusPagamento() {
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get('booking_id');
+    document.getElementById('booking-id').textContent = bookingId || '-';
+
+    if (!bookingId) {
+      mostrarErro('ID de reserva não informado na URL.');
+      document.getElementById('msg').textContent =
+        'Não foi possível identificar a reserva.';
+      return;
+    }
+
+    // Atualiza payment_status para 'pago'
+    const { error } = await supabase
+      .from('bookings')
+      .update({ payment_status: 'pago' })
+      .eq('id', bookingId);
+
+    if (error) {
+      console.error(error);
+      mostrarErro('Ocorreu um erro ao atualizar o status do pagamento.');
+      document.getElementById('msg').textContent =
+        'Seu pagamento foi concluído, mas houve falha ao atualizar o status no sistema. Avise o suporte.';
+      return;
+    }
+
+    document.getElementById('msg').textContent =
+      'Pagamento confirmado e status da reserva atualizado para "pago".';
+  }
+
+  atualizarStatusPagamento();
+</script>
+
+</body>
+</html>
