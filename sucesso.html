@@ -302,7 +302,8 @@
           .from('bookings')
           .update({
             payment_status: 'pago',
-            payment_method: 'InfinitePay'
+            payment_method: 'InfinitePay',
+            status: 'confirmada'          // <<< aqui atualiza o status da reserva
           })
           .eq('id', bookingId);
 
@@ -314,7 +315,7 @@
           return;
         }
 
-        msgEl.textContent = 'Pagamento confirmado! Seu anfitrião já pode ver que a reserva foi paga.';
+        msgEl.textContent = 'Pagamento confirmado! Seu anfitrião já pode ver que a reserva foi paga e confirmada.';
 
       } catch (e) {
         console.error(e);
