@@ -9,21 +9,27 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700;800&display=swap" rel="stylesheet">
 
+  <!-- Font Awesome (para o ícone do LinkedIn) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     :root{
-      --pri:#e2725b; 
-      --pri-dark:#d45f47; 
-      --bg:#f7f7f7; 
-      --card:#fff; 
+      --pri:#e2725b;
+      --pri-dark:#d45f47;
+      --bg:#f7f7f7;
+      --card:#fff;
       --border:#e5e5e5;
-      --txt:#1f2937; 
-      --muted:#6b7280; 
+      --txt:#1f2937;
+      --muted:#6b7280;
       --shadow: 0 10px 24px rgba(17, 24, 39, .08);
       --shadow-soft: 0 6px 16px rgba(17, 24, 39, .06);
       --radius:16px;
       --chip:#fff0ec;
       --chip-border:#ffd8cf;
       --transition: .22s cubic-bezier(.2,.8,.2,1);
+
+      /* LinkedIn */
+      --linkedin:#0a66c2;
     }
 
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -72,13 +78,15 @@
       color:#1f2937;
       font-weight:800;
       font-family:'Parkinsans',sans-serif;
-      transition:color var(--transition);
+      transition:color var(--transition), background var(--transition), border-color var(--transition);
       padding:6px 10px;
       border-radius:999px;
+      border:1px solid transparent;
     }
     nav ul li a:hover{
       color:var(--pri-dark);
       background:rgba(226,114,91,.10);
+      border-color: rgba(212,95,71,.12);
     }
     nav ul li a.active{
       color:var(--pri-dark);
@@ -250,7 +258,73 @@
       width:100%;
       height:100%;
       object-fit:cover;
+      object-position: center 30%;
       display:block;
+    }
+
+    .avatarWrap{
+      position:relative;
+      width:64px;
+      height:64px;
+      flex: 0 0 auto;
+    }
+    .avatarWrap .avatar{
+      width:64px;
+      height:64px;
+    }
+
+    .member:hover .avatar{
+      transform: scale(1.04);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      border-color: rgba(212,95,71,.35);
+      box-shadow: 0 12px 24px rgba(17,24,39,.14);
+    }
+
+    .li-float{
+      position:absolute;
+      right:-3px;
+      bottom:-3px;
+      width:26px;
+      height:26px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:var(--linkedin);
+      color:#fff;
+      border:2px solid #fff;
+      box-shadow:0 8px 16px rgba(17,24,39,.18);
+      text-decoration:none;
+      cursor:pointer;
+      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+    }
+    .li-float i{font-size:13px;line-height:1;}
+
+    .li-float:hover{
+      transform: translateY(-2px) scale(1.05);
+      filter: brightness(1.03);
+      box-shadow:0 12px 22px rgba(17,24,39,.22);
+    }
+
+    .li-float::after{
+      content:"LinkedIn";
+      position:absolute;
+      right:0;
+      bottom:34px;
+      background:rgba(17,24,39,.92);
+      color:#fff;
+      font-size:.72rem;
+      font-weight:800;
+      padding:6px 8px;
+      border-radius:10px;
+      white-space:nowrap;
+      opacity:0;
+      transform: translateY(6px);
+      pointer-events:none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .li-float:hover::after{
+      opacity:1;
+      transform: translateY(0);
     }
 
     .nameBox{min-width:0;}
@@ -296,14 +370,72 @@
       line-height:1.6;
     }
 
-    /* Responsivo */
+    /* ===========================
+       RESPONSIVO (TELEFONES)
+       - sem mudar conteúdo
+       - só ajusta layout/padding/tamanhos
+       =========================== */
+
+    /* Tablets/menores: reduz levemente paddings */
+    @media (max-width: 980px){
+      main{padding:0 14px;}
+      .card{padding:24px;}
+    }
+
+    /* Já existia: empilha hero */
     @media (max-width: 860px){
-      .hero{grid-template-columns:1fr; }
+      .hero{grid-template-columns:1fr;}
       .sideBox{order:2;}
     }
+
+    /* Celulares: melhora leitura e evita "aperto" */
+    @media (max-width: 560px){
+      header{padding:14px 0;}
+      nav{width:min(1040px, calc(100% - 20px));}
+      nav ul{gap:10px;}
+      nav ul li a{padding:8px 12px;} /* alvo de toque melhor */
+
+      main{margin:18px auto;}
+      .card{padding:18px;border-radius:16px;}
+
+      h1{font-size:1.55rem;}
+      h2{font-size:1.08rem;}
+
+      .badge{padding:7px 10px;font-size:.92rem;}
+
+      .teamHeader{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+      }
+      .teamHeader p{font-size:.95rem;}
+
+      /* cards do time com espaçamento mais confortável */
+      .team{gap:12px;}
+      .member{padding:14px;border-radius:14px;}
+      .topRow{gap:10px;margin-bottom:8px;}
+    }
+
+    /* Já existia: ajuste foto para telas bem pequenas */
     @media (max-width: 420px){
-      .card{padding:20px;}
+      .card{padding:16px;}
       .avatar{width:58px;height:58px;}
+      .avatarWrap{width:58px;height:58px;}
+      .avatarWrap .avatar{width:58px;height:58px;}
+
+      /* LinkedIn acompanha o avatar menor */
+      .li-float{
+        width:24px;height:24px;
+        right:-3px;bottom:-3px;
+      }
+      .li-float i{font-size:12px;}
+    }
+
+    /* iPhone SE / telas ultra pequenas */
+    @media (max-width: 360px){
+      nav ul li a{padding:8px 10px;font-size:.95rem;}
+      .chip{font-size:.70rem;padding:4px 9px;}
+      .member p{font-size:.93rem;}
     }
   </style>
 </head>
@@ -375,22 +507,22 @@
       </div>
 
       <div class="team">
-        <!-- IMPORTANTE:
-             Ajuste o caminho se necessário:
-             - Se as fotos estiverem na mesma pasta do quemsomos.html: src="IsabellaRodrigues.jpeg"
-             - Se estiverem em /assets/team/: src="assets/team/IsabellaRodrigues.jpeg"
-        -->
-
         <div class="member">
           <div class="topRow">
-            <div class="avatar">
-              <img src="IsabellaRodrigues.jpeg" alt="Foto de Isabella Rodrigues">
+            <div class="avatarWrap">
+              <div class="avatar">
+                <img src="assets/IsabellaRodrigues.jpeg" alt="Foto de Isabella Rodrigues">
+              </div>
+              <a class="li-float" href="https://www.linkedin.com/in/isabella-rodrigues-7486642a7/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Isabella Rodrigues">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
             </div>
+
             <div class="nameBox">
               <h3>Isabella Rodrigues</h3>
               <div class="chips">
                 <span class="chip primary">🐶 Dev & Design</span>
-                <span class="chip">Frontend</span>
+                <span class="chip">CEUB • ADS</span>
               </div>
             </div>
           </div>
@@ -401,9 +533,15 @@
 
         <div class="member">
           <div class="topRow">
-            <div class="avatar">
-              <img src="JessyeAguiar.jpeg" alt="Foto de Jessye Aguiar">
+            <div class="avatarWrap">
+              <div class="avatar">
+                <img src="assets/JessyeAguiar.jpeg" alt="Foto de Jessye Aguiar">
+              </div>
+              <a class="li-float" href="https://www.linkedin.com/in/jessye-aguiar-torres-75628330b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Jessye Aguiar">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
             </div>
+
             <div class="nameBox">
               <h3>Jessye Aguiar</h3>
               <div class="chips">
@@ -419,9 +557,15 @@
 
         <div class="member">
           <div class="topRow">
-            <div class="avatar">
-              <img src="MariaLuiza.jpeg" alt="Foto de Maria Luiza Andrade">
+            <div class="avatarWrap">
+              <div class="avatar">
+                <img src="assets/MariaLuiza.jpeg" alt="Foto de Maria Luiza Andrade">
+              </div>
+              <a class="li-float" href="https://www.linkedin.com/in/maria-luiza-concei%C3%A7%C3%A3o-da-silva-andrade-b95b21324" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Maria Luiza Andrade">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
             </div>
+
             <div class="nameBox">
               <h3>Maria Luiza Andrade</h3>
               <div class="chips">
@@ -437,9 +581,15 @@
 
         <div class="member">
           <div class="topRow">
-            <div class="avatar">
-              <img src="JulianaMartins.jpeg" alt="Foto de Juliana Martins">
+            <div class="avatarWrap">
+              <div class="avatar">
+                <img src="assets/JulianaMartins.jpeg" alt="Foto de Juliana Martins">
+              </div>
+              <a class="li-float" href="https://www.linkedin.com/in/julianamaferr" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Juliana Martins">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
             </div>
+
             <div class="nameBox">
               <h3>Juliana Martins</h3>
               <div class="chips">
@@ -455,13 +605,13 @@
 
         <div class="member">
           <div class="topRow">
-            <div class="avatar">
-              <img src="OutrosColaboradores.jpeg" alt="Foto ilustrativa de colaboradores">
+            <div class="avatar" aria-hidden="true" style="display:grid;place-items:center;background:rgba(226,114,91,.10);border-color:rgba(212,95,71,.22);">
+              <span style="font-size:28px;">🐈</span>
             </div>
             <div class="nameBox">
               <h3>Outros colaboradores</h3>
               <div class="chips">
-                <span class="chip primary">🐈 Apoio</span>
+                <span class="chip primary">🐾 Apoio</span>
                 <span class="chip">Mentoria</span>
               </div>
             </div>
@@ -476,7 +626,7 @@
 
       <h2>Nosso Propósito</h2>
       <p>
-        Acreditamos que cuidar de um animal é um ato de amor — e que todo tutor merece sentir segurança ao deixá-lo aos cuidados de alguém.
+        Acredititamos que cuidar de um animal é um ato de amor — e que todo tutor merece sentir segurança ao deixá-lo aos cuidados de alguém.
         A <strong>Patas Pousada</strong> é mais do que um projeto acadêmico: é uma plataforma que reflete nosso compromisso com o bem-estar animal e com a inovação.
       </p>
     </div>

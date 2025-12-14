@@ -61,17 +61,21 @@
             gap: 10px;
             text-decoration: none;
             transition: transform 0.2s;
+            min-width: 0; /* ✅ ajuda a não estourar no mobile */
         }
 
         .brand:hover { transform: scale(1.03); }
 
-        .brand img { width: 36px; height: 36px; }
+        .brand img { width: 36px; height: 36px; flex: 0 0 auto; }
 
         .brand span {
             font-size: 1.5em;
             font-weight: 800;
             color: var(--primary-color);
             font-family: 'Parkinsans', sans-serif;
+            white-space: nowrap; /* ✅ evita quebrar em duas linhas feias */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .nav-links {
@@ -194,11 +198,13 @@
             font-size: 1.8rem;
             color: var(--text-light);
             transition: color 0.2s;
+            flex: 0 0 auto;
         }
 
         .service-info {
             display: flex;
             flex-direction: column;
+            min-width: 0; /* ✅ evita estourar com textos */
         }
 
         .service-title {
@@ -330,6 +336,7 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(4px);
+            padding: 14px; /* ✅ evita colar nas bordas em celular */
         }
 
         .legal-modal {
@@ -342,6 +349,7 @@
             flex-direction: column;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: fadeInModal 0.3s ease-out;
+            overflow: hidden;
         }
 
         .legal-header {
@@ -350,6 +358,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
         }
 
         .legal-header h3 {
@@ -375,6 +384,7 @@
             line-height: 1.7;
             color: var(--text-dark);
             font-size: 0.95rem;
+            -webkit-overflow-scrolling: touch; /* ✅ scroll suave iPhone */
         }
 
         .legal-body h4 {
@@ -391,6 +401,12 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        /* ✅ RESPONSIVIDADE MELHORADA (sem mudar a ideia do layout) */
+        @media (max-width: 1024px){
+            .hero { height: 440px; }
+            .hero h1 { font-size: 2.6rem; }
+        }
+
         @media (max-width: 768px) {
             .nav-links { display: none; }
             nav { justify-content: center; }
@@ -405,6 +421,70 @@
             .footer-left { flex-direction: column; gap: 5px; }
             .footer-copy { border-left: none; padding-left: 0; }
             .footer-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
+        }
+
+        /* ✅ Celulares (Android/iPhone): ajustes finos de espaçamento e tipografia */
+        @media (max-width: 560px){
+            header{ padding: 12px 0; }
+            nav{ padding: 0 16px; }
+            .brand img{ width: 34px; height: 34px; }
+            .brand span{ font-size: 1.25em; }
+
+            .hero-wrapper{ padding: 14px; }
+            .hero{
+                height: 360px;
+                border-radius: 18px;
+                padding: 0 14px;
+            }
+            .hero h1{
+                font-size: 1.65rem;
+                line-height: 1.2;
+            }
+            .hero p{
+                font-size: 1rem;
+            }
+
+            .search-section{
+                padding: 0 14px;
+                margin-top: -26px; /* mantém efeito "flutuando" sem colar demais */
+            }
+            .search-card{
+                padding: 16px;
+                border-radius: 18px;
+                gap: 14px;
+            }
+
+            .service-options{
+                grid-template-columns: 1fr; /* ✅ uma coluna no celular */
+                gap: 12px;
+            }
+            .service-option label{
+                padding: 14px 14px;
+                border-radius: 14px;
+                gap: 12px;
+            }
+            .service-icon{ font-size: 1.6rem; }
+            .service-title{ font-size: 1rem; }
+            .service-desc{ font-size: .85rem; }
+
+            .search-action{ padding-top: 14px; }
+            .btn-search{
+                width: 100%;
+                justify-content: center;
+                padding: 14px 18px;
+                font-size: 1.05rem;
+            }
+
+            footer{ margin-top: 40px; padding: 20px 0; }
+            .footer-container{ padding: 0 16px; }
+        }
+
+        /* ✅ iPhone SE / telas bem pequenas */
+        @media (max-width: 360px){
+            .hero{ height: 330px; }
+            .hero h1{ font-size: 1.5rem; }
+            .hero p{ font-size: .95rem; }
+            .btn-search{ font-size: 1rem; }
         }
 
         /* --- PATINHAS SEGUINDO O MOUSE (DIMINUÍDAS) --- */
@@ -424,6 +504,11 @@
         @keyframes pawFade {
             0% { opacity: 1; }
             100% { opacity: 0; }
+        }
+
+        /* ✅ Mobile: desliga patinhas (evita lag e toque indevido em celular) */
+        @media (hover: none) and (pointer: coarse){
+            .paw-trail{ display:none !important; }
         }
     </style>
 </head>
