@@ -7,31 +7,304 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --pri:#e2725b; --pri-dark:#d45f47; --bg:#f7f7f7; --card:#fff; --border:#e5e5e5;
-      --txt:#222; --muted:#6b7280; --role-tutor:#b14946; --role-host:#a65351;
+      --pri:#e2725b; 
+      --pri-dark:#d45f47; 
+      --bg:#f7f7f7; 
+      --card:#fff; 
+      --border:#e5e5e5;
+      --txt:#1f2937; 
+      --muted:#6b7280; 
+      --shadow: 0 10px 24px rgba(17, 24, 39, .08);
+      --shadow-soft: 0 6px 16px rgba(17, 24, 39, .06);
+      --radius:16px;
+      --chip:#fff0ec;
+      --chip-border:#ffd8cf;
+      --transition: .22s cubic-bezier(.2,.8,.2,1);
     }
+
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:Nunito,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);}
-    header{display:flex;justify-content:center;align-items:center;background:#fff;padding:20px 0;box-shadow:0 2px 4px rgba(0,0,0,.1);}
-    nav{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;}
-    .logo{display:flex;align-items:center;gap:10px;font-family:'Parkinsans',sans-serif;font-size:1.6em;font-weight:800;color:var(--pri);text-decoration:none;}
+    body{
+      font-family:Nunito,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(1100px 500px at 50% 0%, rgba(226,114,91,.16), transparent 60%),
+                  linear-gradient(180deg, #ffffff 0%, var(--bg) 35%, var(--bg) 100%);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      display:flex;justify-content:center;align-items:center;
+      background:rgba(255,255,255,.85);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(229,229,229,.8);
+      padding:18px 0;
+    }
+
+    nav{
+      width:min(1040px, calc(100% - 32px));
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;
+    }
+
+    .logo{
+      display:flex;align-items:center;gap:10px;
+      font-family:'Parkinsans',sans-serif;
+      font-size:1.55em;font-weight:800;color:var(--pri);
+      text-decoration:none;
+      letter-spacing:.2px;
+    }
     .logo img{width:30px;height:30px;margin-bottom:2px;}
-    nav ul{list-style:none;display:flex;justify-content:center;gap:24px;margin-top:6px;padding:0;}
-    nav ul li a{text-decoration:none;color:#1f2937;font-weight:700;font-family:'Parkinsans',sans-serif;transition:color .2s;}
-    nav ul li a:hover{ color:var(--pri-dark); }
-    main{max-width:980px;margin:24px auto;padding:0 16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:0 10px 20px rgba(0,0,0,.06);max-width:900px;margin:0 auto;}
-    h1{font-size:1.7rem;margin-bottom:8px;font-family:'Parkinsans',sans-serif;color:var(--pri);}
-    h2{font-size:1.2rem;margin-top:16px;color:var(--pri-dark);}
-    p{margin:8px 0;line-height:1.6;}
-    .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:20px;}
-    .member{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
-    .member h3{margin:6px 0;color:var(--pri-dark);}
-    .member p{color:var(--muted);font-size:.95em;}
+
+    nav ul{
+      list-style:none;
+      display:flex;flex-wrap:wrap;
+      justify-content:center;
+      gap:18px;
+      margin-top:6px;
+      padding:0;
+    }
+    nav ul li a{
+      text-decoration:none;
+      color:#1f2937;
+      font-weight:800;
+      font-family:'Parkinsans',sans-serif;
+      transition:color var(--transition);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+    nav ul li a:hover{
+      color:var(--pri-dark);
+      background:rgba(226,114,91,.10);
+    }
+    nav ul li a.active{
+      color:var(--pri-dark);
+      background:rgba(226,114,91,.12);
+      border:1px solid rgba(212,95,71,.18);
+    }
+
+    main{max-width:1040px;margin:26px auto;padding:0 16px;}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--chip-border);
+      background:var(--chip);
+      color:var(--pri-dark);
+      font-weight:800;
+      width:max-content;
+      margin-bottom:10px;
+    }
+
+    h1{
+      font-size:1.8rem;
+      margin-bottom:8px;
+      font-family:'Parkinsans',sans-serif;
+      color:var(--pri);
+      letter-spacing:.2px;
+      line-height:1.15;
+    }
+
+    h2{
+      font-size:1.18rem;
+      margin-top:18px;
+      color:var(--pri-dark);
+      font-family:'Parkinsans',sans-serif;
+    }
+
+    p{margin:10px 0;line-height:1.75;color:var(--txt);}
+
+    .sideBox{
+      background: linear-gradient(180deg, rgba(226,114,91,.10), rgba(226,114,91,.04));
+      border:1px solid rgba(212,95,71,.20);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:var(--shadow-soft);
+    }
+    .sideBox h3{
+      font-family:'Parkinsans',sans-serif;
+      color:var(--pri-dark);
+      font-size:1.02rem;
+      margin-bottom:10px;
+    }
+    .sideList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .miniItem{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.72);
+      border:1px solid rgba(229,229,229,.9);
+    }
+    .miniIcon{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(226,114,91,.12);
+      border:1px solid rgba(212,95,71,.18);
+      flex:0 0 auto;
+      font-size:18px;
+    }
+    .miniText b{display:block;color:var(--txt);margin-bottom:2px;}
+    .miniText span{color:var(--muted);font-size:.95rem;line-height:1.35;}
+
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(226,114,91,.28), transparent);
+      margin:20px 0;
+    }
+
+    /* TEAM */
+    .teamHeader{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:10px;
+    }
+    .teamHeader p{
+      margin:0;
+      color:var(--muted);
+      font-size:.98rem;
+    }
+
+    .team{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .member{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:var(--shadow-soft);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .member::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:6px;
+      background:linear-gradient(90deg, rgba(226,114,91,.9), rgba(212,95,71,.55));
+    }
+
+    .member:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(17,24,39,.10);
+      border-color: rgba(212,95,71,.25);
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:6px;
+      margin-bottom:10px;
+    }
+
+    /* Foto estilo "perfil" */
+    .avatar{
+      width:64px;
+      height:64px;
+      border-radius:999px;
+      border:3px solid rgba(226,114,91,.30);
+      box-shadow: 0 8px 18px rgba(17,24,39,.10);
+      overflow:hidden;
+      background: #fff;
+      flex: 0 0 auto;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .nameBox{min-width:0;}
+    .nameBox h3{
+      margin:0;
+      color:var(--pri-dark);
+      font-family:'Parkinsans',sans-serif;
+      font-size:1.08rem;
+      line-height:1.15;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:6px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.72rem;
+      border:1px solid rgba(229,229,229,.9);
+      background:#fff;
+      color:var(--muted);
+    }
+    .chip.primary{
+      background:rgba(226,114,91,.10);
+      border-color: rgba(212,95,71,.22);
+      color: var(--pri-dark);
+    }
+
+    .member p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.6;
+    }
+
+    /* Responsivo */
+    @media (max-width: 860px){
+      .hero{grid-template-columns:1fr; }
+      .sideBox{order:2;}
+    }
+    @media (max-width: 420px){
+      .card{padding:20px;}
+      .avatar{width:58px;height:58px;}
+    }
   </style>
 </head>
 
@@ -44,71 +317,167 @@
       </a>
       <ul>
         <li><a href="index.html">Início</a></li>
-        <li><a href="pagamento.html">Pagamento</a></li>
         <li><a href="ajuda.html">Ajuda</a></li>
-        <li><a href="quemsomos.html" style="color:var(--pri-dark)">Quem Somos</a></li>
+        <li><a href="quemsomos.html" class="active">Quem Somos</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <div class="card">
-      <h1>Quem Somos 🐾</h1>
-      <p>
-        A <strong>Patas Pousadas</strong> nasceu da vontade de unir pessoas que amam animais e desejam oferecer ou encontrar o melhor cuidado possível para seus pets. 
-        Nosso objetivo é proporcionar uma rede de confiança entre tutores e anfitriões, facilitando hospedagens seguras, acolhedoras e cheias de carinho.
-      </p>
-      <p>
-        O projeto foi desenvolvido como parte do curso de <strong>Análise e Desenvolvimento de Sistemas</strong> no <strong>Centro Universitário de Brasília (CEUB)</strong>, 
-        combinando tecnologia, empatia e responsabilidade social. Queremos que cada reserva seja mais do que um serviço: seja uma experiência de amor e cuidado pelos animais. 💕
-      </p>
+      <div class="hero">
+        <section>
+          <span class="badge">🐾 Sobre a Patas Pousada</span>
+          <h1>Quem Somos</h1>
+          <p>
+            A <strong>Patas Pousada</strong> nasceu da vontade de unir pessoas que amam animais e desejam oferecer ou encontrar o melhor cuidado possível para seus pets.
+            Nosso objetivo é proporcionar uma rede de confiança entre tutores e anfitriões, facilitando hospedagens seguras, acolhedoras e cheias de carinho.
+          </p>
+          <p>
+            O projeto foi desenvolvido como parte do curso de <strong>Análise e Desenvolvimento de Sistemas</strong> no <strong>Centro Universitário de Brasília (CEUB)</strong>,
+            combinando tecnologia, empatia e responsabilidade social. Queremos que cada reserva seja mais do que um serviço: seja uma experiência de amor e cuidado pelos animais.
+          </p>
+        </section>
 
-      <h2>Nosso Time</h2>
+        <aside class="sideBox">
+          <h3>Nossos valores</h3>
+          <div class="sideList">
+            <div class="miniItem">
+              <div class="miniIcon">🧡</div>
+              <div class="miniText">
+                <b>Acolhimento</b>
+                <span>Uma experiência humana e carinhosa do início ao fim.</span>
+              </div>
+            </div>
+            <div class="miniItem">
+              <div class="miniIcon">🛡️</div>
+              <div class="miniText">
+                <b>Confiança</b>
+                <span>Conexões transparentes entre tutores e anfitriões.</span>
+              </div>
+            </div>
+            <div class="miniItem">
+              <div class="miniIcon">🐶</div>
+              <div class="miniText">
+                <b>Bem-estar</b>
+                <span>Pets em primeiro lugar, sempre, com responsabilidade.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="teamHeader">
+        <h2>Nosso Time</h2>
+        <p>Conheça as pessoas por trás da Patas Pousada.</p>
+      </div>
+
       <div class="team">
+        <!-- IMPORTANTE:
+             Ajuste o caminho se necessário:
+             - Se as fotos estiverem na mesma pasta do quemsomos.html: src="IsabellaRodrigues.jpeg"
+             - Se estiverem em /assets/team/: src="assets/team/IsabellaRodrigues.jpeg"
+        -->
+
         <div class="member">
-          <h3>🐶 Isabella Rodrigues</h3>
+          <div class="topRow">
+            <div class="avatar">
+              <img src="IsabellaRodrigues.jpeg" alt="Foto de Isabella Rodrigues">
+            </div>
+            <div class="nameBox">
+              <h3>Isabella Rodrigues</h3>
+              <div class="chips">
+                <span class="chip primary">🐶 Dev & Design</span>
+                <span class="chip">Frontend</span>
+              </div>
+            </div>
+          </div>
           <p>
-            Idealizadora e desenvolvedora principal do projeto. Apaixonada por animais e tecnologia,
-            Isabella cuida do design, da estrutura e da lógica do site, garantindo uma experiência intuitiva e acolhedora.
+            Idealizadora e desenvolvedora principal do projeto. Cuida do design, da estrutura e da lógica do site, garantindo uma experiência intuitiva e acolhedora.
           </p>
         </div>
 
         <div class="member">
-          <h3>🐾 Jessye Silva</h3>
+          <div class="topRow">
+            <div class="avatar">
+              <img src="JessyeAguiar.jpeg" alt="Foto de Jessye Aguiar">
+            </div>
+            <div class="nameBox">
+              <h3>Jessye Aguiar</h3>
+              <div class="chips">
+                <span class="chip primary">🐾 Conteúdo</span>
+                <span class="chip">Organização</span>
+              </div>
+            </div>
+          </div>
           <p>
-            Co-desenvolvedora e organizadora de conteúdo. Responsável pela comunicação do projeto,
-            assegurando que cada texto e imagem transmitam o propósito da Patas Pousadas: conectar tutores e anfitriões com segurança e afeto.
+            Co-desenvolvedora e organizadora de conteúdo. Responsável pela comunicação do projeto, garantindo que cada texto transmita o propósito da plataforma.
           </p>
         </div>
 
         <div class="member">
-          <h3>🐕 Maria Luiza Andrade</h3>
+          <div class="topRow">
+            <div class="avatar">
+              <img src="MariaLuiza.jpeg" alt="Foto de Maria Luiza Andrade">
+            </div>
+            <div class="nameBox">
+              <h3>Maria Luiza Andrade</h3>
+              <div class="chips">
+                <span class="chip primary">🐕 Dados</span>
+                <span class="chip">Backend</span>
+              </div>
+            </div>
+          </div>
           <p>
-            Análise de dados e apoio ao backend. Participa da integração com banco de dados e da organização das informações,
-            ajudando a manter tudo confiável e funcional.
+            Apoio ao backend e organização das informações. Participa da integração com banco de dados e ajuda a manter tudo confiável e funcional.
           </p>
         </div>
 
         <div class="member">
-          <h3>🐾 Juliana Martins</h3>
+          <div class="topRow">
+            <div class="avatar">
+              <img src="JulianaMartins.jpeg" alt="Foto de Juliana Martins">
+            </div>
+            <div class="nameBox">
+              <h3>Juliana Martins</h3>
+              <div class="chips">
+                <span class="chip primary">🐾 UX</span>
+                <span class="chip">Testes</span>
+              </div>
+            </div>
+          </div>
           <p>
-            Responsável pela experiência do usuário e testes de qualidade. 
-            Juliana garante que o sistema seja acessível, intuitivo e livre de falhas, ajudando o time a aprimorar a usabilidade e o visual da plataforma.
+            Responsável pela experiência do usuário e testes de qualidade. Ajuda a melhorar usabilidade, acessibilidade e consistência visual da plataforma.
           </p>
         </div>
 
         <div class="member">
-          <h3>🐈 Outros colaboradores</h3>
+          <div class="topRow">
+            <div class="avatar">
+              <img src="OutrosColaboradores.jpeg" alt="Foto ilustrativa de colaboradores">
+            </div>
+            <div class="nameBox">
+              <h3>Outros colaboradores</h3>
+              <div class="chips">
+                <span class="chip primary">🐈 Apoio</span>
+                <span class="chip">Mentoria</span>
+              </div>
+            </div>
+          </div>
           <p>
-            Professores, colegas e amigos do CEUB que acreditaram na ideia e ajudaram o projeto a crescer com sugestões, testes e incentivo constante.
+            Professores, colegas e amigos do CEUB que contribuíram com sugestões, testes e incentivo para o projeto crescer com qualidade.
           </p>
         </div>
       </div>
 
+      <div class="divider"></div>
+
       <h2>Nosso Propósito</h2>
       <p>
         Acreditamos que cuidar de um animal é um ato de amor — e que todo tutor merece sentir segurança ao deixá-lo aos cuidados de alguém.
-        A <strong>Patas Pousadas</strong> é mais do que um projeto acadêmico: é uma plataforma que reflete nosso compromisso com o bem-estar animal e com a inovação.
+        A <strong>Patas Pousada</strong> é mais do que um projeto acadêmico: é uma plataforma que reflete nosso compromisso com o bem-estar animal e com a inovação.
       </p>
     </div>
   </main>
