@@ -10,325 +10,63 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- Estilo extra só para os filtros de reservas -->
-<style>
-  .tutor-bookings-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-  }
-  .tutor-bookings-filter{
-    display:flex;
-    gap:6px;
-  }
-  .tb-filter-btn{
-    border-radius:999px;
-    padding:3px 10px;
-    font-size:0.7rem;
-    border:1px solid #e5e7eb;
-    background:#fff;
-    cursor:pointer;
-    color:#6b7280;
-    font-weight:600;
-    transition:all .15s;
-  }
-  .tb-filter-btn:hover{
-    background:#f3f4f6;
-  }
-  .tb-filter-btn.active{
-    background:#fee2e2;
-    border-color:#f97373;
-    color:#b91c1c;
-    box-shadow:0 1px 4px rgba(248,113,113,.4);
-  }
-
-  /* LISTA DE RESERVAS DO TUTOR */
-  .tutor-bookings{
-    max-height:340px;
-    overflow:auto;
-    border-radius:12px;
-    border:1px solid #e5e7eb;
-    background:#fff;
-  }
-  .tutor-booking-row{
-    padding:10px 12px;
-    border-bottom:1px solid #e5e7eb;
-    font-size:0.85rem;
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
-  .tutor-booking-row:last-child{
-    border-bottom:none;
-  }
-
-  .tb-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-  }
-  .tb-host{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    min-width:0;
-  }
-  .tb-avatar{
-    width:40px;
-    height:40px;
-    border-radius:999px;
-    object-fit:cover;
-    flex-shrink:0;
-  }
-  .tb-host-text{
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .tb-name{
-    font-weight:600;
-    font-size:0.9rem;
-  }
-  .tb-city{
-    font-size:0.78rem;
-    color:#6b7280;
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-
-  .tb-status-pill{
-    border-radius:999px;
-    padding:3px 10px;
-    font-size:0.75rem;
-    font-weight:700;
-    white-space:nowrap;
-  }
-
-  .tb-meta{
-    margin-left:48px;
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-    font-size:0.78rem;
-    color:#4b5563;
-  }
-  .tb-dates{
-    font-weight:500;
-  }
-  .tb-pets{
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-  .tb-amount{
-    font-weight:500;
-  }
-
-  .tb-actions{
-    margin-left:48px;
-    margin-top:6px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-  }
-  .tb-btn{
-    border-radius:999px;
-    padding:4px 10px;
-    font-size:0.75rem;
-    font-weight:600;
-    cursor:pointer;
-    border:1px solid #e5e7eb;
-    background:#fff;
-    color:#374151;
-    white-space:nowrap;
-  }
-  .tb-btn-danger{
-    border-color:#ef4444;
-    color:#ef4444;
-    background:#fef2f2;
-  }
-  .tb-btn-pay{
-    border-color:#10b981;
-    color:#059669;
-    background:#ecfdf5;
-  }
-
-  /* ------- CARROSSEL DO MODAL ------- */
-  .modal-photos{
-    position:relative;
-    border-radius:16px;
-    overflow:hidden;
-    background:#000;
-  }
-  .modal-photo{
-    width:100%;
-    max-height:320px;
-    object-fit:cover;
-    display:block;
-  }
-  .modal-photo-arrow{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:32px;
-    height:32px;
-    border-radius:999px;
-    border:none;
-    background:rgba(15,23,42,.8);
-    color:#f9fafb;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    padding:0;
-  }
-  .modal-photo-arrow.left{
-    left:10px;
-  }
-  .modal-photo-arrow.right{
-    right:10px;
-  }
-  .modal-photo-arrow i{
-    font-size:0.9rem;
-  }
-  .modal-photo-counter{
-    position:absolute;
-    right:12px;
-    bottom:10px;
-    padding:3px 10px;
-    border-radius:999px;
-    background:rgba(15,23,42,.85);
-    color:#e5e7eb;
-    font-size:0.8rem;
-  }
-
-  /* ------- FOTO DO HOST NO CARD ------- */
-  .host-header{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:6px;
-  }
-  .host-header-avatar{
-    width:40px;
-    height:40px;
-    border-radius:999px;
-    object-fit:cover;
-    flex-shrink:0;
-  }
-  .host-header-info h3{
-    margin:0;
-    font-size:1rem;
-  }
-  .host-header-info span{
-    display:block;
-    font-size:0.85rem;
-    color:#6b7280;
-  }
-
-  /* ------- FOTO DO HOST NO MODAL ------- */
-  .modal-host-header{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:12px;
-  }
-  .modal-host-avatar{
-    width:44px;
-    height:44px;
-    border-radius:999px;
-    object-fit:cover;
-    flex-shrink:0;
-  }
-  .modal-host-name{
-    font-weight:600;
-    font-size:0.95rem;
-  }
-  .modal-host-city{
-    font-size:0.85rem;
-    color:#6b7280;
-  }
-
-  /* ------- CAMPOS EXTRAS DO MODAL (PET QTD + LISTA) ------- */
-  .modal-field{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    font-size:.85rem;
-  }
-  .modal-field label{
-    font-weight:600;
-    color:#374151;
-  }
-  .modal-extra-row{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-top:10px;
-  }
-  .modal-field input[type="number"]{
-    border-radius:8px;
-    border:1px solid #e5e7eb;
-    padding:6px 10px;
-    font-size:.9rem;
-  }
-  .pets-checkbox-list{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    max-height:120px;
-    overflow:auto;
-    border:1px solid #e5e7eb;
-    border-radius:8px;
-    padding:8px;
-    background:#fff;
-  }
-  .pets-checkbox-list label{
-    font-size:.85rem;
-    display:flex;
-    gap:6px;
-    align-items:center;
-  }
-  .pets-checkbox-list small{
-    font-size:.8rem;
-    color:#6b7280;
-  }
-</style>
 </head>
-<body>
-<header>
-  <nav>
-    <a href="index.html" class="logo">
-      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="">
-      <span>Patas Pousada</span>
-    </a>
 
-    <ul>
-      <li><a href="#">Reservas</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
-      <li><a class="pill" href="#">Lar Temporário</a></li>
-      
-      <li class="user-menu">
-        <div class="user-trigger">
-          <img id="userAvatar" class="user-avatar-img" src="" alt="Foto">
-          <div id="userInitial" class="user-initials-badge">U</div>
-          
-          <strong id="userName">Usuário</strong>
-          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"></path></svg>
-        </div>
-        <div class="dropdown">
-          <a href="menu_perfil.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
-          <a href="meusPets.html"><i class="fa-solid fa-paw"></i> Meus pets</a>
-          <a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
-          <div class="dropdown-sep"></div>
-          <a href="#" id="deleteAccountLink" class="danger-link">
-            <i class="fa-solid fa-user-xmark"></i> Excluir conta
-          </a>
-        </div>
-      </li>
-    </ul>
+<body>
+<header id="ppHeader">
+  <nav>
+    <div class="pp-nav-left">
+      <a href="index.html" class="logo">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="">
+        <span>Patas Pousada</span>
+      </a>
+
+      <!-- LINKS DO MENU (desktop) -->
+      <ul class="pp-nav-links">
+        <li><a href="#">Reservas</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+        <li><a class="pill" href="#">Lar Temporário</a></li>
+      </ul>
+    </div>
+
+    <div class="pp-nav-right">
+      <!-- PERFIL FICA SEMPRE AQUI (NÃO VAI PRO HAMBÚRGUER) -->
+      <ul style="list-style:none; margin:0; padding:0;">
+        <li class="user-menu">
+          <div class="user-trigger">
+            <img id="userAvatar" class="user-avatar-img" src="" alt="Foto">
+            <div id="userInitial" class="user-initials-badge">U</div>
+
+            <strong id="userName">Usuário</strong>
+            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"></path></svg>
+          </div>
+          <div class="dropdown">
+            <a href="menu_perfil.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+            <a href="meusPets.html"><i class="fa-solid fa-paw"></i> Meus pets</a>
+            <a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+            <div class="dropdown-sep"></div>
+            <a href="#" id="deleteAccountLink" class="danger-link">
+              <i class="fa-solid fa-user-xmark"></i> Excluir conta
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- BOTÃO HAMBÚRGUER (mobile) -->
+      <button class="pp-menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- MENU MOBILE (somente links do site; perfil NÃO vai aqui) -->
+    <div class="pp-mobile-menu" id="mobileMenu" aria-hidden="true">
+      <a href="#"><i class="fa-regular fa-calendar"></i> Reservas</a>
+      <a href="ajuda.html"><i class="fa-regular fa-circle-question"></i> Ajuda</a>
+      <a href="#"><i class="fa-solid fa-heart"></i> Lar Temporário</a>
+      <div class="pp-mobile-sep"></div>
+      <a href="menu_perfil.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+      <a href="meusPets.html"><i class="fa-solid fa-paw"></i> Meus pets</a>
+    </div>
   </nav>
 </header>
 
@@ -353,7 +91,7 @@
   </div>
 
   <div class="cols">
-    
+
     <div class="sidebar-left">
         <div class="card">
         <div class="hd">Buscar serviços <i class="fa-solid fa-sliders" style="color:#9ca3af; font-size:0.85rem;"></i></div>
@@ -362,7 +100,7 @@
             <button class="chip-btn" data-service="daycare"><i class="fa-solid fa-sun"></i> Day Care</button>
             <button class="chip-btn" data-service="hospedagem"><i class="fa-solid fa-house-chimney"></i> Hospedagem</button>
             <button class="chip-btn" data-service="lar"><i class="fa-solid fa-heart"></i> Lar Temporário</button>
-            
+
             <div style="margin-top: 10px;">
                 <label class="field-label">Localização</label>
                 <input
@@ -514,7 +252,7 @@
         <p>Selecione uma conversa para iniciar</p>
       </div>
       <div class="pp-chat-messages" id="ppChatMessages"></div>
-      
+
       <form class="pp-chat-input-area" id="ppChatForm">
         <input
           type="text"
@@ -569,6 +307,60 @@
 
   // controle do modal de cancelamento de reserva
   let bookingToCancelId = null;
+
+  /* =========================
+     MENU MOBILE (HAMBÚRGUER)
+     ========================= */
+  (function setupMobileMenu(){
+    const headerEl = document.getElementById('ppHeader');
+    const toggleBtn = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if(!headerEl || !toggleBtn || !mobileMenu) return;
+
+    function closeMenu(){
+      headerEl.classList.remove('pp-menu-open');
+      mobileMenu.setAttribute('aria-hidden','true');
+      toggleBtn.setAttribute('aria-label','Abrir menu');
+      const icon = toggleBtn.querySelector('i');
+      if(icon){
+        icon.classList.remove('fa-xmark');
+        icon.classList.add('fa-bars');
+      }
+    }
+
+    function openMenu(){
+      headerEl.classList.add('pp-menu-open');
+      mobileMenu.setAttribute('aria-hidden','false');
+      toggleBtn.setAttribute('aria-label','Fechar menu');
+      const icon = toggleBtn.querySelector('i');
+      if(icon){
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-xmark');
+      }
+    }
+
+    toggleBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const isOpen = headerEl.classList.contains('pp-menu-open');
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    document.addEventListener('click', (e)=>{
+      if(!headerEl.classList.contains('pp-menu-open')) return;
+      const clickedInsideHeader = headerEl.contains(e.target);
+      if(!clickedInsideHeader) closeMenu();
+    });
+
+    mobileMenu.addEventListener('click', (e)=>{
+      const a = e.target.closest('a');
+      if(a) closeMenu();
+    });
+
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeMenu();
+    });
+  })();
 
   // --- UI HELPERS ---
   function toast(msg){
@@ -665,7 +457,7 @@
     const services = h.service
       .map(s=>({daycare:"Day Care", hospedagem:"Hospedagem", lar:"Lar Temporário"}[s] || s))
       .join(", ");
-    
+
     let photosHtml = "";
     let badgeHtml  = "";
     const photos = (h.photos && h.photos.length > 0) ? h.photos : [h.img];
@@ -699,7 +491,7 @@
         const datePub = new Date(h.createdAt);
         const now = new Date();
         const diffTime = Math.abs(now - datePub);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         publishedText = (diffDays <= 1) ? "Publicado hoje" : `Publicado há ${diffDays} dias`;
     }
 
@@ -725,7 +517,7 @@
           <span class="rating"><i class="fa-solid fa-star"></i> ${h.rating.toFixed(1)} <span class="rating-count">(${h.reviews})</span></span>
           <span class="tag"><i class="fa-solid fa-briefcase"></i> ${services}</span>
         </div>
-        
+
         <div class="meta-details">
             <div><i class="fa-solid fa-paw"></i> ${capacityText}</div>
             <div><i class="fa-regular fa-calendar-check"></i> ${availableText}</div>
@@ -882,7 +674,7 @@
       HOSTS = activeListings.map(l => {
         const host = hostsMap[l.host_id] || {};
         const profile = profilesMap[l.host_id] || {};
-        
+
         const servicesArray = Array.isArray(l.services) ? l.services : [];
         const normalizedServices = servicesArray.map(s=>{
           const lower = (s || '').toLowerCase();
@@ -893,7 +685,7 @@
         });
 
         const avatar = host.avatar_url || "https://cdn-icons-png.flaticon.com/512/1373/1373255.png";
-        
+
         const profileNameFromParts = `${(profile.first_name || '').trim()} ${(profile.last_name || '').trim()}`.trim();
         const displayName = (host.full_name && host.full_name.trim()) ||
                             (profile.full_name && profile.full_name.trim()) ||
@@ -1047,7 +839,7 @@
 
             const start = new Date(b.start_date).toLocaleDateString('pt-BR');
             const end   = new Date(b.end_date).toLocaleDateString('pt-BR');
-            
+
             const status = (b.status || '').toLowerCase();
             const isCanceled = (status === 'cancelada' || status === 'cancelado');
             const canCancel = !isCanceled &&
@@ -1144,7 +936,7 @@
                         : ''
                     }
                     ${
-                      showCancelBtn 
+                      showCancelBtn
                         ? `<button class="tb-btn tb-btn-danger" onclick="cancelBooking('${b.id}')">
                              Cancelar
                            </button>`
@@ -1326,22 +1118,22 @@
     document.getElementById('mBody').innerHTML = `
       <div class="modal-grid">
         <div class="modal-photos">
-          <button 
-            class="modal-photo-arrow left" 
-            onclick="changeModalPhoto(-1)" 
+          <button
+            class="modal-photo-arrow left"
+            onclick="changeModalPhoto(-1)"
             ${totalPhotos <= 1 ? 'style="display:none;"' : ''}>
             <i class="fa-solid fa-chevron-left"></i>
           </button>
 
-          <img 
-            src="${currentModalPhotos[0]}" 
-            class="modal-photo" 
-            id="modalMainPhoto" 
+          <img
+            src="${currentModalPhotos[0]}"
+            class="modal-photo"
+            id="modalMainPhoto"
             alt="Foto do anúncio">
 
-          <button 
-            class="modal-photo-arrow right" 
-            onclick="changeModalPhoto(1)" 
+          <button
+            class="modal-photo-arrow right"
+            onclick="changeModalPhoto(1)"
             ${totalPhotos <= 1 ? 'style="display:none;"' : ''}>
             <i class="fa-solid fa-chevron-right"></i>
           </button>
@@ -1638,9 +1430,9 @@
         pets_ids: selectedPets
     });
 
-    if(error) { 
-        console.error(error); 
-        errEl.textContent = "Erro ao reservar."; 
+    if(error) {
+        console.error(error);
+        errEl.textContent = "Erro ao reservar.";
     } else {
         toast("Reserva solicitada!");
         toggleModal(false);
@@ -2014,7 +1806,7 @@
     const isMe = (msg.sender_id === currentUserId);
     const row = document.createElement('div');
     row.className = `pp-chat-msg-row ${isMe ? 'me' : ''}`;
-    
+
     const time = new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
     row.innerHTML = `
@@ -2074,7 +1866,7 @@
         toast("Faça login primeiro");
         return;
     }
-    
+
     ppChatWidget.style.display = 'flex';
     ppChatSubtitle.textContent = "Conectando...";
 

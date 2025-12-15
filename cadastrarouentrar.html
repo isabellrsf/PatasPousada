@@ -20,6 +20,10 @@
       --white: #fff;
       --border-radius: 20px;
       --shadow: 0 10px 40px rgba(226, 114, 91, 0.15);
+
+      --border: rgba(229,229,229,.9);
+      --shadow-soft: 0 6px 16px rgba(17, 24, 39, .06);
+      --transition: .22s cubic-bezier(.2,.8,.2,1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,11 +35,10 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      /* MESMO CURSOR DO INDEX */
       cursor: url('https://cur.cursors-4u.net/animals/ani-12/ani1133.cur'), auto;
     }
 
-    /* --- HEADER (Restaurado) --- */
+    /* --- HEADER --- */
     header {
       background: var(--white);
       padding: 15px 0;
@@ -52,6 +55,7 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
+      position: relative; /* ✅ para ancorar botão do menu */
     }
 
     .logo {
@@ -64,6 +68,7 @@
       font-weight: 800;
       font-size: 1.4rem;
       transition: transform 0.2s;
+      white-space: nowrap;
     }
     .logo:hover { transform: scale(1.02); }
     .logo img { height: 32px; }
@@ -72,14 +77,158 @@
       display: flex;
       gap: 25px;
       list-style: none;
+      align-items: center;
     }
     .nav-links a {
       text-decoration: none;
       color: var(--text-main);
       font-weight: 700;
-      transition: color 0.2s;
+      transition: color 0.2s, background var(--transition), border-color var(--transition);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-family: 'Parkinsans', sans-serif;
     }
-    .nav-links a:hover { color: var(--primary); }
+    .nav-links a:hover {
+      color: var(--primary);
+      background: rgba(226,114,91,.10);
+      border-color: rgba(198,80,56,.16);
+    }
+
+    /* =========================
+       ✅ MENU MOBILE (hambúrguer + drawer)
+       ========================= */
+    .menu-toggle{
+      display:none;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      color:var(--primary-hover);
+      align-items:center;
+      justify-content:center;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+    .menu-toggle:hover{
+      background:rgba(226,114,91,.08);
+      border-color: rgba(198,80,56,.18);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(17,24,39,.10);
+    }
+    .menu-toggle i{font-size:1.2rem;}
+
+    .mobile-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      backdrop-filter: blur(4px);
+      z-index:999;
+      display:none;
+      opacity:0;
+      transition: opacity .2s ease;
+    }
+    .mobile-overlay.active{
+      display:block;
+      opacity:1;
+    }
+
+    .mobile-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:min(86vw, 330px);
+      background:#fff;
+      z-index:1000;
+      transform: translateX(100%);
+      transition: transform .25s ease;
+      box-shadow: -18px 0 40px rgba(0,0,0,.14);
+      display:flex;
+      flex-direction:column;
+    }
+    .mobile-drawer.active{ transform: translateX(0); }
+
+    .drawer-header{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .drawer-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .drawer-brand img{ width:30px; height:30px; }
+    .drawer-brand strong{
+      font-family:'Parkinsans',sans-serif;
+      color:var(--primary);
+      font-size:1.12rem;
+      white-space:nowrap;
+    }
+
+    .drawer-close{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      color:var(--text-main);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: background var(--transition), transform var(--transition), border-color var(--transition);
+    }
+    .drawer-close:hover{
+      background:rgba(226,114,91,.08);
+      border-color: rgba(198,80,56,.18);
+      transform: translateY(-1px);
+    }
+
+    .drawer-links{
+      list-style:none;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .drawer-links a{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      text-decoration:none;
+      color:var(--text-main);
+      font-weight:900;
+      font-family:'Parkinsans',sans-serif;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .drawer-links a:hover{
+      background:rgba(226,114,91,.10);
+      border-color: rgba(198,80,56,.22);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(17,24,39,.10);
+    }
+
+    .drawer-footer{
+      margin-top:auto;
+      padding:14px 16px 18px;
+      border-top:1px solid var(--border);
+      color:var(--text-light);
+      font-size:.85rem;
+      text-align:center;
+    }
 
     /* --- ÁREA PRINCIPAL --- */
     main {
@@ -90,7 +239,6 @@
       padding: 40px 20px;
     }
 
-    /* Container de Login (Card Centralizado) */
     .login-container {
       background: var(--white);
       width: 100%;
@@ -110,7 +258,7 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end; /* Texto na parte de baixo */
+      justify-content: flex-end;
       padding: 40px;
       color: white;
     }
@@ -122,7 +270,6 @@
       background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.1));
     }
 
-    /* Botão Voltar Personalizado */
     .btn-back {
       position: absolute;
       top: 20px;
@@ -179,7 +326,6 @@
     }
     .header-text p { color: var(--text-light); margin-bottom: 30px; }
 
-    /* Inputs */
     .input-group {
       margin-bottom: 20px;
       position: relative;
@@ -221,7 +367,6 @@
       box-shadow: 0 0 0 4px rgba(226, 114, 91, 0.1);
     }
 
-    /* Botão Ver Senha */
     .toggle-pass {
       position: absolute;
       right: 15px;
@@ -245,7 +390,6 @@
     }
     .forgot-link:hover { color: var(--primary); text-decoration: underline; }
 
-    /* Botão Principal */
     button#btn-login {
       width: 100%;
       padding: 15px;
@@ -256,13 +400,12 @@
       font-weight: 800;
       font-size: 1.1rem;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.2s;
       box-shadow: 0 4px 15px rgba(226, 114, 91, 0.3);
     }
     button#btn-login:hover { background: var(--primary-hover); transform: translateY(-2px); }
     button#btn-login:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
-    /* Área de Cadastro (Divider) */
     .divider {
       display: flex;
       align-items: center;
@@ -279,7 +422,6 @@
     }
     .divider span { padding: 0 10px; }
 
-    /* Cards de Cadastro */
     .signup-options {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -311,7 +453,6 @@
       transform: translateY(-2px);
     }
 
-    /* Mensagens */
     .msg {
       margin-top: 15px;
       padding: 12px;
@@ -323,39 +464,89 @@
     .msg.ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
     .msg.err { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
-    /* Responsividade Mobile */
+    /* =========================
+       ✅ RESPONSIVIDADE MOBILE
+       - foto aparece (banner)
+       - header mantém menu via drawer
+       ========================= */
     @media (max-width: 768px) {
-      .nav-links { display: none; } /* Menu simplificado no mobile */
-      nav { justify-content: center; }
-      
-      .login-container { flex-direction: column; height: auto; box-shadow: none; border-radius: 0; background: transparent; }
-      .login-visual { display: none; } 
-      .login-form-wrapper { padding: 0; background: transparent; }
-      
-      /* Card branco apenas no form no mobile */
-      form { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+      /* esconde os links normais e mostra o hambúrguer */
+      .nav-links { display: none; }
+      .menu-toggle { display: inline-flex; }
+
+      main { padding: 22px 14px; align-items: flex-start; }
+
+      .login-container{
+        flex-direction: column;
+        height: auto;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+
+      /* ✅ FOTO VISÍVEL: banner no topo */
+      .login-visual{
+        display: flex;
+        flex: none;
+        height: 230px;
+        padding: 18px;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 14px;
+        background-position: center 35%;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      }
+
+      .btn-back{
+        top: 14px;
+        left: 14px;
+        padding: 7px 12px;
+        font-size: 0.85rem;
+      }
+
+      .visual-quote{
+        font-size: 1.4rem;
+        max-width: 100%;
+      }
+
+      .login-form-wrapper{
+        padding: 0;
+        background: transparent;
+        overflow: visible;
+      }
+
+      form{
+        background: #fff;
+        padding: 22px;
+        border-radius: 20px;
+        box-shadow: 0 8px 26px rgba(0,0,0,0.06);
+      }
     }
 
-    /* --- MESMA PATINHA DO INDEX: RASTRO NO MOUSE --- */
+    @media (max-width: 420px){
+      .login-visual{ height: 210px; }
+      .visual-quote{ font-size: 1.25rem; }
+      .signup-options{ grid-template-columns: 1fr 1fr; gap: 12px; }
+      form{ padding: 18px; }
+    }
+
+    /* --- PATINHAS --- */
     .paw-trail {
       position: fixed;
-      pointer-events: none;   /* não bloqueia cliques */
+      pointer-events: none;
       z-index: 9999;
       font-size: 15px;
       transform: translate(-50%, -50%);
       animation: pawFade 0.8s ease-out forwards;
     }
-
-    .paw-trail i {
-      color: var(--primary);
-    }
+    .paw-trail i { color: var(--primary); }
 
     @keyframes pawFade {
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
 
-    /* --- EXPLOSÃO DE PATINHAS AO CLICAR (extra fofura) --- */
     .paw-explosion {
       position: fixed;
       pointer-events: none;
@@ -363,20 +554,11 @@
       font-size: 18px;
       animation: pawExplode 0.6s ease-out forwards;
     }
-
-    .paw-explosion i {
-      color: var(--primary);
-    }
+    .paw-explosion i { color: var(--primary); }
 
     @keyframes pawExplode {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.5);
-      }
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.5); }
     }
   </style>
 
@@ -391,16 +573,47 @@
         <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Logo">
         Patas Pousada
       </a>
+
+      <!-- ✅ LINKS (desktop) -->
       <ul class="nav-links">
         <li><a href="index.html">Início</a></li>
         <li><a href="ajuda.html">Ajuda</a></li>
       </ul>
+
+      <!-- ✅ HAMBÚRGUER (mobile) -->
+      <button class="menu-toggle" id="btnHamburger" type="button" aria-label="Abrir menu" aria-controls="mobileDrawer" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </nav>
   </header>
 
+  <!-- ✅ Overlay + Drawer Mobile -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Logo">
+        <strong>Patas Pousada</strong>
+      </div>
+      <button class="drawer-close" id="btnDrawerClose" aria-label="Fechar menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <ul class="drawer-links">
+      <li><a href="index.html">Início <i class="fa-solid fa-chevron-right"></i></a></li>
+      <li><a href="ajuda.html">Ajuda <i class="fa-solid fa-chevron-right"></i></a></li>
+    </ul>
+
+    <div class="drawer-footer">
+      © 2025 Patas Pousada
+    </div>
+  </aside>
+
   <main>
     <div class="login-container">
-      
+
       <div class="login-visual">
         <a href="index.html" class="btn-back">
           <i class="fas fa-arrow-left"></i> Voltar
@@ -418,7 +631,7 @@
         </div>
 
         <form id="form-login" autocomplete="on">
-          
+
           <div class="input-group">
             <label for="login-email">E-mail</label>
             <div class="input-wrapper">
@@ -465,6 +678,50 @@
   </main>
 
   <script>
+    /* =========================
+       ✅ MENU MOBILE (drawer)
+       ========================= */
+    (function(){
+      const btnHamburger = document.getElementById('btnHamburger');
+      const overlay = document.getElementById('mobileOverlay');
+      const drawer = document.getElementById('mobileDrawer');
+      const btnClose = document.getElementById('btnDrawerClose');
+
+      function openDrawer(){
+        overlay.classList.add('active');
+        drawer.classList.add('active');
+        drawer.setAttribute('aria-hidden', 'false');
+        btnHamburger.setAttribute('aria-expanded', 'true');
+        btnHamburger.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer(){
+        overlay.classList.remove('active');
+        drawer.classList.remove('active');
+        drawer.setAttribute('aria-hidden', 'true');
+        btnHamburger.setAttribute('aria-expanded', 'false');
+        btnHamburger.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        document.body.style.overflow = '';
+      }
+
+      if (btnHamburger && overlay && drawer && btnClose) {
+        btnHamburger.addEventListener('click', () => {
+          if (drawer.classList.contains('active')) closeDrawer();
+          else openDrawer();
+        });
+
+        btnClose.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && drawer.classList.contains('active')) closeDrawer();
+        });
+      }
+    })();
+
     /* ============================================
        CONFIGURAÇÃO SUPABASE
     ============================================= */
@@ -474,7 +731,6 @@
 
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Função para mostrar/ocultar senha
     function togglePassword() {
       const passInput = document.getElementById('login-pass');
       const icon = document.querySelector('.toggle-pass');
@@ -501,9 +757,6 @@
       btn.innerHTML = is ? '<i class="fas fa-spinner fa-spin"></i> Entrando...' : "Entrar na conta";
     }
 
-    /* ============================================
-       LÓGICA DE LOGIN
-    ============================================= */
     async function decideRedirect(email) {
       const p = new URLSearchParams(location.search);
       const forced = p.get('next');
@@ -515,9 +768,7 @@
         .eq('email', email)
         .maybeSingle();
 
-      if (!error && data) {
-        return "home_host.html";
-      }
+      if (!error && data) return "home_host.html";
       return "home_tutor.html";
     }
 
@@ -571,15 +822,13 @@
       }
     }
 
-    /* ============================
-       MESMA PATINHA DO INDEX NO MOUSE
-    ============================ */
+    /* PATINHAS NO MOUSE */
     if (window.matchMedia('(pointer: fine)').matches) {
       let lastPawTime = 0;
 
       document.addEventListener('mousemove', function(e) {
         const now = Date.now();
-        if (now - lastPawTime < 70) return; // igual ao index (70ms)
+        if (now - lastPawTime < 70) return;
         lastPawTime = now;
 
         const paw = document.createElement('span');
@@ -589,20 +838,16 @@
         paw.style.left = e.clientX + 'px';
         paw.style.top = e.clientY + 'px';
 
-        const rotate = (Math.random() * 60 - 30).toFixed(0); // -30 a 30 graus
+        const rotate = (Math.random() * 60 - 30).toFixed(0);
         paw.style.transform = `translate(-50%, -50%) rotate(${rotate}deg)`;
 
         document.body.appendChild(paw);
 
-        setTimeout(() => {
-          paw.remove();
-        }, 800);
+        setTimeout(() => { paw.remove(); }, 800);
       });
     }
 
-    /* ===============================
-       EXPLOSÃO DE PATINHAS NO CLIQUE
-    =============================== */
+    /* EXPLOSÃO DE PATINHAS NO CLIQUE */
     function explodePaws(x, y) {
       for (let i = 0; i < 12; i++) {
         const paw = document.createElement('span');
@@ -621,9 +866,7 @@
 
         document.body.appendChild(paw);
 
-        setTimeout(() => {
-          paw.remove();
-        }, 600);
+        setTimeout(() => { paw.remove(); }, 600);
       }
     }
 

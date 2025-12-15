@@ -28,14 +28,63 @@
       display: flex;
       gap: 6px;
       align-items: center;
+      flex-wrap: wrap;
     }
-    .perfil-breadcrumb a {
-      color: var(--cor-principal-escura);
+
+    /* ====== "Voltar" do breadcrumb com cara do projeto ====== */
+    .perfil-breadcrumb .breadcrumb-back{
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 800;
+      color: var(--cor-principal-escura);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(226,114,91,0.35);
+      background: linear-gradient(180deg, #ffffff, #fff7f5);
+      box-shadow: 0 8px 18px rgba(226,114,91,0.10);
+      transition: transform .15s, box-shadow .15s, background .15s, border-color .15s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
     }
-    .perfil-breadcrumb a:hover {
-      text-decoration: underline;
+    .perfil-breadcrumb .breadcrumb-back i{
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-escura));
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(226,114,91,0.22);
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .perfil-breadcrumb .breadcrumb-back:hover{
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, #ffffff, #fff0ec);
+      border-color: rgba(226,114,91,0.55);
+      box-shadow: 0 14px 26px rgba(226,114,91,0.16);
+    }
+    .perfil-breadcrumb .breadcrumb-back:hover i{
+      transform: translateX(-2px);
+      box-shadow: 0 14px 22px rgba(226,114,91,0.30);
+    }
+    .perfil-breadcrumb .breadcrumb-back:active{
+      transform: translateY(0);
+      box-shadow: 0 10px 18px rgba(226,114,91,0.12);
+    }
+    .perfil-breadcrumb .breadcrumb-back:focus-visible{
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(226,114,91,0.22), 0 14px 26px rgba(226,114,91,0.14);
+    }
+
+    .perfil-breadcrumb span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .perfil-top-card {
@@ -75,12 +124,15 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0; /* evita overflow no mobile */
     }
     .perfil-main-info h1 {
       font-family: 'Parkinsans', sans-serif;
       font-size: 1.6rem;
       letter-spacing: -0.5px;
       color: var(--cor-texto);
+      line-height: 1.15;
+      word-break: break-word;
     }
     .perfil-location {
       font-size: 0.95rem;
@@ -88,6 +140,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      min-width: 0;
     }
     .perfil-location i {
       color: var(--cor-principal-escura);
@@ -135,6 +188,7 @@
       gap: 6px;
       color: #4b5563;
       transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
     }
     .perfil-actions .btn-voltar:hover {
       background: #f3f4f6;
@@ -156,6 +210,7 @@
       gap: 8px;
       box-shadow: 0 4px 12px rgba(226,114,91,0.35);
       transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
     }
     .perfil-actions .btn-chat i {
       font-size: 0.9rem;
@@ -192,6 +247,7 @@
       color: var(--cor-texto-secundario);
       line-height: 1.5;
       white-space: pre-line;
+      overflow-wrap: anywhere;
     }
 
     .perfil-section-subtitle {
@@ -244,6 +300,7 @@
       gap: 10px;
       align-items: center;
       background: #f9fafb;
+      min-width: 0;
     }
     .perfil-pet-avatar {
       width: 52px;
@@ -255,22 +312,28 @@
       align-items: center;
       justify-content: center;
       font-size: 1.3rem;
+      flex-shrink: 0;
     }
     .perfil-pet-avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+    .perfil-pet-info {
+      min-width: 0;
+    }
     .perfil-pet-info h3 {
       font-size: 0.95rem;
       margin-bottom: 2px;
       color: var(--cor-texto);
       font-weight: 700;
+      word-break: break-word;
     }
     .perfil-pet-info p {
       font-size: 0.8rem;
       margin-bottom: 1px;
       color: var(--cor-texto-secundario);
+      overflow-wrap: anywhere;
     }
 
     .perfil-pet-tags {
@@ -305,6 +368,211 @@
       color: #b91c1c;
     }
 
+    /* =========================
+       HEADER MOBILE (HAMBURGUER)
+       Não altera desktop: só atua <= 860px
+       ========================= */
+    .mobile-menu-btn {
+      display: none;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #4b5563;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, .06);
+      transition: background .15s, border-color .15s, color .15s, transform .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-menu-btn:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      color: var(--cor-principal-escura);
+      transform: translateY(-1px);
+    }
+    .mobile-menu-btn i {
+      font-size: 1rem;
+    }
+
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 9998;
+    }
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(86vw, 360px);
+      background: #fff;
+      border-left: 1px solid #e5e7eb;
+      box-shadow: -10px 0 30px rgba(15,23,42,.12);
+      transform: translateX(105%);
+      transition: transform .22s ease;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px 12px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 10px;
+    }
+    .mobile-drawer-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .mobile-drawer-title .logo-text {
+      font-family: 'Parkinsans', sans-serif;
+      font-weight: 800;
+      color: var(--cor-principal-escura);
+      letter-spacing: -0.3px;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mobile-drawer-close {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor: pointer;
+      color: #4b5563;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-drawer-close:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      color: var(--cor-principal-escura);
+    }
+
+    .mobile-drawer-body {
+      padding: 12px 14px 16px 14px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mobile-nav a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 700;
+      border: 1px solid #eef2f7;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .mobile-nav a:hover {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+      color: var(--cor-principal-escura);
+    }
+    .mobile-nav a i {
+      color: var(--cor-principal-escura);
+      opacity: .95;
+    }
+
+    .mobile-userbox {
+      border: 1px solid #eef2f7;
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mobile-userbox .perfil-bolinha {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 2px solid #ffe2da;
+      overflow: hidden;
+      background: #fff5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mobile-userbox .perfil-bolinha img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .mobile-userbox .perfil-nome {
+      font-weight: 800;
+      color: #111827;
+      font-size: .95rem;
+      line-height: 1.15;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .mobile-user-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mobile-user-actions a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 700;
+      border: 1px solid #eef2f7;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .mobile-user-actions a:hover {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+      color: var(--cor-principal-escura);
+    }
+    .mobile-user-actions a i {
+      color: var(--cor-principal-escura);
+    }
+
+    .mobile-drawer-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-drawer.is-open {
+      transform: translateX(0);
+    }
+
+    /* =========================
+       Ajustes responsivos do conteúdo
+       ========================= */
     @media (max-width: 900px) {
       .perfil-top-card {
         grid-template-columns: auto 1fr;
@@ -314,23 +582,82 @@
         grid-column: 1 / -1;
         flex-direction: row;
         justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
       }
       .perfil-content-grid {
         grid-template-columns: 1fr;
       }
     }
 
+    @media (max-width: 860px) {
+      header .topbar-center {
+        display: none !important;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+      header .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
     @media (max-width: 600px) {
+      .perfil-page-wrapper {
+        margin: 18px auto 26px auto;
+        padding: 0 14px;
+        gap: 16px;
+      }
+
+      /* No mobile, o breadcrumb fica mais “tocável” e alinhado */
+      .perfil-breadcrumb {
+        gap: 10px;
+      }
+
       .perfil-top-card {
         grid-template-columns: 1fr;
         text-align: left;
+        padding: 16px 16px 14px 16px;
+        gap: 12px;
       }
+
       .perfil-avatar {
-        margin-bottom: 4px;
+        width: 76px;
+        height: 76px;
+        font-size: 1.9rem;
+        margin-bottom: 2px;
       }
+
+      .perfil-main-info h1 {
+        font-size: 1.25rem;
+      }
+
       .perfil-actions {
         align-items: flex-start;
         justify-content: flex-start;
+        width: 100%;
+      }
+      .perfil-actions .btn-voltar,
+      .perfil-actions .btn-chat {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .perfil-section {
+        padding: 16px 16px 14px 16px;
+      }
+
+      .perfil-pet-card {
+        padding: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .mobile-nav a,
+      .mobile-user-actions a {
+        font-size: 16px;
       }
     }
   </style>
@@ -356,6 +683,11 @@
       </div>
 
       <div class="topbar-right">
+        <!-- Botão hambúrguer (só aparece no mobile) -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Abrir menu" aria-controls="mobileDrawer" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
         <div class="user-menu">
           <button class="user-trigger" id="userMenuTrigger">
             <div class="perfil-bolinha" id="userAvatarCircle">
@@ -365,7 +697,6 @@
             <span class="perfil-nome" id="userNameTop">Carregando...</span>
           </button>
           <div class="user-dropdown">
-            <!-- SOMENTE ÁREA DO ANFITRIÃO, NADA DE ÁREA DO TUTOR AQUI -->
             <a href="home_host.html"><i class="fa-solid fa-house"></i> Área do Anfitrião</a>
             <a href="configuracoes.html"><i class="fa-solid fa-gear"></i> Configurações</a>
             <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
@@ -375,10 +706,61 @@
     </div>
   </header>
 
+  <!-- Drawer mobile -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" aria-hidden="true"></div>
+
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <div class="mobile-drawer-title">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone" style="width:28px;height:28px;border-radius:10px;">
+        <span class="logo-text">Patas Pousada</span>
+      </div>
+      <button class="mobile-drawer-close" id="mobileDrawerClose" type="button" aria-label="Fechar menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <div class="mobile-userbox">
+        <div class="perfil-bolinha" id="mobileUserAvatarCircle">
+          <span id="mobileUserAvatarInitials">PP</span>
+          <img id="mobileUserAvatarImg" alt="Avatar" />
+        </div>
+        <div style="min-width:0; flex:1;">
+          <div class="perfil-nome" id="mobileUserName">Carregando...</div>
+        </div>
+      </div>
+
+      <nav class="mobile-nav" aria-label="Menu principal">
+        <a href="index.html#como-funciona">
+          <span>Como funciona</span>
+          <i class="fa-solid fa-angle-right"></i>
+        </a>
+        <a href="home_host.html">
+          <span>Sou Anfitrião</span>
+          <i class="fa-solid fa-angle-right"></i>
+        </a>
+        <a href="home_tutor.html">
+          <span>Sou Tutor</span>
+          <i class="fa-solid fa-angle-right"></i>
+        </a>
+      </nav>
+
+      <div class="mobile-user-actions" aria-label="Ações do usuário">
+        <a href="home_host.html"><i class="fa-solid fa-house"></i> Área do Anfitrião</a>
+        <a href="configuracoes.html"><i class="fa-solid fa-gear"></i> Configurações</a>
+        <a href="#" id="mobileLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+      </div>
+    </div>
+  </aside>
+
   <!-- CONTEÚDO PERFIL TUTOR -->
   <main class="perfil-page-wrapper">
     <div class="perfil-breadcrumb">
-      <a href="home_host.html">&larr; Voltar</a>
+      <a href="home_host.html" class="breadcrumb-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar
+      </a>
       <span>/</span>
       <span>Perfil do tutor</span>
     </div>
@@ -392,7 +774,6 @@
 
     <section id="perfilContentSection" style="display:none;">
       <div class="perfil-content-grid">
-        <!-- Coluna ESQUERDA: Sobre o tutor -->
         <section class="perfil-section" id="perfilSobreSection">
           <div class="perfil-section-subtitle">SOBRE O TUTOR</div>
           <h2>Apresentação</h2>
@@ -404,7 +785,6 @@
           </div>
         </section>
 
-        <!-- Coluna DIREITA: Pets do tutor -->
         <aside class="perfil-section">
           <div class="perfil-section-subtitle">PETS DO TUTOR</div>
           <h2>Companheiros de casa</h2>
@@ -427,21 +807,13 @@
     </div>
   </main>
 
-  <!-- Toast simples de feedback -->
   <div class="toast" id="globalToast"></div>
 
   <script>
-    // =========================
-    // CONFIGURAÇÃO SUPABASE
-    // =========================
     const SUPABASE_URL = 'https://nwbgzokttjgkipwzfgzc.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ';
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // =========================
-    // HELPERS
-    // =========================
     function getTutorIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('tutor_id') || params.get('id') || null;
@@ -455,9 +827,80 @@
       setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
 
-    // =========================
-    // HEADER: USUÁRIO LOGADO (HOST)
-    // =========================
+    function setupMobileDrawer() {
+      const btn = document.getElementById('mobileMenuBtn');
+      const drawer = document.getElementById('mobileDrawer');
+      const overlay = document.getElementById('mobileDrawerOverlay');
+      const closeBtn = document.getElementById('mobileDrawerClose');
+
+      if (!btn || !drawer || !overlay || !closeBtn) return;
+
+      function openDrawer() {
+        drawer.classList.add('is-open');
+        overlay.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        overlay.setAttribute('aria-hidden', 'false');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        overlay.setAttribute('aria-hidden', 'true');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', () => {
+        const isOpen = drawer.classList.contains('is-open');
+        if (isOpen) closeDrawer();
+        else openDrawer();
+      });
+
+      closeBtn.addEventListener('click', closeDrawer);
+      overlay.addEventListener('click', closeDrawer);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDrawer();
+      });
+
+      drawer.addEventListener('click', (e) => {
+        const a = e.target.closest('a');
+        if (a) closeDrawer();
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 860) closeDrawer();
+      });
+    }
+
+    function syncHeaderToMobileDrawer() {
+      const nomeTop = document.getElementById('userNameTop');
+      const mobileNome = document.getElementById('mobileUserName');
+
+      const avatarInitials = document.getElementById('userAvatarInitials');
+      const avatarImg = document.getElementById('userAvatarImg');
+
+      const mobileInitials = document.getElementById('mobileUserAvatarInitials');
+      const mobileImg = document.getElementById('mobileUserAvatarImg');
+
+      if (nomeTop && mobileNome) mobileNome.textContent = nomeTop.textContent || 'Usuário';
+
+      if (avatarImg && mobileImg && avatarImg.src) {
+        mobileImg.src = avatarImg.src;
+        mobileImg.style.display = 'block';
+        if (mobileInitials) mobileInitials.style.display = 'none';
+      } else {
+        if (mobileImg) mobileImg.style.display = 'none';
+        if (mobileInitials && avatarInitials) {
+          mobileInitials.textContent = avatarInitials.textContent || 'PP';
+          mobileInitials.style.display = 'block';
+        }
+      }
+    }
+
     async function carregarUsuarioHeader() {
       try {
         const { data, error } = await supabase.auth.getUser();
@@ -469,7 +912,6 @@
         const user = data.user;
         const userId = user.id;
 
-        // Host logado vem da tabela hosts
         const { data: host, error: hostErr } = await supabase
           .from('hosts')
           .select('full_name, avatar_url')
@@ -540,14 +982,22 @@
             window.location.href = 'login.html';
           });
         }
+
+        const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+        if (mobileLogoutBtn) {
+          mobileLogoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+          });
+        }
+
+        syncHeaderToMobileDrawer();
       } catch (e) {
         console.error('Erro ao carregar usuário no header (host):', e);
       }
     }
 
-    // =========================
-    // FUNÇÃO: INICIAR CONVERSA COM O TUTOR
-    // =========================
     async function iniciarConversaComTutor(profile) {
       const btn = document.getElementById('btnIniciarChatTutor');
       try {
@@ -570,7 +1020,6 @@
         const hostId = userData.user.id;
         const tutorId = profile.id;
 
-        // 1) Tenta achar um chat existente
         const { data: existingChats, error: chatSelectErr } = await supabase
           .from('chats')
           .select('id')
@@ -585,7 +1034,6 @@
 
         let chatId = existingChats?.[0]?.id || null;
 
-        // 2) Se não existir, cria
         if (!chatId) {
           const { data: newChat, error: insertErr } = await supabase
             .from('chats')
@@ -598,7 +1046,6 @@
             .single();
 
           if (insertErr) {
-            // Pode ser conflito de unique, tenta buscar de novo
             console.error('Erro ao criar chat, tentando recarregar existente:', insertErr);
             const { data: retryChats } = await supabase
               .from('chats')
@@ -618,7 +1065,6 @@
           return;
         }
 
-        // 3) Redireciona para a Área do Anfitrião abrindo esse chat
         window.location.href = `home_host.html?chat_id=${chatId}`;
       } catch (e) {
         console.error('Erro ao iniciar conversa com tutor:', e);
@@ -631,9 +1077,6 @@
       }
     }
 
-    // =========================
-    // RENDERIZA PERFIL DO TUTOR
-    // =========================
     function renderPerfilTop(profile, pets) {
       const container = document.getElementById('perfilTopSection');
       if (!container) return;
@@ -733,9 +1176,7 @@
 
         const tags = [];
 
-        if (profile.gender) {
-          tags.push(`Gênero: ${profile.gender}`);
-        }
+        if (profile.gender) tags.push(`Gênero: ${profile.gender}`);
 
         if (profile.address_city || profile.address_state || profile.city) {
           const c = profile.address_city || profile.city || '';
@@ -743,9 +1184,7 @@
           tags.push(`Região: ${c}${c && s ? ' - ' : ''}${s}`);
         }
 
-        if (profile.pets_count != null) {
-          tags.push(`Pets em casa (informado): ${profile.pets_count}`);
-        }
+        if (profile.pets_count != null) tags.push(`Pets em casa (informado): ${profile.pets_count}`);
 
         if (profile.phone_country && profile.phone_number) {
           tags.push(`Telefone: (+${profile.phone_country}) ${profile.phone_number}`);
@@ -827,9 +1266,6 @@
       wrapper.appendChild(list);
     }
 
-    // =========================
-    // CARREGAR PERFIL DO TUTOR
-    // =========================
     async function carregarPerfilTutor() {
       const tutorId = getTutorIdFromUrl();
       const topSection = document.getElementById('perfilTopSection');
@@ -877,9 +1313,7 @@
           .select('*')
           .eq('owner_id', tutorId);
 
-        if (petsErr) {
-          console.error('Erro pets:', petsErr);
-        }
+        if (petsErr) console.error('Erro pets:', petsErr);
 
         const petsList = pets || [];
 
@@ -904,12 +1338,11 @@
       }
     }
 
-    // =========================
-    // INIT
-    // =========================
     document.addEventListener('DOMContentLoaded', async () => {
+      setupMobileDrawer();
       await carregarUsuarioHeader();
       await carregarPerfilTutor();
+      syncHeaderToMobileDrawer();
     });
   </script>
 </body>

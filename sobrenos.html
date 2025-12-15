@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700;800&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome (para o ícone do LinkedIn) -->
+  <!-- Font Awesome (para o ícone do LinkedIn + menu + voltar) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -53,7 +53,13 @@
 
     nav{
       width:min(1040px, calc(100% - 32px));
-      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:8px;
+      position: relative; /* ✅ para ancorar o botão do menu no mobile */
     }
 
     .logo{
@@ -370,30 +376,199 @@
       line-height:1.6;
     }
 
+    /* =========================
+       ✅ MENU MOBILE (hambúrguer + drawer)
+       ========================= */
+    .menu-toggle{
+      display:none;
+      position:absolute;
+      top:6px;
+      right:0;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(229,229,229,.9);
+      background:#fff;
+      cursor:pointer;
+      color:var(--pri-dark);
+      align-items:center;
+      justify-content:center;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+    .menu-toggle:hover{
+      background:rgba(226,114,91,.08);
+      border-color: rgba(212,95,71,.22);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(17,24,39,.10);
+    }
+    .menu-toggle i{font-size:1.2rem;}
+
+    .mobile-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      backdrop-filter: blur(4px);
+      z-index:999;
+      display:none;
+      opacity:0;
+      transition: opacity .2s ease;
+    }
+    .mobile-overlay.active{
+      display:block;
+      opacity:1;
+    }
+
+    .mobile-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:min(86vw, 330px);
+      background:#fff;
+      z-index:1000;
+      transform: translateX(100%);
+      transition: transform .25s ease;
+      box-shadow: -18px 0 40px rgba(0,0,0,.14);
+      display:flex;
+      flex-direction:column;
+    }
+    .mobile-drawer.active{ transform: translateX(0); }
+
+    .drawer-header{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(229,229,229,.9);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .drawer-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .drawer-brand img{ width:30px; height:30px; }
+    .drawer-brand strong{
+      font-family:'Parkinsans',sans-serif;
+      color:var(--pri);
+      font-size:1.12rem;
+      white-space:nowrap;
+    }
+
+    .drawer-close{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:1px solid rgba(229,229,229,.95);
+      background:#fff;
+      cursor:pointer;
+      color:var(--txt);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: background var(--transition), transform var(--transition), border-color var(--transition);
+    }
+    .drawer-close:hover{
+      background:rgba(226,114,91,.08);
+      border-color: rgba(212,95,71,.22);
+      transform: translateY(-1px);
+    }
+
+    .drawer-links{
+      list-style:none;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .drawer-links a{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(229,229,229,.95);
+      background:#fff;
+      text-decoration:none;
+      color:var(--txt);
+      font-weight:900;
+      font-family:'Parkinsans',sans-serif;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .drawer-links a:hover{
+      background:rgba(226,114,91,.10);
+      border-color: rgba(212,95,71,.25);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(17,24,39,.10);
+    }
+    .drawer-links a.active{
+      background:rgba(226,114,91,.12);
+      border-color: rgba(212,95,71,.28);
+      color:var(--pri-dark);
+    }
+
+    .drawer-footer{
+      margin-top:auto;
+      padding:14px 16px 18px;
+      border-top:1px solid rgba(229,229,229,.9);
+      color:var(--muted);
+      font-size:.85rem;
+      text-align:center;
+    }
+
+    /* ======================
+       ✅ BOTÃO VOLTAR (INDEX)
+       ====================== */
+    .back-wrapper{
+      max-width:1040px;
+      margin:16px auto 0;
+      padding:0 16px;
+    }
+
+    .back-to-home{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 22px;
+      background:var(--pri);
+      color:#fff;
+      text-decoration:none;
+      font-family:'Parkinsans',sans-serif;
+      font-weight:900;
+      font-size:.95rem;
+      border-radius:999px;
+      box-shadow:0 6px 16px rgba(226,114,91,.35);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .back-to-home i{ font-size:.9rem; }
+    .back-to-home:hover{
+      background:var(--pri-dark);
+      transform: translateY(-2px);
+      box-shadow:0 10px 22px rgba(212,95,71,.45);
+    }
+
     /* ===========================
        RESPONSIVO (TELEFONES)
-       - sem mudar conteúdo
-       - só ajusta layout/padding/tamanhos
        =========================== */
 
-    /* Tablets/menores: reduz levemente paddings */
     @media (max-width: 980px){
       main{padding:0 14px;}
       .card{padding:24px;}
     }
 
-    /* Já existia: empilha hero */
     @media (max-width: 860px){
       .hero{grid-template-columns:1fr;}
       .sideBox{order:2;}
     }
 
-    /* Celulares: melhora leitura e evita "aperto" */
     @media (max-width: 560px){
       header{padding:14px 0;}
       nav{width:min(1040px, calc(100% - 20px));}
       nav ul{gap:10px;}
-      nav ul li a{padding:8px 12px;} /* alvo de toque melhor */
+      nav ul li a{padding:8px 12px;}
 
       main{margin:18px auto;}
       .card{padding:18px;border-radius:16px;}
@@ -410,20 +585,23 @@
       }
       .teamHeader p{font-size:.95rem;}
 
-      /* cards do time com espaçamento mais confortável */
       .team{gap:12px;}
       .member{padding:14px;border-radius:14px;}
       .topRow{gap:10px;margin-bottom:8px;}
+
+      /* Botão voltar centralizado no mobile */
+      .back-wrapper{
+        display:flex;
+        justify-content:center;
+      }
     }
 
-    /* Já existia: ajuste foto para telas bem pequenas */
     @media (max-width: 420px){
       .card{padding:16px;}
       .avatar{width:58px;height:58px;}
       .avatarWrap{width:58px;height:58px;}
       .avatarWrap .avatar{width:58px;height:58px;}
 
-      /* LinkedIn acompanha o avatar menor */
       .li-float{
         width:24px;height:24px;
         right:-3px;bottom:-3px;
@@ -431,11 +609,18 @@
       .li-float i{font-size:12px;}
     }
 
-    /* iPhone SE / telas ultra pequenas */
     @media (max-width: 360px){
       nav ul li a{padding:8px 10px;font-size:.95rem;}
       .chip{font-size:.70rem;padding:4px 9px;}
       .member p{font-size:.93rem;}
+    }
+
+    /* ✅ Ativa o menu mobile e esconde o UL no mobile */
+    @media (max-width: 768px){
+      .menu-toggle{ display:inline-flex; }
+      nav ul{ display:none; }
+      /* evita o botão “cair” em cima do logo */
+      nav{ padding-right: 52px; }
     }
   </style>
 </head>
@@ -447,6 +632,12 @@
         <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
         Patas Pousada
       </a>
+
+      <!-- ✅ BOTÃO HAMBÚRGUER (mobile) -->
+      <button class="menu-toggle" id="btnHamburger" type="button" aria-label="Abrir menu" aria-controls="mobileDrawer" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
       <ul>
         <li><a href="index.html">Início</a></li>
         <li><a href="ajuda.html">Ajuda</a></li>
@@ -454,6 +645,39 @@
       </ul>
     </nav>
   </header>
+
+  <!-- ✅ BOTÃO VOLTAR (leva para o index) -->
+  <div class="back-wrapper">
+    <a href="index.html" class="back-to-home">
+      <i class="fa-solid fa-arrow-left"></i>
+      Voltar para o início
+    </a>
+  </div>
+
+  <!-- ✅ Overlay + Drawer Mobile -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Logo">
+        <strong>Patas Pousada</strong>
+      </div>
+      <button class="drawer-close" id="btnDrawerClose" aria-label="Fechar menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <ul class="drawer-links">
+      <li><a href="index.html">Início <i class="fa-solid fa-chevron-right"></i></a></li>
+      <li><a href="ajuda.html">Ajuda <i class="fa-solid fa-chevron-right"></i></a></li>
+      <li><a href="quemsomos.html" class="active">Quem Somos <i class="fa-solid fa-chevron-right"></i></a></li>
+    </ul>
+
+    <div class="drawer-footer">
+      © 2025 Patas Pousada
+    </div>
+  </aside>
 
   <main>
     <div class="card">
@@ -631,5 +855,51 @@
       </p>
     </div>
   </main>
+
+  <script>
+    // ✅ MENU MOBILE (drawer lateral)
+    (function(){
+      const btnHamburger = document.getElementById('btnHamburger');
+      const overlay = document.getElementById('mobileOverlay');
+      const drawer = document.getElementById('mobileDrawer');
+      const btnClose = document.getElementById('btnDrawerClose');
+
+      function openDrawer(){
+        overlay.classList.add('active');
+        drawer.classList.add('active');
+        drawer.setAttribute('aria-hidden', 'false');
+        btnHamburger.setAttribute('aria-expanded', 'true');
+        btnHamburger.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer(){
+        overlay.classList.remove('active');
+        drawer.classList.remove('active');
+        drawer.setAttribute('aria-hidden', 'true');
+        btnHamburger.setAttribute('aria-expanded', 'false');
+        btnHamburger.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        document.body.style.overflow = '';
+      }
+
+      if (btnHamburger && overlay && drawer && btnClose) {
+        btnHamburger.addEventListener('click', () => {
+          if (drawer.classList.contains('active')) closeDrawer();
+          else openDrawer();
+        });
+
+        btnClose.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // fecha ao clicar em link
+        drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+        // ESC fecha
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && drawer.classList.contains('active')) closeDrawer();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

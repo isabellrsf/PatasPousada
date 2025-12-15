@@ -27,6 +27,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{max-width:100%;overflow-x:hidden}
 body{
   font-family:Nunito,system-ui,Arial,sans-serif;
   background:var(--bg);
@@ -34,6 +35,8 @@ body{
   line-height:1.5;
 }
 a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:3px solid rgba(226,114,91,.35); outline-offset:2px}
 
 /* HEADER */
 header{
@@ -53,6 +56,7 @@ header{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:16px;
 }
 .logo{
   display:flex;
@@ -62,9 +66,11 @@ header{
   font-weight:800;
   font-size:1.35rem;
   color:var(--brand);
+  flex: 0 0 auto;
 }
 .logo img{width:34px;height:34px}
 
+/* links (desktop) */
 .nav ul{
   list-style:none;
   display:flex;
@@ -78,8 +84,97 @@ header{
 }
 .nav a.link:hover{color:var(--brand)}
 
+/* Hamburger (mobile) */
+.menu-toggle{
+  display:none;
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:#4b5563;
+  cursor:pointer;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), color var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-toggle:hover{
+  border-color: rgba(226,114,91,.35);
+  color: var(--brand-strong);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  transform: translateY(-1px);
+}
+.menu-toggle:active{ transform: translateY(0); }
+
+/* dropdown menu (mobile) */
+.mobile-menu{
+  position: fixed;
+  inset: 0;
+  background: rgba(17,24,39,.35);
+  display: none;
+  z-index: 999;
+  backdrop-filter: blur(3px);
+}
+.mobile-menu.is-open{ display:block; }
+
+.mobile-menu__panel{
+  position:absolute;
+  top: 72px;
+  right: 12px;
+  left: 12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 16px 50px rgba(0,0,0,.16);
+  overflow:hidden;
+}
+
+.mobile-menu__links{
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  gap:6px;
+}
+.mobile-menu__links a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px;
+  border-radius:14px;
+  font-family:Parkinsans,sans-serif;
+  font-weight:700;
+  color:#374151;
+  background:#fff;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.mobile-menu__links a i{ color:#9ca3af; }
+.mobile-menu__links a:hover{
+  background:#fff7f5;
+  color: var(--brand-strong);
+  transform: translateX(2px);
+}
+.mobile-menu__foot{
+  border-top:1px solid var(--line);
+  padding:10px;
+  display:flex;
+  justify-content:flex-end;
+}
+.mobile-menu__close{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:12px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-weight:800;
+  color:#6b7280;
+}
+.mobile-menu__close:hover{ color: var(--brand-strong); border-color: rgba(226,114,91,.35); }
+
 /* USER MENU */
-.user{position:relative}
+.user{position:relative; flex:0 0 auto;}
 .user__trigger{
   display:flex;
   align-items:center;
@@ -87,10 +182,12 @@ header{
   padding:6px 12px 6px 6px;
   border-radius:40px;
   cursor:pointer;
+  border: 1px solid transparent;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 .user__trigger:hover{
   background:#fff;
-  border:1px solid var(--line);
+  border-color: var(--line);
   box-shadow:var(--shadow);
 }
 .user__avatar-img{
@@ -114,14 +211,14 @@ header{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  font-weight:700;
+  font-weight:800;
 }
 .user__dropdown{
   position:absolute;
   right:0;
   top:calc(100% + 8px);
   background:#fff;
-  border-radius:12px;
+  border-radius:14px;
   border:1px solid var(--line);
   box-shadow:0 10px 25px rgba(0,0,0,.1);
   width:220px;
@@ -141,9 +238,9 @@ header{
   gap:10px;
   align-items:center;
   padding:10px 14px;
-  border-radius:8px;
+  border-radius:10px;
   font-size:.85rem;
-  font-weight:600;
+  font-weight:800;
   color:#4b5563;
 }
 .user__item:hover{
@@ -163,18 +260,21 @@ header{
   gap:8px;
   align-items:center;
   margin-bottom:24px;
-  padding:8px 16px;
-  border-radius:30px;
+  padding:10px 16px;
+  border-radius:999px;
   border:1px solid var(--line);
   background:#fff;
   color:var(--muted);
-  font-weight:700;
+  font-weight:800;
   cursor:pointer;
+  transition: transform var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+  -webkit-tap-highlight-color: transparent;
 }
 .back-btn:hover{
-  border-color:var(--brand);
-  color:var(--brand);
-  transform:translateX(-2px);
+  border-color:rgba(226,114,91,.35);
+  color:var(--brand-strong);
+  box-shadow:0 10px 22px rgba(0,0,0,.08);
+  transform:translateY(-1px);
 }
 
 .title{
@@ -185,7 +285,7 @@ header{
   text-align:center;
   color:var(--muted);
   margin:12px auto 40px;
-  max-width:500px;
+  max-width:520px;
 }
 
 .grid{
@@ -195,7 +295,6 @@ header{
 @media(min-width:600px){
   .grid{grid-template-columns:1fr 1fr}
 }
-
 .card{
   background:#fff;
   border-radius:16px;
@@ -205,7 +304,7 @@ header{
   flex-direction:column;
   align-items:center;
   text-align:center;
-  transition:.2s;
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 .card:hover{
   transform:translateY(-4px);
@@ -221,12 +320,57 @@ header{
   font-size:1.4rem;
 }
 .card h3{
-  font:700 1.1rem Parkinsans,sans-serif;
+  font:800 1.1rem Parkinsans,sans-serif;
   margin-top:12px;
 }
 .card p{
   font-size:.85rem;
   color:var(--muted);
+}
+
+/* =========================
+   MOBILE TUNING
+   ========================= */
+@media (max-width: 860px){
+  .nav{
+    padding:12px 14px;
+  }
+
+  /* oculta os links no topo e ativa hambúrguer */
+  .nav ul{ display:none; }
+  .menu-toggle{ display:inline-flex; }
+
+  /* deixa o logo menor e evita quebrar */
+  .logo{ font-size:1.2rem; }
+  .logo img{ width:32px; height:32px; }
+
+  /* usuário mais compacto */
+  .user__trigger{
+    padding:6px 10px 6px 6px;
+  }
+  .user__trigger span{
+    max-width:92px;
+    font-size:.95rem;
+  }
+
+  /* conteúdo com respiro melhor no celular */
+  .wrap{
+    margin:22px auto;
+    padding:0 14px;
+  }
+  .title{ font-size:1.55rem; }
+  .lead{ margin:10px auto 22px; }
+
+  /* cards em 1 coluna no mobile */
+  .grid{ grid-template-columns:1fr; }
+}
+
+/* iPhone safe area */
+@supports(padding: env(safe-area-inset-top)){
+  header{
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 }
 </style>
 </head>
@@ -234,30 +378,57 @@ header{
 <body>
 
 <header>
-  <nav class="nav">
+  <nav class="nav" aria-label="Navegação principal">
     <a class="logo" href="home_host.html">
-      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png">
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Patas Pousada">
       Patas Pousada
     </a>
 
-    <ul>
+    <!-- Links (desktop) -->
+    <ul aria-label="Links">
       <li><a class="link" href="reservas_host.html">Reservas</a></li>
       <li><a class="link" href="ajuda.html">Ajuda</a></li>
     </ul>
 
+    <!-- Botão hambúrguer (mobile) -->
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
     <div class="user">
-      <div class="user__trigger">
-        <img id="userAvatar" class="user__avatar-img">
+      <div class="user__trigger" role="button" tabindex="0" aria-label="Menu do usuário">
+        <img id="userAvatar" class="user__avatar-img" alt="Avatar do anfitrião">
         <div class="badge" id="userInitial">H</div>
         <span id="userName">Anfitrião</span>
+        <i class="fa-solid fa-chevron-down" style="font-size:.8rem;color:#9ca3af;"></i>
       </div>
-      <div class="user__dropdown">
+
+      <div class="user__dropdown" aria-label="Ações do usuário">
         <a class="user__item" href="perfil_host.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
         <a class="user__item" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
       </div>
     </div>
   </nav>
 </header>
+
+<!-- Menu mobile (overlay) -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="mobile-menu__links">
+      <a href="home_host.html">
+        <span><i class="fa-solid fa-calendar-check" style="margin-right:10px"></i> Reservas</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+      <a href="ajuda.html">
+        <span><i class="fa-solid fa-circle-question" style="margin-right:10px"></i> Ajuda</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+    </div>
+    <div class="mobile-menu__foot">
+      <button class="mobile-menu__close" id="menuClose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
 
 <main class="wrap">
 
@@ -322,12 +493,50 @@ async function init(){
   }
 }
 
-btnLogout.onclick = async ()=>{
+btnLogout.onclick = async (e)=>{
+  e.preventDefault();
   await sb.auth.signOut();
   location.href="index.html";
 };
 
 init();
+
+/* =========================
+   MENU HAMBÚRGUER (mobile)
+   ========================= */
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+
+function openMenu(){
+  mobileMenu.classList.add('is-open');
+  mobileMenu.setAttribute('aria-hidden','false');
+  menuToggle.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu(){
+  mobileMenu.classList.remove('is-open');
+  mobileMenu.setAttribute('aria-hidden','true');
+  menuToggle.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+
+menuToggle.addEventListener('click', ()=>{
+  if(mobileMenu.classList.contains('is-open')) closeMenu();
+  else openMenu();
+});
+
+menuClose.addEventListener('click', closeMenu);
+
+/* fecha ao clicar fora do painel */
+mobileMenu.addEventListener('click', (e)=>{
+  if(e.target === mobileMenu) closeMenu();
+});
+
+/* fecha com ESC */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && mobileMenu.classList.contains('is-open')) closeMenu();
+});
 </script>
 
 </body>

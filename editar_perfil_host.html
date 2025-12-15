@@ -21,9 +21,11 @@
   --radius:12px;
   --shadow:0 4px 12px rgba(0,0,0,.06);
   --line:#e5e7eb;
+  --transition:.2s cubic-bezier(.25,.8,.25,1);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
 body{
   font-family:'Nunito',sans-serif;
   background:var(--bg);
@@ -31,6 +33,8 @@ body{
   line-height:1.5;
 }
 a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:3px solid rgba(226,114,91,.35); outline-offset:2px}
 
 /* HEADER */
 header{
@@ -41,6 +45,7 @@ header{
   position:sticky;
   top:0;
   z-index:100;
+  backdrop-filter: blur(8px);
 }
 nav{
   max-width:1100px;
@@ -49,6 +54,7 @@ nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:16px;
 }
 .logo{
   display:flex;
@@ -58,18 +64,129 @@ nav{
   font-weight:800;
   font-size:1.35rem;
   color:var(--brand);
+  flex: 0 0 auto;
 }
 .logo img{width:34px;height:34px}
 
+/* Links (desktop) */
+.nav-links{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+.nav-links a{
+  font-family:Parkinsans,sans-serif;
+  font-weight:700;
+  color:#4b5563;
+}
+.nav-links a:hover{color:var(--brand)}
 
-.user-menu{display:flex;align-items:center;gap:10px}
+/* Hamburger (mobile) */
+.menu-toggle{
+  display:none;
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:#4b5563;
+  cursor:pointer;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), color var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-toggle:hover{
+  border-color: rgba(226,114,91,.35);
+  color: var(--brand-strong);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  transform: translateY(-1px);
+}
+.menu-toggle:active{ transform: translateY(0); }
+
+/* User menu (top) */
+.user-menu{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex: 0 0 auto;
+}
 .user-menu img{
   width:40px;height:40px;border-radius:50%;
   object-fit:cover;background:#eee;
+  border:1px solid var(--line);
 }
-.user-menu span{font-weight:700}
-.user-menu a{font-weight:600;color:#4b5563}
+.user-menu span{font-weight:800; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.user-menu a{font-weight:800;color:#4b5563}
 .user-menu a:hover{color:var(--brand)}
+
+/* Mobile menu overlay */
+.mobile-menu{
+  position: fixed;
+  inset: 0;
+  background: rgba(17,24,39,.35);
+  display: none;
+  z-index: 999;
+  backdrop-filter: blur(3px);
+}
+.mobile-menu.is-open{ display:block; }
+
+.mobile-menu__panel{
+  position:absolute;
+  top: 72px;
+  right: 12px;
+  left: 12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 16px 50px rgba(0,0,0,.16);
+  overflow:hidden;
+}
+
+.mobile-menu__links{
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  gap:6px;
+}
+.mobile-menu__links a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px;
+  border-radius:14px;
+  font-family:Parkinsans,sans-serif;
+  font-weight:800;
+  color:#374151;
+  background:#fff;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.mobile-menu__links a i{ color:#9ca3af; }
+.mobile-menu__links a:hover{
+  background:#fff7f5;
+  color: var(--brand-strong);
+  transform: translateX(2px);
+}
+.mobile-menu__foot{
+  border-top:1px solid var(--line);
+  padding:10px;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+.mobile-menu__close{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:12px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-weight:900;
+  color:#6b7280;
+}
+.mobile-menu__close:hover{ color: var(--brand-strong); border-color: rgba(226,114,91,.35); }
 
 /* CONTAINER */
 .container{
@@ -84,18 +201,21 @@ nav{
   gap:8px;
   align-items:center;
   margin-bottom:24px;
-  padding:8px 18px;
-  border-radius:30px;
+  padding:10px 18px;
+  border-radius:999px;
   background:#fff;
   border:1px solid var(--line);
-  font-weight:700;
+  font-weight:900;
   font-size:.9rem;
   color:var(--muted);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), color var(--transition);
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-back:hover{
-  border-color:var(--brand);
-  color:var(--brand);
-  transform:translateX(-2px);
+  border-color:rgba(226,114,91,.35);
+  color:var(--brand-strong);
+  box-shadow:0 10px 22px rgba(0,0,0,.08);
+  transform:translateY(-1px);
 }
 
 /* PERFIL */
@@ -121,8 +241,9 @@ h2{
 }
 .foto-wrapper{
   position:relative;
-  width:100px;height:100px;
+  width:104px;height:104px;
   cursor:pointer;
+  border-radius:50%;
 }
 .foto-wrapper img{
   width:100%;height:100%;
@@ -130,13 +251,14 @@ h2{
   object-fit:cover;
   border:4px solid #fff;
   box-shadow:0 4px 15px rgba(0,0,0,.1);
+  background:#eee;
 }
 .foto-badge{
   position:absolute;
   bottom:0;right:0;
   background:var(--brand);
   color:#fff;
-  width:32px;height:32px;
+  width:34px;height:34px;
   border-radius:50%;
   display:grid;
   place-items:center;
@@ -158,52 +280,143 @@ h2{
   gap:6px;
   margin-bottom:20px;
 }
-label{font-weight:700;font-size:.9rem}
+label{font-weight:900;font-size:.9rem}
 input,select,textarea{
   padding:12px 16px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid #d1d5db;
   font-size:.95rem;
+  background:#fff;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
 }
 input:focus,select:focus,textarea:focus{
   border-color:var(--brand);
   outline:none;
+  box-shadow: 0 0 0 4px rgba(226,114,91,.12);
 }
 input[readonly]{background:#f3f4f6}
+textarea{resize:vertical}
 
 button{
   width:100%;
   padding:14px;
   border:none;
-  border-radius:30px;
+  border-radius:999px;
   background:var(--brand);
   color:#fff;
-  font-weight:700;
+  font-weight:900;
   font-size:1rem;
   cursor:pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  -webkit-tap-highlight-color: transparent;
 }
-button:hover{background:var(--brand-strong)}
+button:hover{
+  background:var(--brand-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(226,114,91,.18);
+}
+button:active{ transform: translateY(0); }
 
-.hint{text-align:center;margin-top:12px;font-weight:600}
+.hint{text-align:center;margin-top:12px;font-weight:800}
+
+/* =========================
+   MOBILE TUNING
+   ========================= */
+@media (max-width: 860px){
+  nav{ padding:12px 14px; }
+
+  /* esconde links no topo, ativa hambúrguer */
+  .nav-links{ display:none; }
+  .menu-toggle{ display:inline-flex; }
+
+  /* compacta logo e user */
+  .logo{ font-size:1.2rem; }
+  .logo img{ width:32px; height:32px; }
+
+  .user-menu span{
+    max-width: 90px;
+    font-size: .95rem;
+  }
+  .user-menu a{ display:none; } /* no mobile, o "Sair" fica no menu hambúrguer */
+
+  .container{
+    margin:22px auto;
+    padding:0 14px;
+  }
+  h2{ font-size:1.45rem; }
+  .sub{ margin-bottom:18px; }
+
+  .foto-perfil{
+    margin-bottom:20px;
+    padding-bottom:20px;
+  }
+}
+
+/* iPhone safe area */
+@supports(padding: env(safe-area-inset-top)){
+  header{
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<nav>
+<nav aria-label="Navegação principal">
   <a href="home_host.html" class="logo">
-    <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png">
+    <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Patas Pousada">
     <span>Patas Pousada</span>
   </a>
 
-  <div class="user-menu">
-    <img id="avatarTop">
+  <!-- Links (desktop) -->
+  <ul class="nav-links" aria-label="Links">
+    <li><a href="home_host.html">Painel</a></li>
+    <li><a href="reservas_host.html">Reservas</a></li>
+    <li><a href="ajuda.html">Ajuda</a></li>
+  </ul>
+
+  <!-- Botão hambúrguer (mobile) -->
+  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div class="user-menu" aria-label="Usuário">
+    <img id="avatarTop" alt="Avatar do anfitrião">
     <span id="userTop">Anfitrião</span>
     <a href="#" id="logout">Sair</a>
   </div>
 </nav>
 </header>
+
+<!-- Menu mobile (overlay) -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="mobile-menu__links">
+      <a href="home_host.html">
+        <span><i class="fa-solid fa-house" style="margin-right:10px"></i> Painel</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+      <a href="reservas_host.html">
+        <span><i class="fa-solid fa-calendar-check" style="margin-right:10px"></i> Reservas</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+      <a href="ajuda.html">
+        <span><i class="fa-solid fa-circle-question" style="margin-right:10px"></i> Ajuda</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+      <a href="#" id="logoutMobile">
+        <span><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right:10px"></i> Sair</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+    </div>
+    <div class="mobile-menu__foot">
+      <button class="mobile-menu__close" id="menuClose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
 
@@ -217,13 +430,13 @@ button:hover{background:var(--brand-strong)}
 
 <div class="foto-perfil">
   <label class="foto-wrapper">
-    <img id="preview">
+    <img id="preview" alt="Pré-visualização da foto de perfil">
     <div class="foto-badge"><i class="fa-solid fa-camera"></i></div>
   </label>
-  <input type="file" id="fotoInput" hidden>
+  <input type="file" id="fotoInput" hidden accept="image/*">
 </div>
 
-<form id="form-host">
+<form id="form-host" autocomplete="on">
   <div class="form-group">
     <label>Nome completo</label>
     <input type="text" name="full_name" required>
@@ -317,7 +530,7 @@ async function loadHost(){
   formHost.birth_date.value= hostData.birth_date || '';
   formHost.city.value      = hostData.city || '';
   formHost.residence_type.value = hostData.residence_type || '';
-  formHost.pets_count.value= hostData.pets_count || '';
+  formHost.pets_count.value= hostData.pets_count ?? '';
   formHost.about.value     = hostData.about || '';
 
   userTop.textContent = hostData.full_name || 'Anfitrião';
@@ -326,6 +539,10 @@ async function loadHost(){
     const url = hostData.avatar_url + '?t=' + Date.now();
     avatarTop.src = url;
     preview.src = url;
+  }else{
+    // fallback simples pra não quebrar se não tiver avatar
+    avatarTop.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='100%25' height='100%25' rx='40' ry='40' fill='%23eee'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-size='28' fill='%239ca3af' font-family='Arial'%3EH%3C/text%3E%3C/svg%3E";
+    preview.src = avatarTop.src;
   }
 }
 
@@ -344,6 +561,7 @@ formHost.onsubmit = async e=>{
     await sb.storage
       .from('host-avatars')
       .upload(path, avatarFile, { upsert:true });
+
     avatarUrl = sb.storage
       .from('host-avatars')
       .getPublicUrl(path).data.publicUrl;
@@ -356,7 +574,7 @@ formHost.onsubmit = async e=>{
     birth_date: formHost.birth_date.value || null,
     city: formHost.city.value,
     residence_type: formHost.residence_type.value,
-    pets_count: formHost.pets_count.value,
+    pets_count: formHost.pets_count.value === "" ? null : Number(formHost.pets_count.value),
     about: formHost.about.value,
     avatar_url: avatarUrl
   });
@@ -364,10 +582,56 @@ formHost.onsubmit = async e=>{
   hint.textContent = error ? 'Erro ao salvar.' : 'Perfil atualizado com sucesso.';
 };
 
-logoutBtn.onclick = async ()=>{
+/* Logout (desktop) */
+logoutBtn.onclick = async (e)=>{
+  e.preventDefault();
   await sb.auth.signOut();
   location.href="cadastrarouentrar.html";
 };
+
+/* Logout (mobile menu) */
+const logoutMobile = document.getElementById('logoutMobile');
+logoutMobile.addEventListener('click', async (e)=>{
+  e.preventDefault();
+  await sb.auth.signOut();
+  location.href="cadastrarouentrar.html";
+});
+
+/* =========================
+   MENU HAMBÚRGUER (mobile)
+   ========================= */
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+
+function openMenu(){
+  mobileMenu.classList.add('is-open');
+  mobileMenu.setAttribute('aria-hidden','false');
+  menuToggle.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu(){
+  mobileMenu.classList.remove('is-open');
+  mobileMenu.setAttribute('aria-hidden','true');
+  menuToggle.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+
+menuToggle.addEventListener('click', ()=>{
+  if(mobileMenu.classList.contains('is-open')) closeMenu();
+  else openMenu();
+});
+menuClose.addEventListener('click', closeMenu);
+
+/* fecha ao clicar fora do painel */
+mobileMenu.addEventListener('click', (e)=>{
+  if(e.target === mobileMenu) closeMenu();
+});
+
+/* fecha com ESC */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && mobileMenu.classList.contains('is-open')) closeMenu();
+});
 </script>
 
 </body>
