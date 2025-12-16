@@ -73,7 +73,7 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           from: "onboarding@resend.dev",
-          to: ["isa.rodrigues01@hotmail.com"],
+          to: ["malluhandrh2005@gmail.com"],
           subject: "Reserva cancelada — Reembolso necessário",
           html: emailHtml,
         }),
