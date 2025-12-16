@@ -58,6 +58,8 @@ header{
   justify-content:space-between;
   gap:16px;
 }
+
+/* logo / brand */
 .logo{
   display:flex;
   align-items:center;
@@ -173,7 +175,7 @@ header{
 }
 .mobile-menu__close:hover{ color: var(--brand-strong); border-color: rgba(226,114,91,.35); }
 
-/* USER MENU */
+/* USER MENU (desktop padrão) */
 .user{position:relative; flex:0 0 auto;}
 .user__trigger{
   display:flex;
@@ -329,28 +331,62 @@ header{
 }
 
 /* =========================
-   MOBILE TUNING
+   MOBILE: header = Patas > usuário > hambúrguer
+   + reduzir itens do header no telefone
+   + usuário só com foto (ou bolinha/initial) no mobile
+   (sem afetar desktop)
    ========================= */
 @media (max-width: 860px){
   .nav{
     padding:12px 14px;
+    gap:10px;
   }
 
-  /* oculta os links no topo e ativa hambúrguer */
+  /* 1) Oculta links no topo e ativa hambúrguer (somente mobile) */
   .nav ul{ display:none; }
   .menu-toggle{ display:inline-flex; }
 
-  /* deixa o logo menor e evita quebrar */
-  .logo{ font-size:1.2rem; }
-  .logo img{ width:32px; height:32px; }
+  /* 2) Ordem do header no mobile: logo (Patas) > usuário > hamburger */
+  .logo{ order:1; }
+  .user{ order:2; }
+  .menu-toggle{ order:3; }
 
-  /* usuário mais compacto */
-  .user__trigger{
-    padding:6px 10px 6px 6px;
+  /* 3) Diminuir “itens” do header no telefone (mais compacto) */
+  .logo{
+    font-size:1.05rem;
+    gap:8px;
+    min-width:0;
   }
-  .user__trigger span{
-    max-width:92px;
-    font-size:.95rem;
+  .logo img{ width:30px; height:30px; }
+
+  /* 4) Usuário no mobile: mostrar somente foto/bolinha (sem nome, sem chevron) */
+  .user__trigger{
+    padding:0;
+    gap:0;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  .user__trigger:hover{
+    border-color: rgba(226,114,91,.35);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+  }
+
+  /* esconder nome e chevron só no mobile */
+  .user__trigger span{ display:none !important; }
+  .user__trigger > i.fa-chevron-down{ display:none !important; }
+
+  /* avatar/initial um pouco menor e central */
+  .user__avatar-img,
+  .badge{
+    width:36px;
+    height:36px;
   }
 
   /* conteúdo com respiro melhor no celular */
@@ -390,11 +426,6 @@ header{
       <li><a class="link" href="ajuda.html">Ajuda</a></li>
     </ul>
 
-    <!-- Botão hambúrguer (mobile) -->
-    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-
     <div class="user">
       <div class="user__trigger" role="button" tabindex="0" aria-label="Menu do usuário">
         <img id="userAvatar" class="user__avatar-img" alt="Avatar do anfitrião">
@@ -408,6 +439,12 @@ header{
         <a class="user__item" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
       </div>
     </div>
+
+    <!-- Botão hambúrguer (mobile) -->
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
   </nav>
 </header>
 

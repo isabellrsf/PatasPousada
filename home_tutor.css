@@ -96,9 +96,9 @@ ul.pp-nav-links{
 
 /* Botão hambúrguer */
 .pp-menu-toggle{
-  width:42px;
-  height:42px;
-  border-radius:12px;
+  width:23px;
+  height:23px;
+  border-radius:10px;
   border:1px solid rgba(229,231,235,1);
   background:#fff;
   color:#374151;
@@ -1723,3 +1723,279 @@ footer {
   position: relative;
   z-index: 10000 !important;
 }
+
+/* =========================================
+   PATCH MOBILE HEADER — logo menor + nome não some
+   (colar no final do CSS)
+   ========================================= */
+
+/* Mobile geral */
+@media (max-width: 600px){
+  nav{
+    padding: 10px 12px;   /* header mais baixo */
+    gap: 10px;
+  }
+
+  /* Logo menor */
+  .logo{
+    font-size: 1.05rem;   /* antes 1.35rem */
+    gap: 6px;
+    letter-spacing: -0.02em;
+  }
+  .logo img{
+    width: 26px;          /* antes 36px */
+    height: 26px;
+    filter: none;         /* opcional: deixa mais "clean" no mobile */
+  }
+
+  /* Botão hambúrguer menor (o seu está 23x23, mas o ícone está 1.1rem e "estoura") */
+  .pp-menu-toggle{
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+  .pp-menu-toggle i{
+    font-size: 0.95rem;
+  }
+
+  /* Perfil: mantém e não deixa esmagar */
+  .user-trigger{
+    padding: 5px 10px 5px 6px;
+    gap: 8px;
+  }
+
+   #userName{
+    display: none !important;
+  }
+
+  /* seta pode ficar, mas menor */
+  .user-trigger svg{
+    display: inline-block !important;
+    width: 10px;
+    height: 10px;
+  }
+    .user-trigger{
+    padding: 0 !important;
+    gap: 0 !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    justify-content: center;
+  }
+
+  .user-trigger svg{
+    display: none !important;
+  }
+
+}
+
+/* Micro-mobile (bem pequeno): reduz mais, mas NÃO some */
+@media (max-width: 420px){
+  .logo{ font-size: 0.98rem; }
+  .logo img{ width: 24px; height: 24px; }
+
+  #userName{
+    max-width: 70px; /* ainda aparece, só mais curto */
+  }
+}
+
+/* =========================
+   MODAL LEGAL (TERMOS / PRIVACIDADE)
+   ========================= */
+.pp-legal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(17, 24, 39, .55);
+  backdrop-filter: blur(6px);
+  z-index: 999;
+}
+
+.pp-legal.show{ display: flex; }
+
+.pp-legal__card{
+  width: min(720px, 100%);
+  max-height: min(72vh, 720px);
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid rgba(229, 231, 235, .9);
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  overflow: hidden;
+  transform: translateY(6px);
+  opacity: 0;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.pp-legal.show .pp-legal__card{
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.pp-legal__hd{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255,255,255,.95);
+}
+
+.pp-legal__hd h3{
+  margin: 0;
+  font-family: Parkinsans, sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #1f2937;
+}
+
+.pp-legal__x{
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  color: #6b7280;
+  transition: transform .12s ease, border-color .2s, color .2s;
+}
+.pp-legal__x:hover{
+  border-color: #ffd8cf;
+  color: #e2725b;
+  transform: translateY(-1px);
+}
+
+.pp-legal__bd{
+  padding: 14px 16px 6px;
+  overflow: auto;
+  max-height: calc(min(72vh, 720px) - 120px);
+  color: #374151;
+  line-height: 1.55;
+  font-size: .95rem;
+}
+
+.pp-legal__bd h4{
+  margin: 10px 0 6px;
+  font-size: .95rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.pp-legal__bd p{
+  margin: 0 0 10px;
+  color: #4b5563;
+}
+
+.pp-legal__bd ul{
+  margin: 0 0 12px 18px;
+  color: #4b5563;
+}
+
+.pp-legal__ft{
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.pp-legal__btn{
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 900;
+  font-family: Parkinsans, sans-serif;
+  background: #e2725b;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(226, 114, 91, .22);
+  transition: transform .12s ease, background .2s;
+}
+.pp-legal__btn:hover{
+  background: #d45f47;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px){
+  .pp-legal__card{ border-radius: 16px; }
+  .pp-legal__bd{ font-size: .92rem; }
+}
+
+/* =========================
+   MOBILE FILTROS — bottom sheet (PATCH)
+   ========================= */
+.pp-filters-fab{ display:none; }
+.pp-filters-overlay{ display:none; }
+
+@media (max-width: 1024px){
+
+  /* 1) desfaz o display:none que você colocou */
+  .sidebar-left{
+    display:block !important;      /* <-- isso é o principal */
+  }
+
+  /* 2) botão "Filtros" */
+  .pp-filters-fab{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:fixed;
+    left:16px;
+    bottom:16px;
+    z-index:1400;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:999px;
+    padding:10px 14px;
+    background:#fff;
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+    font-weight:800;
+    color: var(--ink);
+  }
+  .pp-filters-fab i{ color: var(--brand); }
+
+  /* 3) overlay */
+  .pp-filters-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.35);
+    z-index:1390;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .2s ease;
+  }
+
+  /* 4) painel (o seu card de filtros) vira bottom sheet */
+  #ppFiltersPanel{
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom:12px;
+    z-index:1410;
+
+    max-height:78vh;
+    overflow:auto;
+
+    border-radius:18px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.18);
+
+    transform: translateY(120%);
+    transition: transform .22s ease;
+  }
+
+  /* 5) aberto */
+  body.pp-filters-open #ppFiltersPanel{
+    transform: translateY(0);
+  }
+  body.pp-filters-open .pp-filters-overlay{
+    display:block;
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  /* 6) evita briga com o chat FAB (opcional) */
+  .pp-chat-fab{ bottom: 16px; right: 16px; }
+}
+

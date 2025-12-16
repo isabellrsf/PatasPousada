@@ -93,7 +93,7 @@
   <div class="cols">
 
     <div class="sidebar-left">
-        <div class="card">
+      <div class="card" id="ppFiltersPanel">
         <div class="hd">Buscar serviços <i class="fa-solid fa-sliders" style="color:#9ca3af; font-size:0.85rem;"></i></div>
         <div class="filters">
             <button class="chip-btn active" data-service="all"><i class="fa-solid fa-border-all"></i> Todos</button>
@@ -222,6 +222,26 @@
   </div>
 </div>
 
+  <!-- MODAL: TERMOS E PRIVACIDADE -->
+<div class="pp-legal" id="ppLegal" aria-hidden="true">
+  <div class="pp-legal__card" role="dialog" aria-modal="true" aria-labelledby="ppLegalTitle">
+    <div class="pp-legal__hd">
+      <h3 id="ppLegalTitle">Título</h3>
+      <button class="pp-legal__x" type="button" id="ppLegalClose" aria-label="Fechar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="pp-legal__bd" id="ppLegalBody">
+      <!-- conteúdo injetado via JS -->
+    </div>
+
+    <div class="pp-legal__ft">
+      <button class="pp-legal__btn" type="button" id="ppLegalOk">Entendi</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><i class="fa-solid fa-check-circle"></i> <span id="toastMsg">Mensagem</span></div>
 
 <!-- WIDGET DE CHAT -->
@@ -272,12 +292,20 @@
   <div class="footer-inner">
     <span>© 2025 Patas Pousada — Área do Tutor</span>
     <div class="footer-links">
-      <a href="#">Termos de uso</a>
-      <a href="#">Política de privacidade</a>
-      <a href="ajuda.html">Ajuda</a>
-    </div>
+  <a href="#" id="openTerms">Termos de uso</a>
+  <a href="#" id="openPrivacy">Política de privacidade</a>
+  <a href="ajuda.html">Ajuda</a>
+  </div>
+
   </div>
 </footer>
+
+  <button class="pp-filters-fab" id="ppFiltersFab" type="button" aria-label="Abrir filtros">
+  <i class="fa-solid fa-sliders"></i>
+  <span>Filtros</span>
+</button>
+<div class="pp-filters-overlay" id="ppFiltersOverlay" aria-hidden="true"></div>
+
 
 <script>
   const SUPABASE_URL     = "https://nwbgzokttjgkipwzfgzc.supabase.co";
@@ -307,6 +335,34 @@
 
   // controle do modal de cancelamento de reserva
   let bookingToCancelId = null;
+
+    /* =========================
+   FILTROS (MOBILE) - BOTTOM SHEET
+   ========================= */
+(function setupMobileFiltersSheet(){
+  const fab = document.getElementById('ppFiltersFab');
+  const panel = document.getElementById('ppFiltersPanel');
+  const overlay = document.getElementById('ppFiltersOverlay');
+  if(!fab || !panel || !overlay) return;
+
+  function open(){
+    document.body.classList.add('pp-filters-open');
+    overlay.setAttribute('aria-hidden','false');
+  }
+
+  function close(){
+    document.body.classList.remove('pp-filters-open');
+    overlay.setAttribute('aria-hidden','true');
+  }
+
+  fab.addEventListener('click', ()=>{
+    const isOpen = document.body.classList.contains('pp-filters-open');
+    isOpen ? close() : open();
+  });
+
+  overlay.addEventListener('click', close);
+  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
+})();
 
   /* =========================
      MENU MOBILE (HAMBÚRGUER)
@@ -1940,6 +1996,118 @@
     }
   });
 
+  /* =========================
+   TERMOS / PRIVACIDADE (MODAL)
+   ========================= */
+(function setupLegalModal(){
+  const modal = document.getElementById('ppLegal');
+  const card  = modal?.querySelector('.pp-legal__card');
+  const title = document.getElementById('ppLegalTitle');
+  const body  = document.getElementById('ppLegalBody');
+  const close = document.getElementById('ppLegalClose');
+  const ok    = document.getElementById('ppLegalOk');
+
+  const btnTerms   = document.getElementById('openTerms');
+  const btnPrivacy = document.getElementById('openPrivacy');
+
+  if(!modal || !title || !body || !close || !ok) return;
+
+  // Conteúdos (edite aqui quando quiser)
+  const TERMS_HTML = `
+    <p><strong>Última atualização:</strong> 2025</p>
+    <p>Ao utilizar o Patas Pousada, você concorda com estes Termos de Uso.</p>
+
+    <h4>1) Uso da plataforma</h4>
+    <ul>
+      <li>Você se compromete a fornecer informações verdadeiras e atualizadas.</li>
+      <li>É proibido usar a plataforma para fins ilegais, ofensivos ou fraudulentos.</li>
+    </ul>
+
+    <h4>2) Reservas e pagamentos</h4>
+    <ul>
+      <li>Reservas podem depender de aprovação do anfitrião.</li>
+      <li>O status de pagamento e de reserva pode ser exibido no painel.</li>
+    </ul>
+
+    <h4>3) Conteúdo e responsabilidade</h4>
+    <ul>
+      <li>Você é responsável pelo conteúdo que publica (textos, fotos e dados).</li>
+      <li>Podemos remover conteúdos que violem regras e segurança.</li>
+    </ul>
+
+    <p style="font-size:.9rem;color:#6b7280;">
+      Observação: este texto é um modelo. Se quiser, eu adapto com base no seu fluxo real (tutor/anfitrião, cancelamento, pagamentos).
+    </p>
+  `;
+
+  const PRIVACY_HTML = `
+    <p><strong>Última atualização:</strong> 2025</p>
+    <p>Esta Política explica como dados podem ser tratados no Patas Pousada.</p>
+
+    <h4>1) Quais dados podem ser coletados</h4>
+    <ul>
+      <li>Dados de conta (nome, e-mail) e perfil.</li>
+      <li>Dados de pets e reservas.</li>
+      <li>Mensagens trocadas no chat interno.</li>
+    </ul>
+
+    <h4>2) Finalidades</h4>
+    <ul>
+      <li>Autenticação, funcionamento das reservas e comunicação entre tutor e anfitrião.</li>
+      <li>Melhoria da experiência e segurança (prevenção de abuso).</li>
+    </ul>
+
+    <h4>3) Compartilhamento</h4>
+    <ul>
+      <li>Alguns dados podem ser exibidos ao anfitrião/tutor para executar a reserva.</li>
+      <li>Não vendemos seus dados.</li>
+    </ul>
+
+    <h4>4) Seus direitos</h4>
+    <ul>
+      <li>Você pode solicitar atualização/exclusão de dados conforme aplicável.</li>
+    </ul>
+
+    <p style="font-size:.9rem;color:#6b7280;">
+      Observação: este texto é um modelo. Se você quiser LGPD “certinho”, eu monto com base nas suas tabelas (profiles, hosts, pets, bookings, chats, messages).
+    </p>
+  `;
+
+  function openLegal(which){
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+
+    if(which === 'terms'){
+      title.textContent = 'Termos de uso';
+      body.innerHTML = TERMS_HTML;
+    } else {
+      title.textContent = 'Política de privacidade';
+      body.innerHTML = PRIVACY_HTML;
+    }
+  }
+
+  function closeLegal(){
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+  }
+
+  btnTerms?.addEventListener('click', (e)=>{ e.preventDefault(); openLegal('terms'); });
+  btnPrivacy?.addEventListener('click', (e)=>{ e.preventDefault(); openLegal('privacy'); });
+
+  close.addEventListener('click', closeLegal);
+  ok.addEventListener('click', closeLegal);
+
+  modal.addEventListener('click', (e)=>{
+    if(e.target === modal) closeLegal();
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal.classList.contains('show')) closeLegal();
+  });
+})();
+
+
 </script>
+
 </body>
 </html>

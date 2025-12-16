@@ -590,17 +590,79 @@
       }
     }
 
+    /* =========================
+       AQUI: aplicar o MESMO pedido
+       MOBILE header = Patas > Usuário > Hambúrguer
+       + usuário só avatar (sem nome) no mobile
+       + reduzir itens do header no telefone
+       Sem afetar desktop
+       ========================= */
     @media (max-width: 860px) {
       header .topbar-center {
         display: none !important;
       }
-      .mobile-menu-btn {
-        display: inline-flex;
-      }
+
       header .topbar-right {
         display: flex;
         align-items: center;
         gap: 10px;
+      }
+
+      /* ordem no mobile */
+      header .topbar-left { order: 1; }
+      header .topbar-right { order: 2; }
+      header .topbar-right .mobile-menu-btn { order: 3; }
+
+      /* garantir que o avatar fique antes do botão */
+      header .topbar-right .user-menu { order: 2; }
+      header .topbar-right .mobile-menu-btn { order: 3; }
+
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+
+      /* compactar logo e itens no mobile */
+      header .topbar-left img {
+        width: 30px !important;
+        height: 30px !important;
+      }
+      header .topbar-left .logo-text {
+        font-size: 1.05rem !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 46vw;
+      }
+
+      /* usuário: só bolinha (avatar), sem nome, estilo compacto */
+      header .user-menu .perfil-nome {
+        display: none !important;
+      }
+
+      header .user-menu .user-trigger{
+        padding: 0 !important;
+        gap: 0 !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 999px !important;
+        border: 1px solid #e5e7eb !important;
+        background: #fff !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .06) !important;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      header .user-menu .perfil-bolinha{
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 999px !important;
+      }
+
+      /* opcional: no mobile, esconder o dropdown do user no header (menu principal já resolve tudo) */
+      header .user-menu .user-dropdown{
+        display: none !important;
       }
     }
 

@@ -321,23 +321,56 @@ button:active{ transform: translateY(0); }
 
 /* =========================
    MOBILE TUNING
+   - Header no mobile: Patas > Usuário > Hambúrguer
+   - Reduz itens do header no telefone
+   - Usuário mostra só a foto (sem nome)
+   - Sem afetar desktop
    ========================= */
 @media (max-width: 860px){
-  nav{ padding:12px 14px; }
+  nav{ padding:12px 14px; gap:10px; }
 
   /* esconde links no topo, ativa hambúrguer */
   .nav-links{ display:none; }
   .menu-toggle{ display:inline-flex; }
 
-  /* compacta logo e user */
-  .logo{ font-size:1.2rem; }
-  .logo img{ width:32px; height:32px; }
+  /* ordem: Patas > usuário > hamburger */
+  .logo{ order:1; }
+  .user-menu{ order:2; }
+  .menu-toggle{ order:3; }
 
-  .user-menu span{
-    max-width: 90px;
-    font-size: .95rem;
+  /* compacta logo */
+  .logo{ font-size:1.05rem; gap:8px; }
+  .logo img{ width:30px; height:30px; }
+
+  /* usuário: só foto e bem compacto */
+  .user-menu{
+    gap:0;
+    padding:0;
+    width:44px;
+    height:44px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    -webkit-tap-highlight-color: transparent;
   }
-  .user-menu a{ display:none; } /* no mobile, o "Sair" fica no menu hambúrguer */
+  .user-menu:hover{
+    border-color: rgba(226,114,91,.35);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transform: translateY(-1px);
+  }
+  .user-menu:active{ transform: translateY(0); }
+
+  .user-menu img{
+    width:36px;
+    height:36px;
+  }
+  .user-menu span{ display:none; } /* no mobile: remove nome */
+  .user-menu a{ display:none; }    /* no mobile: "Sair" fica no menu hambúrguer */
 
   .container{
     margin:22px auto;
@@ -540,7 +573,6 @@ async function loadHost(){
     avatarTop.src = url;
     preview.src = url;
   }else{
-    // fallback simples pra não quebrar se não tiver avatar
     avatarTop.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='100%25' height='100%25' rx='40' ry='40' fill='%23eee'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-size='28' fill='%239ca3af' font-family='Arial'%3EH%3C/text%3E%3C/svg%3E";
     preview.src = avatarTop.src;
   }

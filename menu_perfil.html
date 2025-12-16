@@ -82,7 +82,7 @@
     }
     .nav__toggle i{ font-size: 1.05rem; }
 
-    /* WRAPPER PARA NAV LINKS + USER (para controlar no mobile) */
+    /* WRAPPER PARA NAV LINKS + USER + HAMBURGUER */
     .nav__right{
       display:flex;
       align-items:center;
@@ -265,12 +265,12 @@
       }
     }
 
-    /* Painel mobile do menu */
+    /* Painel mobile do menu (AGORA ANCORADO À DIREITA) */
     .nav__mobile{
       display:none;
       position:absolute;
-      left: 16px;
       right: 16px;
+      left: auto;
       top: calc(100% + 10px);
       background:#fff;
       border:1px solid var(--line);
@@ -279,6 +279,7 @@
       padding: 10px;
       z-index: 90;
       overflow:hidden;
+      width: min(360px, calc(100vw - 32px));
     }
     .nav__mobile.open{
       display:block;
@@ -347,6 +348,117 @@
         width: 210px;
       }
     }
+    /* =============================
+       AJUSTE DE LOGO NO MOBILE
+       ============================= */
+    @media (max-width: 860px){
+      .logo{
+        font-size: 1.15rem; /* antes 1.35rem */
+        gap: 8px;
+      }
+
+      .logo img{
+        width: 28px;   /* antes 34px */
+        height: 28px;
+      }
+    }
+
+    /* Telas bem pequenas (ex: iPhone SE, Android compacto) */
+    @media (max-width: 380px){
+      .logo{
+        font-size: 1.05rem;
+      }
+
+      .logo img{
+        width: 24px;
+        height: 24px;
+      }
+    }
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 1.05rem; /* antes: 1.35rem */
+        gap: 6px;
+      }
+
+      .logo img {
+        width: 26px;  /* antes: 34px */
+        height: 26px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav__toggle {
+        width: 23px;
+        height: 23px;
+        border-radius: 10px;
+      }
+
+      .nav__toggle i {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .user__trigger span {
+        max-width: 80px; /* antes era 110px */
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav {
+        padding: 10px 12px;
+        gap: 10px;
+      }
+
+      .nav__right {
+        gap: 10px;
+      }
+    }
+
+    /* =========================================================
+       PATCH: MOBILE HEADER — esconder nome do usuário no mobile
+       e deixar o "usuário" só como bolinha (igual outras páginas)
+       ========================================================= */
+    @media (max-width: 860px){
+
+      /* 1) Some o nome no mobile */
+      #userName{
+        display:none !important;
+      }
+
+      /* 2) Some a setinha no mobile */
+      .user__trigger svg{
+        display:none !important;
+      }
+
+      /* 3) Vira "botão bolinha": só avatar/badge */
+      .user__trigger{
+        padding: 0 !important;
+        gap: 0 !important;
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        justify-content: center;
+        border: 1px solid transparent;
+        max-width: none;
+      }
+
+      /* 4) Mantém hover agradável no mobile (sem “estourar” o layout) */
+      .user__trigger:hover{
+        background:#fff;
+        border-color: var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      /* 5) Centraliza badge/avatar dentro do círculo */
+      .badge,
+      .user__avatar-img{
+        width: 40px;
+        height: 40px;
+      }
+    }
+
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -359,11 +471,6 @@
       Patas Pousada
     </a>
 
-    <!-- Botão hambúrguer (mobile) -->
-    <button class="nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" type="button">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-
     <div class="nav__right">
       <ul>
         <li><a class="link" href="reservas.html">Reservas</a></li>
@@ -371,6 +478,7 @@
         <li><a class="link" href="Lartemp.html" style="color:var(--brand)">Lar Temporário</a></li>
       </ul>
 
+      <!-- ORDEM: Patas Pousada > Usuário > Hamburguer -->
       <div class="user" id="userMenuRoot">
         <div class="user__trigger">
           <img id="userAvatar" class="user__avatar-img" src="" alt="Foto">
@@ -389,6 +497,11 @@
           </a>
         </div>
       </div>
+
+      <!-- Botão hambúrguer (mobile) AGORA À DIREITA DO USUÁRIO -->
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" type="button">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
 
     <!-- Menu mobile (painel) -->

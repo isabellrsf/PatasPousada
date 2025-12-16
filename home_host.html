@@ -12,44 +12,55 @@
 </head>
 <body>
   <header>
-    <div class="topbar">
-      <a href="index.html" class="topbar-left">
-        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
-        <span class="logo-text">Patas Pousada</span>
-      </a>
-      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-  <i class="fa-solid fa-bars"></i>
-</button>
-      <div class="topbar-center" id="topbarCenter">
-  <nav class="topbar-nav">
-    <ul>
-      <li><a href="#">Reservas</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
-      <li><a href="Lartemp.html">Lar Temporário</a></li>
-    </ul>
-  </nav>
-</div>
+  <div class="topbar">
+    <a href="index.html" class="topbar-left">
+      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+      <span class="logo-text">Patas Pousada</span>
+    </a>
 
-      <div class="topbar-right">
-        <div class="user-menu">
-          <button type="button" class="user-trigger">
-            <div class="perfil-bolinha" id="perfilBolinha">
-              <img id="perfilFoto" src="" alt="Foto">
-              <span id="perfilInicial">U</span>
-            </div>
-            <span class="perfil-nome" id="perfilNome">Carregando...</span>
-            <i class="fas fa-chevron-down" style="font-size:0.8rem; color:#666"></i>
-          </button>
-          <div class="user-dropdown">
-            <a href="menu_perfil_host.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
-            <a href="alterar_senha_host.html" id="linkAlterarSenha"><i class="fa-solid fa-lock"></i> Alterar senha</a>
-            <a href="#" id="linkExcluirConta" style="color:#dc2626;"><i class="fa-solid fa-user-xmark"></i> Excluir conta</a>
-            <a href="#" id="linkSair"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+    <div class="topbar-right">
+      <div class="user-menu">
+        <button type="button" class="user-trigger">
+          <div class="perfil-bolinha" id="perfilBolinha">
+            <img id="perfilFoto" src="" alt="Foto">
+            <span id="perfilInicial">U</span>
           </div>
+          <span class="perfil-nome" id="perfilNome">Carregando...</span> <!-- Exibe o nome do usuário -->
+          <i class="fas fa-chevron-down" style="font-size:0.8rem; color:#666"></i>
+        </button>
+        <div class="user-dropdown">
+          <a href="menu_perfil_host.html"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+          <a href="alterar_senha_host.html" id="linkAlterarSenha"><i class="fa-solid fa-lock"></i> Alterar senha</a>
+          <a href="#" id="linkExcluirConta" style="color:#dc2626;"><i class="fa-solid fa-user-xmark"></i> Excluir conta</a>
+          <a href="#" id="linkSair"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
         </div>
       </div>
+
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
-  </header>
+
+    <div class="topbar-center" id="topbarCenter">
+      <nav class="topbar-nav">
+        <ul>
+          <li><a href="#">Reservas</a></li>
+          <li><a href="ajuda.html">Ajuda</a></li>
+          <li><a href="Lartemp.html">Lar Temporário</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- BOAS-VINDAS (Olá, Nome!) -->
+<section class="pp-hello" aria-label="Boas-vindas">
+  <div class="pp-hello-inner">
+    <h1 class="pp-hello-title">
+      Olá, <span id="helloName" class="pp-hello-name">...</span>! <span class="pp-hello-emoji">👋</span>
+    </h1>
+  </div>
+</section>
 
   <main class="container-main">
     <section class="top-cards">
@@ -544,20 +555,26 @@ if (menuToggle && topbarCenter) {
       ppInitChat(); 
     }
 
-    function updateHeader(){
-      let name = currentProfile.full_name || currentProfile.first_name;
-      if(!name) name = "Anfitrião";
+function updateHeader(){
+  let name = currentProfile.full_name || currentProfile.first_name;
+  if(!name) name = "Anfitrião";
 
-      document.getElementById('perfilNome').textContent = name;
-      document.getElementById('perfilInicial').textContent = name[0].toUpperCase();
-      
-      if(currentProfile.avatar_url){
-        const img = document.getElementById('perfilFoto');
-        img.src = currentProfile.avatar_url + '?t=' + new Date().getTime();
-        img.style.display = 'block';
-        document.getElementById('perfilInicial').style.display = 'none';
-      }
-    }
+  document.getElementById('perfilNome').textContent = name;
+  document.getElementById('perfilInicial').textContent = name[0].toUpperCase();
+
+  // NOVO: preencher o "Olá, Nome!"
+  const hello = document.getElementById('helloName');
+  if (hello) hello.textContent = name;
+
+  if(currentProfile.avatar_url){
+    const img = document.getElementById('perfilFoto');
+    img.src = currentProfile.avatar_url + '?t=' + new Date().getTime();
+    img.style.display = 'block';
+    document.getElementById('perfilInicial').style.display = 'none';
+  }
+}
+
+
 
     function toastHost(msg, type = 'info'){
       const t = document.getElementById("toastHost");
