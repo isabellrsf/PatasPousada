@@ -1040,87 +1040,82 @@
 
   cancelBkNo.addEventListener('click', closeCancelBookingModal);
 
-cancelBkYes.addEventListener('click', async ()=>{
-  if(!bookingToCancelId || !currentUserId){
-    closeCancelBookingModal();
-    return;
-  }
-
+cancelBkYes.addEventListener('click', async () => {
   try {
-    // 1) Buscar dados da reserva (para saber se foi paga e o método)
+    if (!bookingToCancelId || !currentUserId) {
+      closeCancelBookingModal();
+      return;
+    }
+
+    // 0) Buscar dados da reserva (para saber se precisa notificar reembolso)
     const { data: bk, error: bkErr } = await sb
       .from('bookings')
-      .select(`
-        id,
-        tutor_id,
-        host_id,
-        listing_id,
-        status,
-        start_date,
-        end_date,
-        total_price,
-        payment_status,
-        payment_method
-      `)
+      .select('id, tutor_id, payment_status, payment_method, total_price, start_date, end_date')
       .eq('id', bookingToCancelId)
       .eq('tutor_id', currentUserId)
       .single();
 
-    if(bkErr || !bk){
-      console.error('Erro ao buscar reserva para cancelar:', bkErr);
+    if (bkErr || !bk) {
+      console.error('Erro ao buscar reserva:', bkErr);
       toast('Erro ao localizar a reserva.');
       return;
     }
 
-    // 2) Cancelar a reserva
+    // 1) Cancela a reserva
     const { error: cancelErr } = await sb
       .from('bookings')
       .update({ status: 'cancelada' })
       .eq('id', bookingToCancelId)
       .eq('tutor_id', currentUserId);
 
-    if(cancelErr){
-      console.error('Erro ao cancelar reserva:', cancelErr);
+    if (cancelErr) {
+      console.error(cancelErr);
       toast('Erro ao cancelar reserva.');
       return;
     }
 
-    // 3) Se estiver paga e for Infinity Pay -> disparar notificação para reembolso
-    const payStatus = (bk.payment_status || '').toLowerCase().trim();
-    const payMethod = (bk.payment_method || '').toLowerCase().trim();
+    // 2) Decide se notifica (PAGA + Infinity Pay)
+    const payStatus = (bk.payment_status || '').toString().toLowerCase().trim();
+    const payMethod = (bk.payment_method || '').toString().toLowerCase().trim();
 
     const isPaid =
-      payStatus === 'pago' ||
+      payStatus.includes('pag') ||     // pago / pagamento confirmado
       payStatus === 'paid' ||
-      payStatus === 'aprovado' ||
+      payStatus.includes('aprov') ||   // aprovado
       payStatus === 'approved';
 
     const isInfinityPay =
-      payMethod.includes('infinity') || payMethod.includes('infinity pay');
+      payMethod.includes('infinity');  // pega "infinity pay", "infinitypay", etc.
 
-    if(isPaid && isInfinityPay){
-      // Chama Edge Function (backend) para enviar e-mail para vocês
-      const { data: fnData, error: fnErr } = await sb.functions.invoke('refund-notify', {
-        body: {
-          booking_id: bk.id
-        }
-      });
+    if (isPaid && isInfinityPay) {
+      // 3) Notifica por e-mail (com JWT)
+      const { data: sessData } = await sb.auth.getSession();
+      const accessToken = sessData?.session?.access_token;
 
-      if(fnErr){
-        console.error('Erro ao notificar reembolso (Edge Function):', fnErr);
-        toast('Reserva cancelada, mas falhou a notificação de reembolso.');
+      if (!accessToken) {
+        console.error("Sem sessão/JWT. Não foi possível chamar refund-notify.");
+        toast('Reserva cancelada, mas sem sessão para avisar reembolso.');
       } else {
-        toast('Reserva cancelada. Solicitação de reembolso enviada por e-mail.');
+        const { error: fnErr } = await sb.functions.invoke('refund-notify', {
+          body: { booking_id: bookingToCancelId },
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+
+        if (fnErr) {
+          console.error('Erro ao enviar e-mail:', fnErr);
+          toast('Reserva cancelada, mas falha ao avisar reembolso.');
+        } else {
+          toast('Reserva cancelada. Equipe notificada para reembolso.');
+        }
       }
     } else {
       toast('Reserva cancelada.');
     }
 
     loadTutorBookings();
-
-  } catch(e){
-    console.error('Erro inesperado ao cancelar reserva:', e);
-    toast('Erro ao cancelar reserva.');
+  } catch (e) {
+    console.error(e);
+    toast('Erro inesperado.');
   } finally {
     closeCancelBookingModal();
   }
