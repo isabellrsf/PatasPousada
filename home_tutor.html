@@ -23,7 +23,7 @@
 
       <!-- LINKS DO MENU (desktop) -->
       <ul class="pp-nav-links">
-        <li><a href="#">Reservas</a></li>
+        <li><a href="#" id="navReservas">Reservas</a></li>
         <li><a href="ajuda.html">Ajuda</a></li>
         <li><a class="pill" href="#">Lar Temporário</a></li>
       </ul>
@@ -60,7 +60,7 @@
 
     <!-- MENU MOBILE (somente links do site; perfil NÃO vai aqui) -->
     <div class="pp-mobile-menu" id="mobileMenu" aria-hidden="true">
-      <a href="#"><i class="fa-regular fa-calendar"></i> Reservas</a>
+      <a href="#" id="mobileNavReservas"><i class="fa-regular fa-calendar"></i> Reservas</a>
       <a href="ajuda.html"><i class="fa-regular fa-circle-question"></i> Ajuda</a>
       <a href="#"><i class="fa-solid fa-heart"></i> Lar Temporário</a>
       <div class="pp-mobile-sep"></div>
@@ -135,7 +135,7 @@
         </div>
 
         <!-- CARD: MINHAS RESERVAS (com filtros Ativas/Canceladas) -->
-        <div class="card">
+        <div class="card" id="minhasReservas">
           <div class="hd tutor-bookings-header">
             <span>Minhas reservas ✔</span>
             <div class="tutor-bookings-filter">
@@ -2025,6 +2025,33 @@ cancelBkYes.addEventListener('click', async () => {
     btn.classList.add('active');
     loadTutorBookings();
   });
+
+  // =========================
+// SCROLL: ir para "Minhas reservas"
+// =========================
+function scrollToMinhasReservas(){
+  const target = document.getElementById('minhasReservas');
+  if(!target) return;
+
+  const header = document.getElementById('ppHeader');
+  const headerH = header ? header.offsetHeight : 0;
+
+  const y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
+
+  window.scrollTo({ top: y, behavior: 'smooth' });
+}
+
+// Link do menu desktop
+document.getElementById('navReservas')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  scrollToMinhasReservas();
+});
+
+// Link do menu mobile (espera um “tiquinho” para o menu fechar e depois faz scroll)
+document.getElementById('mobileNavReservas')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  setTimeout(scrollToMinhasReservas, 180);
+});
 
   // --- INITIALIZATION ---
   window.addEventListener('DOMContentLoaded', async ()=>{
