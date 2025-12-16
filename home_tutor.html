@@ -1040,33 +1040,91 @@
 
   cancelBkNo.addEventListener('click', closeCancelBookingModal);
 
-  cancelBkYes.addEventListener('click', async ()=>{
-    if(!bookingToCancelId || !currentUserId){
-      closeCancelBookingModal();
+cancelBkYes.addEventListener('click', async ()=>{
+  if(!bookingToCancelId || !currentUserId){
+    closeCancelBookingModal();
+    return;
+  }
+
+  try {
+    // 1) Buscar dados da reserva (para saber se foi paga e o método)
+    const { data: bk, error: bkErr } = await sb
+      .from('bookings')
+      .select(`
+        id,
+        tutor_id,
+        host_id,
+        listing_id,
+        status,
+        start_date,
+        end_date,
+        total_price,
+        payment_status,
+        payment_method
+      `)
+      .eq('id', bookingToCancelId)
+      .eq('tutor_id', currentUserId)
+      .single();
+
+    if(bkErr || !bk){
+      console.error('Erro ao buscar reserva para cancelar:', bkErr);
+      toast('Erro ao localizar a reserva.');
       return;
     }
 
-    try {
-      const { error } = await sb
-        .from('bookings')
-        .update({ status: 'cancelada' })
-        .eq('id', bookingToCancelId)
-        .eq('tutor_id', currentUserId);
+    // 2) Cancelar a reserva
+    const { error: cancelErr } = await sb
+      .from('bookings')
+      .update({ status: 'cancelada' })
+      .eq('id', bookingToCancelId)
+      .eq('tutor_id', currentUserId);
 
-      if(error){
-        console.error('Erro ao cancelar reserva:', error);
-        toast('Erro ao cancelar reserva.');
-      } else {
-        toast('Reserva cancelada.');
-        loadTutorBookings();
-      }
-    } catch(e){
-      console.error('Erro inesperado ao cancelar reserva:', e);
+    if(cancelErr){
+      console.error('Erro ao cancelar reserva:', cancelErr);
       toast('Erro ao cancelar reserva.');
-    } finally {
-      closeCancelBookingModal();
+      return;
     }
-  });
+
+    // 3) Se estiver paga e for Infinity Pay -> disparar notificação para reembolso
+    const payStatus = (bk.payment_status || '').toLowerCase().trim();
+    const payMethod = (bk.payment_method || '').toLowerCase().trim();
+
+    const isPaid =
+      payStatus === 'pago' ||
+      payStatus === 'paid' ||
+      payStatus === 'aprovado' ||
+      payStatus === 'approved';
+
+    const isInfinityPay =
+      payMethod.includes('infinity') || payMethod.includes('infinity pay');
+
+    if(isPaid && isInfinityPay){
+      // Chama Edge Function (backend) para enviar e-mail para vocês
+      const { data: fnData, error: fnErr } = await sb.functions.invoke('refund-notify', {
+        body: {
+          booking_id: bk.id
+        }
+      });
+
+      if(fnErr){
+        console.error('Erro ao notificar reembolso (Edge Function):', fnErr);
+        toast('Reserva cancelada, mas falhou a notificação de reembolso.');
+      } else {
+        toast('Reserva cancelada. Solicitação de reembolso enviada por e-mail.');
+      }
+    } else {
+      toast('Reserva cancelada.');
+    }
+
+    loadTutorBookings();
+
+  } catch(e){
+    console.error('Erro inesperado ao cancelar reserva:', e);
+    toast('Erro ao cancelar reserva.');
+  } finally {
+    closeCancelBookingModal();
+  }
+});
 
   // função chamada no botão do card
   window.cancelBooking = function(bookingId){

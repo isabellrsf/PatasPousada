@@ -628,24 +628,28 @@
 
     userName.textContent = display || emailPrefix;
 
-    if (avatarUrl) {
-      userAvatar.src = avatarUrl;
-      userAvatar.style.display = 'inline';
-    } else {
-      const c = document.createElement('canvas');
-      c.width = 64; c.height = 64;
-      const cx = c.getContext('2d');
-      cx.fillStyle='#ffe6e6';
-      cx.fillRect(0,0,64,64);
-      cx.fillStyle='#e2725b';
-      cx.font='bold 26px Nunito';
-      cx.textAlign='center';
-      cx.textBaseline='middle';
-      cx.fillText(initialsFromName(display || emailPrefix), 32, 34);
-      userAvatar.src = c.toDataURL();
-      userAvatar.style.borderRadius = '50%';
-      userAvatar.style.display = 'inline';
-    }
+if (avatarUrl) {
+  const urlComCache = avatarUrl.includes('?')
+    ? `${avatarUrl}&t=${Date.now()}`
+    : `${avatarUrl}?t=${Date.now()}`;
+
+  userAvatar.src = urlComCache;
+  userAvatar.style.display = 'inline';
+} else {
+  const c = document.createElement('canvas');
+  c.width = 64; c.height = 64;
+  const cx = c.getContext('2d');
+  cx.fillStyle='#ffe6e6';
+  cx.fillRect(0,0,64,64);
+  cx.fillStyle='#e2725b';
+  cx.font='bold 26px Nunito';
+  cx.textAlign='center';
+  cx.textBaseline='middle';
+  cx.fillText(initialsFromName(display || emailPrefix), 32, 34);
+  userAvatar.src = c.toDataURL();
+  userAvatar.style.borderRadius = '50%';
+  userAvatar.style.display = 'inline';
+}
 
     userMenuRoot.style.display = 'flex';
     return user;

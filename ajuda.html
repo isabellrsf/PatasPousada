@@ -14,416 +14,747 @@
       --bg:#f7f7f7;
       --card:#ffffff;
       --border:#e5e7eb;
-      --txt:#111827;
+      --text:#1f2937;
       --muted:#6b7280;
+      --radius:14px;
+      --shadow:0 6px 18px rgba(15, 23, 42, .06);
+      --transition:0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    *{box-sizing:border-box;margin:0;padding:0;}
-
+    *{box-sizing:border-box}
     body{
+      margin:0;
       font-family:Nunito,system-ui,Arial,sans-serif;
-      line-height:1.6;
-      background:linear-gradient(180deg,#fff,#fdf4f2);
-      color:var(--txt);
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing: antialiased;
     }
+    a{color:inherit;text-decoration:none}
 
-    /* HEADER */
+    /* =========================
+       HEADER (DESKTOP)
+       ========================= */
     header{
-      justify-content:center;
+      position:sticky;
+      top:0;
+      z-index:100;
+      background:rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      box-shadow:0 1px 3px rgba(0,0,0,.05);
       display:flex;
-      background-color:#fff;
-      padding:16px 0;
-      box-shadow:0 2px 4px rgba(0,0,0,0.08);
+      justify-content:center;
     }
 
     nav{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      max-width:1200px;
-      margin:0 auto;
-      padding:0 20px;
       width:100%;
+      max-width:1100px;
+      padding:12px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:relative;
     }
 
-    nav .logo{
-      font-size:1.5em;
-      font-weight:bold;
+    .logo{
       color:var(--pri);
       text-decoration:none;
       display:flex;
       align-items:center;
       gap:8px;
       font-family:Parkinsans,sans-serif;
+      font-weight:800;
+      font-size:1.2rem;
+      white-space:nowrap;
+      min-width:0;
     }
 
-    nav img{
+    .logo img{
       width:30px;
       height:30px;
+      flex-shrink:0; /* garante que o ícone não “some” no mobile */
     }
 
     nav ul{
       list-style:none;
       display:flex;
-      gap:16px;
-    }
-
-    nav ul li a{
-      text-decoration:none;
-      color:#333;
-      font-weight:bold;
-      font-family:Parkinsans,sans-serif;
-      font-size:.95rem;
-    }
-    nav ul li a:hover{ color:var(--pri-dark); }
-
-    /* TOPO: VOLTAR + TÍTULO */
-    .top-wrap{
-      max-width:900px;
-      margin:26px auto 8px;
-      padding:0 16px;
-      display:flex;
-      justify-content:flex-start; /* tudo alinhado à esquerda */
+      gap:20px;
+      margin:0;
+      padding:0;
       align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
     }
 
-    .top-wrap h1{
+    nav ul a{
       font-family:Parkinsans,sans-serif;
-      font-size:1.8rem;
-      color:var(--pri);
+      font-weight:600;
+      color:#4b5563;
+      font-size:0.95rem;
+      transition:color var(--transition);
+      white-space:nowrap;
     }
+    nav ul a:hover{color:var(--pri)}
 
-    .back-btn{
-      border-radius:999px;
-      padding:9px 20px;
-      border:2px solid var(--pri);
-      background:var(--pri);           /* preenchido */
-      color:#fff;
-      font-weight:800;
-      font-size:.9rem;
+    /* =========================
+       MENU MOBILE (HAMBÚRGUER)
+       ========================= */
+    .pp-menu-toggle{
+      display:none; /* só aparece no mobile */
+      border:none;
+      background:#fff;
+      border:1px solid var(--border);
+      width:40px;
+      height:40px;
+      border-radius:12px;
       cursor:pointer;
-      display:inline-flex;
+      box-shadow:0 2px 10px rgba(0,0,0,.04);
+      transition:transform .15s ease, border-color var(--transition);
+      flex-shrink:0;
       align-items:center;
-      gap:8px;
-      font-family:Parkinsans,sans-serif;
-      box-shadow:0 3px 8px rgba(0,0,0,0.14);
-      transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+      justify-content:center;
     }
-    .back-btn:hover{
-      background:var(--pri-dark);
-      border-color:var(--pri-dark);
-      transform:translateX(-3px);
-      box-shadow:0 6px 14px rgba(0,0,0,0.2);
+    .pp-menu-toggle:hover{border-color:#d1d5db}
+    .pp-menu-toggle:active{transform:scale(0.98)}
+    .pp-menu-toggle i{font-size:18px;color:#374151}
+
+    .pp-mobile-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      backdrop-filter: blur(2px);
+      display:none;
+      z-index:150;
     }
 
-    /* CONTAINER PRINCIPAL */
-    .container{
-      max-width:900px;
-      margin:4px auto 24px;
-      padding:0 16px 24px;
-      width:100%;
+    .pp-mobile-menu{
+      position:fixed;
+      top:72px;
+      right:16px;
+      width:min(320px, calc(100vw - 32px));
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:0 20px 50px rgba(0,0,0,.18);
+      overflow:hidden;
+      display:none;
+      z-index:200;
+      transform:translateY(8px);
+      opacity:0;
+      transition:all .18s ease;
     }
 
-    .cards-grid{
+    .pp-mobile-menu a{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      font-weight:700;
+      color:#374151;
+      border-bottom:1px solid #f3f4f6;
+    }
+    .pp-mobile-menu a:last-child{border-bottom:none}
+    .pp-mobile-menu a i{width:18px;text-align:center;color:#6b7280}
+    .pp-mobile-menu a:hover{background:#f9fafb;color:var(--pri)}
+    .pp-mobile-menu a:hover i{color:var(--pri)}
+
+    header.pp-menu-open .pp-mobile-overlay{display:block}
+    header.pp-menu-open .pp-mobile-menu{
+      display:block;
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    /* =========================
+       CONTEÚDO DA PÁGINA (seu layout)
+       ========================= */
+    .wrap{
+      max-width:1100px;
+      margin:28px auto 40px;
+      padding:0 24px;
+    }
+
+    .page-title{
+      font:800 1.8rem Parkinsans,sans-serif;
+      margin:0 0 8px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .page-title i{color:var(--pri)}
+    .page-sub{color:var(--muted); margin:0 0 18px}
+
+    .grid{
       display:grid;
-      grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
+      grid-template-columns: 1.1fr .9fr;
       gap:18px;
-    }
-    @media (max-width:840px){
-      .cards-grid{
-        grid-template-columns:1fr;
-      }
+      align-items:start;
     }
 
     .card{
       background:var(--card);
-      border-radius:18px;
-      box-shadow:0 12px 28px rgba(15,23,42,.09);
-      border:1px solid var(--border);
-      padding:18px 18px 20px;
+      border:1px solid transparent;
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:18px;
     }
 
-    .card h2{
-      font-size:1.25rem;
-      margin-bottom:8px;
-      color:var(--pri);
-      font-family:Parkinsans,sans-serif;
-      display:flex;
-      align-items:center;
-      gap:6px;
+    .card h3{
+      margin:0 0 10px;
+      font:800 1.1rem Parkinsans,sans-serif;
     }
 
-    .card h2 span.ic{
-      font-size:1.3rem;
-    }
-
-    .card p{
-      font-size:.95rem;
-      color:#374151;
-      margin-bottom:8px;
-    }
-
-    /* FAQ */
     .faq-item{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
       margin-bottom:10px;
-      border-bottom:1px solid #f3f4f6;
-      padding-bottom:8px;
-    }
-
-    .faq-item strong{
-      display:block;
-      margin-bottom:2px;
-    }
-
-    /* CONTATO */
-    .contact p strong{ color:#111827; }
-
-    /* FORMULÁRIO */
-    form{
-      display:flex;
-      flex-direction:column;
-      margin-top:6px;
-    }
-
-    form label{
-      margin-bottom:4px;
-      font-weight:800;
-      font-size:.9rem;
-      color:#111827;
-    }
-
-    form input,
-    form textarea{
-      margin-bottom:12px;
-      padding:10px 11px;
-      border:1px solid #d1d5db;
-      border-radius:10px;
-      font-size:.95rem;
-      font-family:inherit;
-      outline:none;
-      transition:border .15s, box-shadow .15s, background .15s;
-      background:#f9fafb;
-    }
-
-    form input:focus,
-    form textarea:focus{
-      border-color:var(--pri);
-      box-shadow:0 0 0 2px rgba(226,114,91,0.18);
       background:#fff;
     }
-
-    form textarea{
-      resize:vertical;
-      min-height:90px;
-    }
-
-    form button{
-      padding:11px 22px;
-      background-color:var(--pri);
-      color:#fff;
-      border:none;
-      border-radius:999px;
+    .faq-q{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
       cursor:pointer;
-      font-size:.96rem;
       font-weight:800;
-      font-family:Parkinsans,sans-serif;
-      margin-top:4px;
-      align-self:flex-end;
-      min-width:170px;
-      box-shadow:0 3px 8px rgba(0,0,0,0.14);
-      transition:background .2s, transform .2s, box-shadow .2s;
+      color:#374151;
     }
-
-    form button:hover{
-      background-color:var(--pri-dark);
-      transform:translateY(-1px);
-      box-shadow:0 6px 14px rgba(0,0,0,0.22);
-    }
-
-    /* MENSAGEM DO FORM */
-    .msg{
-      margin-top:8px;
-      font-size:.88rem;
-      font-weight:600;
+    .faq-q i{color:#9ca3af; transition:transform .2s}
+    .faq-item.open .faq-q i{transform:rotate(180deg)}
+    .faq-a{
       display:none;
-      padding:8px 10px;
-      border-radius:10px;
+      padding:0 14px 12px;
+      color:#4b5563;
+      font-weight:600;
     }
-    .msg.ok{
-      display:block;
-      background:#ecfdf5;
-      border:1px solid #a7f3d0;
-      color:#065f46;
-    }
-    .msg.err{
-      display:block;
-      background:#fef2f2;
-      border:1px solid #fecaca;
-      color:#991b1b;
-    }
+    .faq-item.open .faq-a{display:block}
 
-    footer{
-      text-align:center;
-      color:#9ca3af;
-      font-size:.8rem;
-      padding:0 0 14px;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:800;
+      cursor:pointer;
+      transition:all var(--transition);
     }
+    .btn:hover{border-color:#d1d5db; transform:translateY(-1px)}
+    .btn-primary{
+      background:var(--pri);
+      border-color:var(--pri);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(226,114,91,.25);
+    }
+    .btn-primary:hover{background:var(--pri-dark)}
+
+    /* =========================
+       MOBILE: “só mexe no mobile”
+       ========================= */
+    @media (max-width: 720px){
+      nav{padding:10px 14px}
+
+      /* some o menu desktop */
+      nav ul{display:none}
+
+      /* mostra hambúrguer */
+      .pp-menu-toggle{
+        display:flex;
+        width:36px;     /* menor */
+        height:36px;    /* menor */
+        border-radius:12px;
+      }
+      .pp-menu-toggle i{font-size:16px}
+
+      /* logo centralizada no topo */
+      .logo{
+        position:absolute;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:1.02rem; /* nome menor no mobile */
+        gap:7px;
+      }
+      .logo img{
+        width:24px;  /* ícone menor no mobile */
+        height:24px;
+      }
+
+      /* garante espaço para o hambúrguer à direita */
+      nav::before{
+        content:"";
+        width:36px;
+        height:36px;
+        display:block;
+      }
+
+      /* conteúdo */
+      .wrap{padding:0 14px}
+      .grid{grid-template-columns:1fr}
+    }
+    /* =========================
+   PATAS LOOK & FEEL (TOQUE VISUAL)
+   Cole no final do <style>
+   ========================= */
+
+/* Fundo com “glow” suave */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-120px;
+  background:
+    radial-gradient(520px 280px at 10% 0%, rgba(226,114,91,.20), transparent 60%),
+    radial-gradient(520px 280px at 90% 10%, rgba(226,114,91,.14), transparent 62%),
+    radial-gradient(560px 320px at 50% 110%, rgba(226,114,91,.10), transparent 60%);
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* Header mais “premium” */
+header{
+  border-bottom:1px solid rgba(229,231,235,.7);
+}
+
+/* Logo com “badge” */
+.logo{
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,240,236,.65);
+  border:1px solid rgba(255,216,207,.8);
+  box-shadow:0 6px 18px rgba(15,23,42,.05);
+}
+.logo span, .logo{ gap:8px; }
+.logo img{ filter:saturate(1.05); }
+
+/* Page title com chip */
+.page-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.page-title i{
+  width:40px; height:40px;
+  display:grid; place-items:center;
+  border-radius:14px;
+  background:rgba(255,240,236,.9);
+  border:1px solid rgba(255,216,207,.9);
+  color:var(--pri);
+  box-shadow:0 10px 22px rgba(226,114,91,.14);
+}
+
+/* Cards com borda e hover */
+.card{
+  border:1px solid rgba(229,231,235,.9);
+  box-shadow:0 14px 38px rgba(15,23,42,.06);
+  border-radius:18px;
+}
+.card:hover{
+  transform:translateY(-2px);
+  transition:transform .18s ease;
+}
+
+/* “Linha” decorativa no topo do card */
+.card::before{
+  content:"";
+  display:block;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(226,114,91,.85), rgba(212,95,71,.35));
+  margin:-18px -18px 14px -18px;
+}
+
+/* FAQ mais com cara de app */
+.faq-item{
+  border-radius:16px;
+  border:1px solid rgba(229,231,235,.9);
+  background:rgba(255,255,255,.92);
+}
+.faq-q{
+  padding:12px 14px;
+}
+.faq-q::before{
+  content:"";
+  width:10px; height:10px;
+  border-radius:999px;
+  background:rgba(226,114,91,.35);
+  border:1px solid rgba(226,114,91,.35);
+  margin-right:10px;
+}
+.faq-q{
+  display:flex;
+  align-items:center;
+}
+.faq-q i{ color:#9ca3af; }
+.faq-item.open{
+  border-color:rgba(226,114,91,.35);
+  box-shadow:0 12px 30px rgba(226,114,91,.12);
+}
+
+/* Botões mais “Patas” */
+.btn{
+  border-radius:999px;
+  font-family:Parkinsans,sans-serif;
+  font-weight:800;
+}
+.btn-primary{
+  box-shadow:0 14px 34px rgba(226,114,91,.28);
+}
+.btn-primary i{ opacity:.95; }
+
+/* Menu mobile com “chip” no topo */
+.pp-mobile-menu::before{
+  content:"Menu";
+  display:block;
+  padding:10px 14px;
+  font-family:Parkinsans,sans-serif;
+  font-weight:800;
+  color:#374151;
+  background:rgba(255,240,236,.85);
+  border-bottom:1px solid rgba(255,216,207,.9);
+}
+
+/* Ajustes mobile extra (só mobile) */
+@media (max-width: 720px){
+  .page-sub{ margin-bottom:14px; }
+  .card{ padding:16px; }
+  .card::before{ margin:-16px -16px 12px -16px; }
+
+  /* Logo central fica mais “fofa” no mobile */
+  .logo{
+    background:rgba(255,240,236,.85);
+    border-color:rgba(255,216,207,.95);
+  }
+}
+
+  /* =========================
+   MODAL "MANUTENÇÃO" (Patas)
+   Cole no final do <style>
+   ========================= */
+.pp-maint-wrap{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:300;
+  background:rgba(17,24,39,.55);
+  backdrop-filter: blur(3px);
+}
+
+.pp-maint-wrap.show{ display:flex; }
+
+.pp-maint-card{
+  width:min(520px, 100%);
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(229,231,235,.9);
+  border-radius:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+  overflow:hidden;
+  transform:translateY(8px);
+  opacity:0;
+  transition:transform .18s ease, opacity .18s ease;
+}
+
+.pp-maint-wrap.show .pp-maint-card{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.pp-maint-hd{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 16px;
+  background:rgba(255,240,236,.9);
+  border-bottom:1px solid rgba(255,216,207,.9);
+}
+
+.pp-maint-ic{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  border:1px solid rgba(255,216,207,.95);
+  box-shadow:0 10px 22px rgba(226,114,91,.14);
+  color:var(--pri);
+  flex-shrink:0;
+}
+
+.pp-maint-hd h4{
+  margin:0;
+  font:800 1.05rem Parkinsans,sans-serif;
+  color:var(--text);
+  flex:1;
+}
+
+.pp-maint-x{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:#374151;
+  transition:background .15s ease;
+}
+.pp-maint-x:hover{ background:rgba(255,255,255,.65); }
+
+.pp-maint-bd{
+  padding:14px 16px 6px;
+  color:#374151;
+  font-weight:650;
+}
+.pp-maint-bd p{ margin:0 0 10px; }
+
+.pp-maint-note{
+  color:var(--muted);
+  font-weight:700;
+  font-size:.92rem;
+}
+
+.pp-maint-ft{
+  padding:12px 16px 16px;
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+}
+
+.pp-maint-ft .btn{
+  border-radius:999px;
+  font-family:Parkinsans,sans-serif;
+  font-weight:800;
+}
+
+@media (max-width: 720px){
+  .pp-maint-ft{
+    flex-direction:column;
+  }
+  .pp-maint-ft .btn{
+    width:100%;
+  }
+}
+
+
   </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
+
 <body>
+  <header id="ppHeader">
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png" alt="Ícone">
+        Patas Pousada
+      </a>
 
-<header>
-  <nav>
-    <a href="index.html" class="logo">
-      <img src="https://images.vexels.com/media/users/3/202255/isolated/preview/a095b3fe28f3c9febbf176089e2d7e08-pegada-de-cachorro-com-osso-de-coracao-rosa-plana.png"
-           alt="Ícone">
-      Patas Pousada
-    </a>
-    <ul>
-      <li><a href="index.html">Início</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
-    </ul>
-  </nav>
-</header>
+      <!-- MENU DESKTOP -->
+      <ul>
+        <li><a href="home_tutor.html">Início</a></li>
+        <li><a href="reservas.html">Reservas</a></li>
+        <li><a href="ajuda.html">Ajuda</a></li>
+      </ul>
 
-<div class="top-wrap">
-  <button id="btnVoltar" class="back-btn">
-    ⟵ Voltar
-  </button>
-  <h1>Ajuda &amp; Suporte</h1>
-</div>
+      <!-- HAMBÚRGUER MOBILE (direita) -->
+      <button class="pp-menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
 
-<div class="container">
-  <div class="cards-grid">
+      <!-- Overlay + menu mobile -->
+      <div class="pp-mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
 
-    <!-- FAQ -->
-    <section class="card faq">
-      <h2><span class="ic">❓</span>Perguntas frequentes</h2>
-      <p class="subtitle" style="font-size:.9rem;color:var(--muted);margin-bottom:10px;">
-        Encontre rapidamente respostas para as dúvidas mais comuns sobre o uso da plataforma.
+      <div class="pp-mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="home_tutor.html"><i class="fa-solid fa-house"></i> Início</a>
+        <a href="reservas.html"><i class="fa-regular fa-calendar"></i> Reservas</a>
+        <a href="ajuda.html"><i class="fa-regular fa-circle-question"></i> Ajuda</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <h1 class="page-title"><i class="fa-regular fa-circle-question"></i> Ajuda e Suporte</h1>
+    <p class="page-sub">Encontre respostas rápidas e canais de contato do Patas Pousada.</p>
+
+    <div class="grid">
+      <section class="card">
+        <h3>Perguntas frequentes</h3>
+
+        <div class="faq-item">
+          <div class="faq-q">Como faço uma reserva? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="faq-a">Tenha um cadastro de conta de tutor, na sua página home selecione um anúncio, confira disponibilidade e finalize a solicitação.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Como cancelo uma reserva? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="faq-a">Na área “Minhas reservas”, selecione a reserva e clique em “Cancelar”, receberemos seu email de cancelamento e seu dinheiro será reembolsado em até 24h.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Como altero meus dados? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="faq-a">Acesse “Editar perfil” no menu da sua conta e atualize as informações.</div>
+        </div>
+
+      </section>
+
+      <aside class="card">
+        <h3>Fale com a gente</h3>
+        <p style="margin:0 0 12px; color:var(--muted); font-weight:600;">
+          Se precisar, envie uma mensagem e responderemos o quanto antes.
+        </p>
+        <button class="btn btn-primary" type="button" id="openTicketBtn">
+  <i class="fa-solid fa-envelope"></i> Abrir chamado
+</button>
+        <div style="height:10px"></div>
+        <button class="btn" type="button" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </aside>
+    </div>
+  </div>
+
+  <!-- MODAL: FUNÇÃO EM MANUTENÇÃO -->
+<div class="pp-maint-wrap" id="ppMaint" aria-hidden="true">
+  <div class="pp-maint-card" role="dialog" aria-modal="true" aria-labelledby="ppMaintTitle">
+    <header class="pp-maint-hd">
+      <span class="pp-maint-ic"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+      <h4 id="ppMaintTitle">Função em manutenção</h4>
+      <button class="pp-maint-x" type="button" aria-label="Fechar" id="ppMaintClose">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </header>
+
+    <div class="pp-maint-bd">
+      <p>
+        O <strong>Abrir chamado</strong> está temporariamente indisponível para ajustes.
       </p>
-
-      <div class="faq-item">
-        <strong>1. Como faço uma reserva?</strong>
-        <p>Você pode fazer uma reserva acessando a página <strong>Reservas</strong> no menu principal, escolhendo o anfitrião e as datas desejadas, e confirmando os detalhes da hospedagem.</p>
-      </div>
-
-      <div class="faq-item">
-        <strong>2. Posso cancelar minha reserva?</strong>
-        <p>Sim. O cancelamento é possível até <strong>24 horas antes</strong> da data de check-in. Consulte sempre os termos de cancelamento exibidos na tela de reserva.</p>
-      </div>
-
-      <div class="faq-item">
-        <strong>3. Como entro em contato com o anfitrião?</strong>
-        <p>Depois de confirmar uma reserva, os dados de contato do anfitrião ficam disponíveis na tela de detalhes da reserva. Você poderá combinar horários, alimentação e outras necessidades do pet.</p>
-      </div>
-
-      <div class="faq-item">
-        <strong>4. Ainda estou com dúvida. O que eu faço?</strong>
-        <p>Preencha o formulário ao lado com o máximo de detalhes possível e nossa equipe retornará o contato por e-mail.</p>
-      </div>
-    </section>
-
-    <!-- CONTATO + FORM -->
-    <section class="card">
-      <h2><span class="ic">📬</span>Fale com a gente</h2>
-      <p style="font-size:.92rem;color:var(--muted);margin-bottom:8px;">
-        Se não encontrou sua resposta no FAQ, envie sua mensagem pelo formulário abaixo.
+      <p class="pp-maint-note">
+        Você ainda pode usar a FAQ acima. Se for urgente, tente novamente em alguns minutos.
       </p>
+    </div>
 
-      <div class="contact" style="margin-bottom:12px;">
-        <p><strong>E-mail:</strong> suporte@patapousada.com</p>
-        <p><strong>Telefone:</strong> (61) 1234-5678</p>
-      </div>
-
-      <div class="form-section">
-        <form id="formSuporte">
-          <label for="name">Nome</label>
-          <input type="text" id="name" name="name" placeholder="Seu nome" required>
-
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" placeholder="voce@exemplo.com" required>
-
-          <label for="message">Mensagem</label>
-          <textarea id="message" name="message" rows="4" placeholder="Conte pra gente como podemos ajudar" required></textarea>
-
-          <button type="submit">Enviar mensagem</button>
-          <div id="msgForm" class="msg"></div>
-        </form>
-      </div>
-    </section>
-
+    <div class="pp-maint-ft">
+      <button class="btn" type="button" id="ppMaintBack">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+      </button>
+      <button class="btn btn-primary" type="button" id="ppMaintOk">
+        <i class="fa-solid fa-check"></i> Entendi
+      </button>
+    </div>
   </div>
 </div>
 
-<footer>© 2025 Patas Pousada • Todos os direitos reservados</footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-item .faq-q').forEach(q=>{
+      q.addEventListener('click', ()=>{
+        q.parentElement.classList.toggle('open');
+      });
+    });
 
-<script>
-  // ===== Supabase: usado só para descobrir se há usuário logado e se é host/tutor =====
-  const SUPABASE_URL = "https://nwbgzokttjgkipwzfgzc.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_wn2dxmpI7gFOx4nLh5oHqg_Qlc4Q0lQ";
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Mobile menu toggle
+    (function setupMobileMenu(){
+      const headerEl = document.getElementById('ppHeader');
+      const toggleBtn = document.getElementById('menuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const overlay = document.getElementById('mobileOverlay');
 
-  // Botão Voltar:
-  // - Sem user -> index.html
-  // - User host -> home_host.html
-  // - User tutor -> home_tutor.html
-  document.getElementById('btnVoltar').addEventListener('click', async ()=>{
-    try{
-      const { data:{ user } } = await sb.auth.getUser();
+      if(!headerEl || !toggleBtn || !mobileMenu || !overlay) return;
 
-      if (!user){
-        window.location.href = "index.html";
-        return;
+      function closeMenu(){
+        headerEl.classList.remove('pp-menu-open');
+        mobileMenu.setAttribute('aria-hidden','true');
+        overlay.setAttribute('aria-hidden','true');
+        toggleBtn.setAttribute('aria-label','Abrir menu');
+        const icon = toggleBtn.querySelector('i');
+        if(icon){
+          icon.classList.remove('fa-xmark');
+          icon.classList.add('fa-bars');
+        }
       }
 
-      // verifica se é anfitrião na tabela hosts
-      const { data: host, error } = await sb
-        .from('hosts')
-        .select('id')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (!error && host){
-        window.location.href = "home_host.html";
-      } else {
-        window.location.href = "home_tutor.html";
+      function openMenu(){
+        headerEl.classList.add('pp-menu-open');
+        mobileMenu.setAttribute('aria-hidden','false');
+        overlay.setAttribute('aria-hidden','false');
+        toggleBtn.setAttribute('aria-label','Fechar menu');
+        const icon = toggleBtn.querySelector('i');
+        if(icon){
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-xmark');
+        }
       }
-    }catch(e){
-      // Se algo der errado, cai pro index
-      window.location.href = "index.html";
-    }
-  });
 
-  // Formulário de suporte (apenas visual, sem backend real)
-  const form = document.getElementById('formSuporte');
-  const msgForm = document.getElementById('msgForm');
+      toggleBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const isOpen = headerEl.classList.contains('pp-menu-open');
+        isOpen ? closeMenu() : openMenu();
+      });
 
-  form.addEventListener('submit', (e)=>{
+      overlay.addEventListener('click', closeMenu);
+
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') closeMenu();
+      });
+
+      mobileMenu.addEventListener('click', (e)=>{
+        const a = e.target.closest('a');
+        if(a) closeMenu();
+      });
+    })();
+
+    // ===== MODAL "MANUTENÇÃO" =====
+(function setupMaintenanceModal(){
+  const wrap = document.getElementById('ppMaint');
+  const btnOpen = document.getElementById('openTicketBtn');
+
+  const btnClose = document.getElementById('ppMaintClose');
+  const btnOk = document.getElementById('ppMaintOk');
+  const btnBack = document.getElementById('ppMaintBack');
+
+  if(!wrap || !btnOpen) return;
+
+  function openMaint(){
+    wrap.classList.add('show');
+    wrap.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMaint(){
+    wrap.classList.remove('show');
+    wrap.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  btnOpen.addEventListener('click', (e)=>{
     e.preventDefault();
-    const nome = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const texto = document.getElementById('message').value.trim();
-
-    if (!nome || !email || !texto){
-      msgForm.textContent = "Preencha todos os campos antes de enviar.";
-      msgForm.className = "msg err";
-      return;
-    }
-
-    // Aqui você poderia integrar com um backend / envio de e-mail.
-    msgForm.textContent = "Mensagem enviada com sucesso! Em breve entraremos em contato pelo seu e-mail. 🐾";
-    msgForm.className = "msg ok";
-    form.reset();
+    openMaint();
   });
-</script>
 
+  [btnClose, btnOk].forEach(b=>{
+    if(b) b.addEventListener('click', closeMaint);
+  });
+
+  if(btnBack) btnBack.addEventListener('click', ()=>{
+    closeMaint();
+    history.back();
+  });
+
+  // clique fora do card fecha
+  wrap.addEventListener('click', (e)=>{
+    if(e.target === wrap) closeMaint();
+  });
+
+  // ESC fecha
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && wrap.classList.contains('show')) closeMaint();
+  });
+})();
+  </script>
 </body>
 </html>
