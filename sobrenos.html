@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Parkinsans:wght@400;700;800&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome (para o ícone do LinkedIn + menu + voltar) -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -28,7 +28,6 @@
       --chip-border:#ffd8cf;
       --transition: .22s cubic-bezier(.2,.8,.2,1);
 
-      /* LinkedIn */
       --linkedin:#0a66c2;
     }
 
@@ -42,6 +41,9 @@
       text-rendering:optimizeLegibility;
     }
 
+    /* =========================
+       HEADER (DESKTOP INTACTO)
+       ========================= */
     header{
       position:sticky; top:0; z-index:50;
       display:flex;justify-content:center;align-items:center;
@@ -59,7 +61,7 @@
       justify-content:center;
       text-align:center;
       gap:8px;
-      position: relative; /* ✅ para ancorar o botão do menu no mobile */
+      position: relative; /* âncora do hambúrguer no mobile */
     }
 
     .logo{
@@ -164,17 +166,10 @@
       font-size:1.02rem;
       margin-bottom:10px;
     }
-    .sideList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .sideList{display:flex;flex-direction:column;gap:10px;}
     .miniItem{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding:10px 12px;
-      border-radius:14px;
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px 12px;border-radius:14px;
       background:rgba(255,255,255,.72);
       border:1px solid rgba(229,229,229,.9);
     }
@@ -203,11 +198,7 @@
       gap:12px;
       margin-top:10px;
     }
-    .teamHeader p{
-      margin:0;
-      color:var(--muted);
-      font-size:.98rem;
-    }
+    .teamHeader p{margin:0;color:var(--muted);font-size:.98rem;}
 
     .team{
       display:grid;
@@ -226,7 +217,6 @@
       overflow:hidden;
       position:relative;
     }
-
     .member::before{
       content:"";
       position:absolute;
@@ -234,7 +224,6 @@
       height:6px;
       background:linear-gradient(90deg, rgba(226,114,91,.9), rgba(212,95,71,.55));
     }
-
     .member:hover{
       transform: translateY(-2px);
       box-shadow: 0 14px 30px rgba(17,24,39,.10);
@@ -249,35 +238,23 @@
       margin-bottom:10px;
     }
 
-    /* Foto estilo "perfil" */
     .avatar{
-      width:64px;
-      height:64px;
-      border-radius:999px;
+      width:64px;height:64px;border-radius:999px;
       border:3px solid rgba(226,114,91,.30);
       box-shadow: 0 8px 18px rgba(17,24,39,.10);
       overflow:hidden;
-      background: #fff;
+      background:#fff;
       flex: 0 0 auto;
     }
     .avatar img{
-      width:100%;
-      height:100%;
+      width:100%;height:100%;
       object-fit:cover;
       object-position: center 30%;
       display:block;
     }
 
-    .avatarWrap{
-      position:relative;
-      width:64px;
-      height:64px;
-      flex: 0 0 auto;
-    }
-    .avatarWrap .avatar{
-      width:64px;
-      height:64px;
-    }
+    .avatarWrap{position:relative;width:64px;height:64px;flex:0 0 auto;}
+    .avatarWrap .avatar{width:64px;height:64px;}
 
     .member:hover .avatar{
       transform: scale(1.04);
@@ -287,24 +264,16 @@
     }
 
     .li-float{
-      position:absolute;
-      right:-3px;
-      bottom:-3px;
-      width:26px;
-      height:26px;
-      border-radius:999px;
-      display:grid;
-      place-items:center;
-      background:var(--linkedin);
-      color:#fff;
+      position:absolute;right:-3px;bottom:-3px;
+      width:26px;height:26px;border-radius:999px;
+      display:grid;place-items:center;
+      background:var(--linkedin);color:#fff;
       border:2px solid #fff;
       box-shadow:0 8px 16px rgba(17,24,39,.18);
       text-decoration:none;
-      cursor:pointer;
       transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
     }
     .li-float i{font-size:13px;line-height:1;}
-
     .li-float:hover{
       transform: translateY(-2px) scale(1.05);
       filter: brightness(1.03);
@@ -328,40 +297,23 @@
       pointer-events:none;
       transition: opacity var(--transition), transform var(--transition);
     }
-    .li-float:hover::after{
-      opacity:1;
-      transform: translateY(0);
-    }
+    .li-float:hover::after{opacity:1;transform: translateY(0);}
 
     .nameBox{min-width:0;}
     .nameBox h3{
-      margin:0;
-      color:var(--pri-dark);
+      margin:0;color:var(--pri-dark);
       font-family:'Parkinsans',sans-serif;
-      font-size:1.08rem;
-      line-height:1.15;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      font-size:1.08rem;line-height:1.15;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
 
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-top:6px;
-    }
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
     .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 10px;
-      border-radius:999px;
-      font-weight:800;
-      font-size:.72rem;
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;
+      font-weight:800;font-size:.72rem;
       border:1px solid rgba(229,229,229,.9);
-      background:#fff;
-      color:var(--muted);
+      background:#fff;color:var(--muted);
     }
     .chip.primary{
       background:rgba(226,114,91,.10);
@@ -369,23 +321,17 @@
       color: var(--pri-dark);
     }
 
-    .member p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:.95rem;
-      line-height:1.6;
-    }
+    .member p{margin:10px 0 0;color:var(--muted);font-size:.95rem;line-height:1.6;}
 
     /* =========================
-       ✅ MENU MOBILE (hambúrguer + drawer)
+       MENU MOBILE (hambúrguer + drawer)
        ========================= */
     .menu-toggle{
       display:none;
       position:absolute;
-      top:6px;
+      top:0px;
       right:0;
-      width:44px;
-      height:44px;
+      width:44px;height:44px;
       border-radius:12px;
       border:1px solid rgba(229,229,229,.9);
       background:#fff;
@@ -404,8 +350,7 @@
     .menu-toggle i{font-size:1.2rem;}
 
     .mobile-overlay{
-      position:fixed;
-      inset:0;
+      position:fixed;inset:0;
       background:rgba(0,0,0,.45);
       backdrop-filter: blur(4px);
       z-index:999;
@@ -413,42 +358,26 @@
       opacity:0;
       transition: opacity .2s ease;
     }
-    .mobile-overlay.active{
-      display:block;
-      opacity:1;
-    }
+    .mobile-overlay.active{display:block;opacity:1;}
 
     .mobile-drawer{
-      position:fixed;
-      top:0;
-      right:0;
-      height:100%;
+      position:fixed;top:0;right:0;height:100%;
       width:min(86vw, 330px);
       background:#fff;
       z-index:1000;
       transform: translateX(100%);
       transition: transform .25s ease;
       box-shadow: -18px 0 40px rgba(0,0,0,.14);
-      display:flex;
-      flex-direction:column;
+      display:flex;flex-direction:column;
     }
     .mobile-drawer.active{ transform: translateX(0); }
 
     .drawer-header{
       padding:16px 16px 12px;
       border-bottom:1px solid rgba(229,229,229,.9);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
-
-    .drawer-brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
+    .drawer-brand{display:flex;align-items:center;gap:10px;min-width:0;}
     .drawer-brand img{ width:30px; height:30px; }
     .drawer-brand strong{
       font-family:'Parkinsans',sans-serif;
@@ -458,16 +387,13 @@
     }
 
     .drawer-close{
-      width:40px;
-      height:40px;
+      width:40px;height:40px;
       border-radius:12px;
       border:1px solid rgba(229,229,229,.95);
       background:#fff;
       cursor:pointer;
       color:var(--txt);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex;align-items:center;justify-content:center;
       transition: background var(--transition), transform var(--transition), border-color var(--transition);
     }
     .drawer-close:hover{
@@ -479,9 +405,7 @@
     .drawer-links{
       list-style:none;
       padding:14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      display:flex;flex-direction:column;gap:10px;
     }
     .drawer-links a{
       display:flex;
@@ -520,14 +444,13 @@
     }
 
     /* ======================
-       ✅ BOTÃO VOLTAR (INDEX)
+       BOTÃO VOLTAR (INDEX)
        ====================== */
     .back-wrapper{
       max-width:1040px;
       margin:16px auto 0;
       padding:0 16px;
     }
-
     .back-to-home{
       display:inline-flex;
       align-items:center;
@@ -550,77 +473,177 @@
       box-shadow:0 10px 22px rgba(212,95,71,.45);
     }
 
-    /* ===========================
-       RESPONSIVO (TELEFONES)
-       =========================== */
+    /* =========================
+       MODAIS: TERMOS E PRIVACIDADE
+       ========================= */
+    .pp-modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      z-index:1200;
+      padding: 18px;
+      opacity:0;
+      transition: opacity .2s ease;
+    }
+    .pp-modal.show{
+      display:flex;
+      opacity:1;
+    }
+    .pp-modal-card{
+      width:min(820px, 96vw);
+      max-height:min(78vh, 640px);
+      background:#fff;
+      border-radius:18px;
+      border:1px solid rgba(229,229,229,.9);
+      box-shadow: 0 22px 60px rgba(0,0,0,.22);
+      overflow:hidden;
+      transform: translateY(10px);
+      transition: transform .2s ease;
+    }
+    .pp-modal.show .pp-modal-card{ transform: translateY(0); }
 
+    .pp-modal-hd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 16px;
+      border-bottom:1px solid rgba(229,229,229,.9);
+      background: rgba(226,114,91,.06);
+    }
+    .pp-modal-hd strong{
+      font-family:'Parkinsans',sans-serif;
+      color:var(--pri-dark);
+      font-size:1.05rem;
+    }
+    .pp-modal-close{
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid rgba(229,229,229,.95);
+      background:#fff;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      transition: background var(--transition), transform var(--transition), border-color var(--transition);
+    }
+    .pp-modal-close:hover{
+      background:rgba(226,114,91,.08);
+      border-color: rgba(212,95,71,.22);
+      transform: translateY(-1px);
+    }
+
+    .pp-modal-bd{
+      padding:16px;
+      overflow:auto;
+      max-height: calc(min(78vh, 640px) - 58px);
+    }
+    .pp-modal-bd h4{
+      font-family:'Parkinsans',sans-serif;
+      color:var(--pri);
+      margin: 10px 0 6px;
+      font-size:1.05rem;
+    }
+    .pp-modal-bd p{
+      color:var(--txt);
+      line-height:1.75;
+      margin: 8px 0;
+    }
+    .pp-muted{
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    /* =========================
+       FOOTER (links do modal)
+       ========================= */
+    footer{
+      max-width:1040px;
+      margin: 18px auto 26px;
+      padding: 0 16px;
+      color: var(--muted);
+      text-align:center;
+      font-size:.9rem;
+    }
+    .footer-links{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .footer-links a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(229,229,229,.95);
+      background:#fff;
+      font-weight:900;
+      font-family:'Parkinsans',sans-serif;
+      color: var(--txt);
+      text-decoration:none;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .footer-links a:hover{
+      background:rgba(226,114,91,.10);
+      border-color: rgba(212,95,71,.25);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(17,24,39,.10);
+      color: var(--pri-dark);
+    }
+
+    /* =========================
+       RESPONSIVO
+       ========================= */
     @media (max-width: 980px){
       main{padding:0 14px;}
       .card{padding:24px;}
     }
-
     @media (max-width: 860px){
       .hero{grid-template-columns:1fr;}
       .sideBox{order:2;}
     }
-
     @media (max-width: 560px){
       header{padding:14px 0;}
       nav{width:min(1040px, calc(100% - 20px));}
       nav ul{gap:10px;}
       nav ul li a{padding:8px 12px;}
-
       main{margin:18px auto;}
       .card{padding:18px;border-radius:16px;}
-
       h1{font-size:1.55rem;}
       h2{font-size:1.08rem;}
-
       .badge{padding:7px 10px;font-size:.92rem;}
-
-      .teamHeader{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:6px;
-      }
+      .teamHeader{flex-direction:column;align-items:flex-start;gap:6px;}
       .teamHeader p{font-size:.95rem;}
-
       .team{gap:12px;}
       .member{padding:14px;border-radius:14px;}
       .topRow{gap:10px;margin-bottom:8px;}
-
-      /* Botão voltar centralizado no mobile */
-      .back-wrapper{
-        display:flex;
-        justify-content:center;
-      }
+      .back-wrapper{display:flex;justify-content:center;}
     }
-
     @media (max-width: 420px){
       .card{padding:16px;}
       .avatar{width:58px;height:58px;}
       .avatarWrap{width:58px;height:58px;}
       .avatarWrap .avatar{width:58px;height:58px;}
-
-      .li-float{
-        width:24px;height:24px;
-        right:-3px;bottom:-3px;
-      }
+      .li-float{width:24px;height:24px;right:-3px;bottom:-3px;}
       .li-float i{font-size:12px;}
     }
-
     @media (max-width: 360px){
       nav ul li a{padding:8px 10px;font-size:.95rem;}
       .chip{font-size:.70rem;padding:4px 9px;}
       .member p{font-size:.93rem;}
     }
 
-    /* ✅ Ativa o menu mobile e esconde o UL no mobile */
+    /* ✅ ativa hambúrguer e esconde menu normal apenas no MOBILE */
     @media (max-width: 768px){
       .menu-toggle{ display:inline-flex; }
       nav ul{ display:none; }
-      /* evita o botão “cair” em cima do logo */
-      nav{ padding-right: 52px; }
+      nav{ padding-right: 52px; } /* evita o hambúrguer encostar no logo */
     }
   </style>
 </head>
@@ -633,8 +656,9 @@
         Patas Pousada
       </a>
 
-      <!-- ✅ BOTÃO HAMBÚRGUER (mobile) -->
-      <button class="menu-toggle" id="btnHamburger" type="button" aria-label="Abrir menu" aria-controls="mobileDrawer" aria-expanded="false">
+      <!-- HAMBÚRGUER (mobile) -->
+      <button class="menu-toggle" id="btnHamburger" type="button"
+        aria-label="Abrir menu" aria-controls="mobileDrawer" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
 
@@ -646,7 +670,7 @@
     </nav>
   </header>
 
-  <!-- ✅ BOTÃO VOLTAR (leva para o index) -->
+  <!-- BOTÃO VOLTAR -->
   <div class="back-wrapper">
     <a href="index.html" class="back-to-home">
       <i class="fa-solid fa-arrow-left"></i>
@@ -654,7 +678,7 @@
     </a>
   </div>
 
-  <!-- ✅ Overlay + Drawer Mobile -->
+  <!-- Overlay + Drawer Mobile -->
   <div class="mobile-overlay" id="mobileOverlay"></div>
 
   <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
@@ -672,6 +696,8 @@
       <li><a href="index.html">Início <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="ajuda.html">Ajuda <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="quemsomos.html" class="active">Quem Somos <i class="fa-solid fa-chevron-right"></i></a></li>
+      <li><a href="#" data-open-modal="termos">Termos de Uso <i class="fa-solid fa-chevron-right"></i></a></li>
+      <li><a href="#" data-open-modal="privacidade">Política de Privacidade <i class="fa-solid fa-chevron-right"></i></a></li>
     </ul>
 
     <div class="drawer-footer">
@@ -856,8 +882,90 @@
     </div>
   </main>
 
+  <footer>
+    <div class="pp-muted">Patas Pousada • Projeto acadêmico CEUB</div>
+    <div class="footer-links">
+      <a href="#" data-open-modal="termos"><i class="fa-solid fa-file-contract"></i> Termos de Uso</a>
+      <a href="#" data-open-modal="privacidade"><i class="fa-solid fa-shield-halved"></i> Política de Privacidade</a>
+    </div>
+  </footer>
+
+  <!-- MODAL: TERMOS -->
+  <div class="pp-modal" id="modal-termos" aria-hidden="true">
+    <div class="pp-modal-card" role="dialog" aria-modal="true" aria-labelledby="termos-title">
+      <div class="pp-modal-hd">
+        <strong id="termos-title">Termos de Uso</strong>
+        <button class="pp-modal-close" type="button" data-close-modal aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="pp-modal-bd">
+        <p class="pp-muted">
+          Modelo base para seu projeto acadêmico. Ajuste conforme orientação do CEUB e necessidades legais do produto.
+        </p>
+
+        <h4>1. Objetivo</h4>
+        <p>
+          A Patas Pousada conecta tutores e anfitriões para facilitar hospedagens e cuidados temporários de pets, promovendo confiança e bem-estar animal.
+        </p>
+
+        <h4>2. Responsabilidades</h4>
+        <p>
+          Tutores e anfitriões se comprometem a fornecer informações verdadeiras e a seguir combinados de cuidado, horários e regras da hospedagem.
+        </p>
+
+        <h4>3. Conduta</h4>
+        <p>
+          É proibido qualquer uso indevido da plataforma, incluindo fraude, assédio, informações falsas ou práticas que coloquem pets em risco.
+        </p>
+
+        <h4>4. Alterações</h4>
+        <p>
+          Estes termos podem ser atualizados para aprimorar o serviço. Recomenda-se revisão periódica.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRIVACIDADE -->
+  <div class="pp-modal" id="modal-privacidade" aria-hidden="true">
+    <div class="pp-modal-card" role="dialog" aria-modal="true" aria-labelledby="priv-title">
+      <div class="pp-modal-hd">
+        <strong id="priv-title">Política de Privacidade</strong>
+        <button class="pp-modal-close" type="button" data-close-modal aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="pp-modal-bd">
+        <p class="pp-muted">
+          Modelo base para fins acadêmicos. Ajuste conforme LGPD e orientação jurídica, se necessário.
+        </p>
+
+        <h4>1. Dados coletados</h4>
+        <p>
+          Podemos coletar dados básicos de cadastro e informações necessárias para viabilizar reservas e comunicação entre usuários.
+        </p>
+
+        <h4>2. Uso dos dados</h4>
+        <p>
+          Utilizamos os dados para autenticação, funcionamento das reservas, suporte, segurança e melhoria da experiência.
+        </p>
+
+        <h4>3. Compartilhamento</h4>
+        <p>
+          Compartilhamento ocorre apenas quando necessário para a prestação do serviço (por exemplo, dados exibidos ao anfitrião/tutor para a reserva).
+        </p>
+
+        <h4>4. Segurança</h4>
+        <p>
+          Adotamos boas práticas para proteger informações contra acessos não autorizados.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ✅ MENU MOBILE (drawer lateral)
+    // ===== MENU MOBILE (drawer lateral) =====
     (function(){
       const btnHamburger = document.getElementById('btnHamburger');
       const overlay = document.getElementById('mobileOverlay');
@@ -891,14 +999,60 @@
         btnClose.addEventListener('click', closeDrawer);
         overlay.addEventListener('click', closeDrawer);
 
-        // fecha ao clicar em link
-        drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+        drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          // só fecha se não for link de modal
+          if (!a.hasAttribute('data-open-modal')) closeDrawer();
+        }));
 
-        // ESC fecha
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && drawer.classList.contains('active')) closeDrawer();
         });
       }
+    })();
+
+    // ===== MODAIS (Termos / Privacidade) =====
+    (function(){
+      const map = {
+        termos: document.getElementById('modal-termos'),
+        privacidade: document.getElementById('modal-privacidade')
+      };
+
+      function openModal(key){
+        const m = map[key];
+        if(!m) return;
+        m.classList.add('show');
+        m.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(modal){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('[data-open-modal]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          const key = el.getAttribute('data-open-modal');
+          openModal(key);
+        });
+      });
+
+      document.querySelectorAll('.pp-modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target.classList.contains('pp-modal')) closeModal(modal);
+        });
+        modal.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(modal));
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if(e.key !== 'Escape') return;
+        const opened = document.querySelector('.pp-modal.show');
+        if(opened) closeModal(opened);
+      });
     })();
   </script>
 </body>
