@@ -921,19 +921,21 @@
               stBorder = '#ef4444';
             }
 
-            // --- status de pagamento ---
-            const payStatus = (b.payment_status || '').toLowerCase();
-            const isPaid    = (payStatus === 'pago');
-            let payLabel    = 'Pendente';
-            let payColor    = '#f59e0b';
+// --- status de pagamento ---
+const payStatus = (b.payment_status || '').toString().toLowerCase().trim();
+const payMethod = (b.payment_method || '').toString().toLowerCase().trim();
 
-            if (isPaid) {
-              payLabel = 'Pago';
-              payColor = '#059669';
-            } else if (!payStatus) {
-              payLabel = 'Pendente';
-              payColor = '#f59e0b';
-            }
+const isPaid =
+  payStatus.includes('pag') ||
+  payStatus.includes('confirm') ||
+  payStatus.includes('aprov') ||
+  payStatus === 'paid' ||
+  payStatus === 'approved' ||
+  payStatus.includes('succeed');
+
+let payLabel = payStatus ? payStatus : 'pendente';
+let payColor = isPaid ? '#059669' : '#6b7280';
+
 
             const showCancelBtn = !showCanceled && canCancel;
             const hasListing    = !!b.listing_id;
@@ -1039,7 +1041,7 @@
   }
 
   cancelBkNo.addEventListener('click', closeCancelBookingModal);
-
+  
 cancelBkYes.addEventListener('click', async () => {
   try {
     if (!bookingToCancelId || !currentUserId) {
@@ -1047,21 +1049,28 @@ cancelBkYes.addEventListener('click', async () => {
       return;
     }
 
-    // 0) Buscar dados da reserva (para saber se precisa notificar reembolso)
+    // 1) Ler status de pagamento ANTES (evita race condition)
     const { data: bk, error: bkErr } = await sb
       .from('bookings')
-      .select('id, tutor_id, payment_status, payment_method, total_price, start_date, end_date')
+      .select('payment_status')
       .eq('id', bookingToCancelId)
       .eq('tutor_id', currentUserId)
-      .single();
+      .maybeSingle();
 
-    if (bkErr || !bk) {
-      console.error('Erro ao buscar reserva:', bkErr);
-      toast('Erro ao localizar a reserva.');
-      return;
+    if (bkErr) {
+      console.error('Erro ao ler payment_status:', bkErr);
     }
 
-    // 1) Cancela a reserva
+    const payStatus = (bk?.payment_status || '').toString().toLowerCase().trim();
+    const isPaid =
+      payStatus.includes('pag') ||
+      payStatus.includes('confirm') ||
+      payStatus.includes('aprov') ||
+      payStatus === 'paid' ||
+      payStatus === 'approved' ||
+      payStatus.includes('succeed');
+
+    // 2) Cancela a reserva
     const { error: cancelErr } = await sb
       .from('bookings')
       .update({ status: 'cancelada' })
@@ -1074,39 +1083,17 @@ cancelBkYes.addEventListener('click', async () => {
       return;
     }
 
-    // 2) Decide se notifica (PAGA + Infinity Pay)
-    const payStatus = (bk.payment_status || '').toString().toLowerCase().trim();
-    const payMethod = (bk.payment_method || '').toString().toLowerCase().trim();
+    // 3) Só notifica reembolso se estiver pago
+    if (isPaid) {
+      const { error: fnErr } = await sb.functions.invoke('refund-notify', {
+        body: { booking_id: bookingToCancelId }
+      });
 
-    const isPaid =
-      payStatus.includes('pag') ||     // pago / pagamento confirmado
-      payStatus === 'paid' ||
-      payStatus.includes('aprov') ||   // aprovado
-      payStatus === 'approved';
-
-    const isInfinityPay =
-      payMethod.includes('infinity');  // pega "infinity pay", "infinitypay", etc.
-
-    if (isPaid && isInfinityPay) {
-      // 3) Notifica por e-mail (com JWT)
-      const { data: sessData } = await sb.auth.getSession();
-      const accessToken = sessData?.session?.access_token;
-
-      if (!accessToken) {
-        console.error("Sem sessão/JWT. Não foi possível chamar refund-notify.");
-        toast('Reserva cancelada, mas sem sessão para avisar reembolso.');
+      if (fnErr) {
+        console.error('Erro ao avisar reembolso:', fnErr);
+        toast('Reserva cancelada. (Falha ao notificar reembolso)');
       } else {
-        const { error: fnErr } = await sb.functions.invoke('refund-notify', {
-          body: { booking_id: bookingToCancelId },
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
-
-        if (fnErr) {
-          console.error('Erro ao enviar e-mail:', fnErr);
-          toast('Reserva cancelada, mas falha ao avisar reembolso.');
-        } else {
-          toast('Reserva cancelada. Equipe notificada para reembolso.');
-        }
+        toast('Reserva cancelada. Equipe notificada para reembolso.');
       }
     } else {
       toast('Reserva cancelada.');
